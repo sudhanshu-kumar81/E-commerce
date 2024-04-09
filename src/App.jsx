@@ -9,6 +9,8 @@ import { Route, Routes } from 'react-router-dom'
 import Home from './pages/Home.jsx'
 import Cart from './features/cart/Cart.jsx'
 import CartPage from './pages/CartPage.jsx'
+import ProductDetailsPage from './pages/ProductDetailsPage.jsx'
+import Checkout from './pages/Checkout.jsx'
 function App() {
 
 
@@ -20,6 +22,8 @@ function App() {
         <Route path='/login' element={<Loginpage/>}></Route>
         <Route path='/signup' element={<SignupPage/>}></Route>
         <Route path='/cart' element={<Cart/>}></Route>
+        <Route path='/product-details' element={<ProductDetailsPage/>}></Route>
+        <Route path='/checkout' element={<Checkout/>}></Route>
       </Routes>
     </>
   )
