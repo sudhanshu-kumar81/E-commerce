@@ -5,11 +5,12 @@ import { ChevronDownIcon, FunnelIcon, MinusIcon, PlusIcon, Squares2X2Icon } from
 import {StarIcon} from '@heroicons/react/20/solid'
 import {useSelector,useDispatch} from 'react-redux'
 import {fetchAllProductsAsync, selectAllProducts,fetchAllProductsByFilterAsync} from '../product-list/productlistSlice'
+import {ITEM_PER_PAGE} from '../../app/constants.js'
 const sortOptions = [
   { name: 'Best Rating', sort: 'rating', current: false },
   
   { name: 'Price: Low to High', sort: 'price', current: false },
-  { name: 'Price: High to Low', href: 'price', current: false },
+  { name: 'Price: High to Low', sort: 'price', current: false },
 ]
 
 const filters = [
@@ -239,30 +240,46 @@ const items = [
 export default function ProductList() {
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
   const [fil,setFil]=useState({})
+  const [sort,setSort]=useState({})
   const dispatch=useDispatch()
-  useEffect(()=>{
-    dispatch(fetchAllProductsAsync());
-  },[])
+  const [page,setPage]=useState(1);
  const  filterHandler=(e,section,option)=>{
-  
-  const newFil={...fil,[section.id]:option.value}
+  console.log("e is ",e.target.checked);
+  const newFil={...fil}
+  if(e.target.value){
+    if(newFil[section.id]){
+      newFil[section.id].push(option.value)
+    }else{
+      newFil[section.id]=[option.value];
+    }
+  }else{
+    const index=newFil[section.id].findIndex(el=>el===option.value);
+    newFil[section.id].splice(index,1);//delete one element;
+  }
+  console.log("after update newFil is ",newFil);
   setFil(newFil)
-  console.log("newFil is ",newFil);
-  dispatch(fetchAllProductsByFilterAsync(newFil))
+  // dispatch(fetchAllProductsByFilterAsync(newFil))
   console.log(section.id,option.value)
-  console.log("fil is ",fil);
  }
+
+ useEffect(()=>{
+  console.log("arrived in useEffect");
+  console.log(" fil and sort is ",fil,sort);
+  dispatch(fetchAllProductsByFilterAsync({fil,sort}))
+},[dispatch,fil,sort])
+
 const sortHandler=(option)=>{
   console.log(option)
-  const newFil={...fil,_sort:option.sort}
-  setFil(newFil)
-  console.log("newFil is ",newFil);
-  dispatch(fetchAllProductsByFilterAsync(newFil))
-}
-
-     
+  const newSort={_sort:option.sort}
+  setSort(newSort)
   
-     const products=useSelector(selectAllProducts)
+}
+const HandlePage=(e,page)=>{
+      setPage(page);
+}
+const products=useSelector(selectAllProducts)
+
+
   return (
     <div className="bg-white">
       <div>
