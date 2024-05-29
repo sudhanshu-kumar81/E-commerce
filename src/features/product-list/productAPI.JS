@@ -40,3 +40,22 @@ export function fetchAllProductsByFilter(fil,sort,pagination) {
     }
     );
   }
+
+  export function fetchBrands(){
+    return new Promise(async (resolve)=>{
+      console.log("before requets");
+      const response=await fetch('http://localhost:3000/brands')
+      console.log("after requets");
+      const data=await response.json()
+      console.log("brand in productApi",data)
+      resolve({data})
+    })
+  }
+  export function fetchCategories(){
+    return new Promise(async (resolve)=>{
+      const response=await fetch('http://localhost:3000/categories')
+      const data=await response.json()
+      console.log("category in productApi",data)
+      resolve({data})
+    })
+  }
