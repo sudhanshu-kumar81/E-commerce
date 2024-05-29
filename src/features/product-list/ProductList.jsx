@@ -4,7 +4,7 @@ import { XMarkIcon } from '@heroicons/react/24/outline'
 import { ChevronDownIcon, FunnelIcon, MinusIcon, PlusIcon, Squares2X2Icon } from '@heroicons/react/20/solid'
 import {StarIcon} from '@heroicons/react/20/solid'
 import {useSelector,useDispatch} from 'react-redux'
-import {fetchAllProductsAsync, selectAllProducts,fetchAllProductsByFilterAsync} from '../product-list/productlistSlice'
+import {fetchAllProductsAsync, selectAllProducts,fetchAllProductsByFilterAsync, selectTotalItems} from '../product-list/productlistSlice'
 import {ITEM_PER_PAGE} from '../../app/constants.js'
 const sortOptions = [
   { name: 'Best Rating', sort: 'rating', current: false },
@@ -243,10 +243,12 @@ export default function ProductList() {
   const [sort,setSort]=useState({})
   const dispatch=useDispatch()
   const [page,setPage]=useState(1);
- const  filterHandler=(e,section,option)=>{
+  const totalItems=useSelector(selectTotalItems)
+  const products=useSelector(selectAllProducts)
+ const  filterHandler=(e,section,option)=>{4
   console.log("e is ",e.target.checked);
   const newFil={...fil}
-  if(e.target.value){
+  if(e.target.checked){
     if(newFil[section.id]){
       newFil[section.id].push(option.value)
     }else{
@@ -265,8 +267,13 @@ export default function ProductList() {
  useEffect(()=>{
   console.log("arrived in useEffect");
   console.log(" fil and sort is ",fil,sort);
-  dispatch(fetchAllProductsByFilterAsync({fil,sort}))
-},[dispatch,fil,sort])
+  console.log("page and item_per_page is ",page,ITEM_PER_PAGE)
+  const pagination={_page:page,_per_page:ITEM_PER_PAGE}
+  dispatch(fetchAllProductsByFilterAsync({fil,sort,pagination}))
+},[dispatch,fil,sort,page])
+useEffect(()=>{
+  setPage(1)
+},[totalItems,sort])
 
 const sortHandler=(option)=>{
   console.log(option)
@@ -274,10 +281,15 @@ const sortHandler=(option)=>{
   setSort(newSort)
   
 }
-const HandlePage=(e,page)=>{
-      setPage(page);
+const HandlePage=(page)=>{
+  console.log("in handle page")
+  console.log("page is ",page);
+   if(page>=1&&page<(totalItems/ITEM_PER_PAGE+1)){
+    setPage(page);
+   }
+    
 }
-const products=useSelector(selectAllProducts)
+
 
 
   return (
@@ -364,7 +376,7 @@ const products=useSelector(selectAllProducts)
           </section>
 
          
-         <Pagination/>
+         <Pagination HandlePage={HandlePage} page={page} setPage={setPage} totalItems={totalItems}/>
      
     
         </main>
@@ -526,7 +538,7 @@ const DeskTopFilter=({filterHandler})=>{
 </form>);
 }
 
-const Pagination=()=>{
+const Pagination=({HandlePage,page,setPage,totalItems})=>{
   return( 
     <div className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6">
     <div className="flex flex-1 justify-between sm:hidden">
@@ -546,9 +558,9 @@ const Pagination=()=>{
     <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
       <div>
         <p className="text-sm text-gray-700">
-          Showing <span className="font-medium">1</span> to{' '}
-          <span className="font-medium">10</span> of{' '}
-          <span className="font-medium">97</span> results
+          Showing <span className="font-medium">{(page-1)*ITEM_PER_PAGE+1}</span> to{' '}
+          <span className="font-medium">{page*ITEM_PER_PAGE<totalItems?(page*ITEM_PER_PAGE):(totalItems)}</span> of{' '}
+          <span className="font-medium">{totalItems}</span> results
         </p>
       </div>
       <div>
@@ -556,47 +568,47 @@ const Pagination=()=>{
           className="isolate inline-flex -space-x-px rounded-md shadow-sm"
           aria-label="Pagination"
         >
-          <a
+          <p
+          onClick={(e)=>HandlePage(page-1)}
             href="#"
             className="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
           >
             <span className="sr-only">Previous</span>
             <ChevronLeftIcon className="h-5 w-5" aria-hidden="true" />
-          </a>
+          </p>
           
-          <a
-            href="#"
-            aria-current="page"
-            className="relative z-10 inline-flex items-center bg-indigo-600 px-4 py-2 text-sm font-semibold text-white focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-          >
-            1
-          </a>
-          <a
-            href="#"
-            className="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
-          >
-            2
-          </a>
+          {
+            Array.from({length:Math.ceil(totalItems/ITEM_PER_PAGE)}).map((el,index)=>(<div
+              onClick={(e)=>HandlePage(index+1)}
+              aria-current="page"
+              className={`relative z-10 inline-flex items-center ${index+1===page?'bg-indigo-600 text-white':'text-gray-400 '} px-4 py-2 text-sm font-semibold  focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 cursor-pointer focus-visible:outline-indigo-600`}
+            >
+              {index+1}
+            </div>))
+            }
+          
 
-          <a
+          <p
+          onClick={(e)=>HandlePage(page+1)}
             href="#"
             className="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
           >
             <span className="sr-only">Next</span>
             <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />
-          </a>
+          </p>
         </nav>
       </div>
     </div>
   </div>);
 }
 const ProductGrid=({products})=>{
+  console.log("products in product grid is ",products);
   return(<div className="bg-white">
   <div className="mx-auto max-w-2xl px-4 py-0 sm:px-6 sm:py-0 lg:max-w-7xl lg:px-8">
 
 
     <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:gap-x-8">
-      {products.map((product) => (
+      {products?.map((product,index) => (
         <NavLink to='product-details'>
 
         
