@@ -59,3 +59,11 @@ export function fetchAllProductsByFilter(fil,sort,pagination) {
       resolve({data})
     })
   }
+  export function fetchProductById(id){
+    return new Promise(async (resolve)=>{
+      const response=await fetch('http://localhost:3000/products/'+id)
+      const data=await response.json()
+      console.log("category in productApi fetcchProductApi",data)
+      resolve({data})
+    })
+  }

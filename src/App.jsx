@@ -1,8 +1,7 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-import { Counter } from './features/counter/Counter'
+import { useState,useEffect } from 'react'
+import { selectLoggedInUser } from './features/auth/authSlice.js'
+import { fetchItemsByUserIdAsync } from './features/cart/counterSlice.js';
+import Protected from './features/auth/component/Protected.jsx'
 import Loginpage from './pages/Loginpage'
 import SignupPage from './pages/SignupPage.jsx'
 import { Route, Routes } from 'react-router-dom'
@@ -11,19 +10,30 @@ import Cart from './features/cart/Cart.jsx'
 import CartPage from './pages/CartPage.jsx'
 import ProductDetailsPage from './pages/ProductDetailsPage.jsx'
 import Checkout from './pages/Checkout.jsx'
+import { useDispatch, useSelector } from 'react-redux'
 function App() {
-
-
+const dispatch=useDispatch();
+const user=useSelector(selectLoggedInUser)
+useEffect(()=>{
+  if(user){
+    dispatch(fetchItemsByUserIdAsync(user.id))
+  }
+},[dispatch, user])
   return (
     <>
       <Routes>
-        <Route path='/' element={<Home/>}></Route>
-        <Route path='/cart' element={<CartPage/>}></Route>
+        <Route path='/' element={<Protected>
+        <Home/>
+      </Protected>}></Route>
+        <Route path='/cart' element={ <Protected>
+        <CartPage/>
+      </Protected>}></Route>
         <Route path='/login' element={<Loginpage/>}></Route>
         <Route path='/signup' element={<SignupPage/>}></Route>
-        <Route path='/cart' element={<Cart/>}></Route>
-        <Route path='/product-details' element={<ProductDetailsPage/>}></Route>
-        <Route path='/checkout' element={<Checkout/>}></Route>
+        <Route path='/product-details/:id' element={ <Protected><ProductDetailsPage/> </Protected>}></Route>
+        <Route path='/checkout' element={<Protected>
+        <Checkout></Checkout>
+      </Protected>}></Route>
       </Routes>
     </>
   )

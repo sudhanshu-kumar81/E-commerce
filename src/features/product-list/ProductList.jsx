@@ -419,7 +419,7 @@ const ProductGrid=({products})=>{
 
     <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:gap-x-8">
       {products?.map((product,index) => (
-        <NavLink to='product-details'>
+        <NavLink to={`/product-details/${product.id}`}>
 
         
         <div key={product.id} className="group relative border-solid border-2 border-gray-200 p-2">
