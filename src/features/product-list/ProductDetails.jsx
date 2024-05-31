@@ -55,7 +55,10 @@ export default function ProductDetail() {
   }, [dispatch, params.id]);
   const handleCart = (e)=>{
     e.preventDefault();
-    dispatch(addToCartAsync({...product,quantity:1,user:user.id }))
+    const newItem  = {...product,quantity:1,user:user.id }
+    console.log("newItem in handleCart",newItem);
+    delete newItem['id']
+    dispatch(addToCartAsync(newItem))
     console.log("item added and navigated")
     navigate('/cart')
     
