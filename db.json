@@ -2489,6 +2489,15 @@
           "city": "Singhia",
           "state": "BH",
           "pinCode": "848209"
+        },
+        {
+          "name": "Sudhanshu",
+          "email": "sudhanshu@gmail.com",
+          "phone": "1234567890-",
+          "street": "BELA pipra singhiya",
+          "city": "Singhia",
+          "state": "BH",
+          "pinCode": "34567890"
         }
       ]
     }
@@ -2619,5 +2628,545 @@
       "user": "940b"
     }
   ],
-  "orders": []
+  "orders": [
+    {
+      "items": [
+        {
+          "title": "iPhone X",
+          "description": "SIM-Free, Model A19211 6.5-inch Super Retina HD display with OLED technology A12 Bionic chip with ...",
+          "price": 899,
+          "discountPercentage": 17.94,
+          "rating": 4.44,
+          "stock": 34,
+          "brand": "Apple",
+          "category": "smartphones",
+          "thumbnail": "https://i.dummyjson.com/data/products/2/thumbnail.jpg",
+          "images": [
+            "https://i.dummyjson.com/data/products/2/1.jpg",
+            "https://i.dummyjson.com/data/products/2/2.jpg",
+            "https://i.dummyjson.com/data/products/2/3.jpg",
+            "https://i.dummyjson.com/data/products/2/thumbnail.jpg"
+          ],
+          "quantity": 2,
+          "user": 1,
+          "id": 6
+        }
+      ],
+      "totalAmount": 1798,
+      "totalItems": 2,
+      "user": {
+        "email": "test@gmail.com",
+        "password": "Qwerty123",
+        "addresses": [
+          {
+            "name": "Abhishek R",
+            "email": "test@gmail.com",
+            "phone": "1234567788",
+            "street": "11th Main",
+            "city": "Banaglore",
+            "state": "Karnataka",
+            "pinCode": "560034"
+          },
+          {
+            "name": "Abhishek R",
+            "email": "test@gmail.com",
+            "phone": "1234567788",
+            "street": "11th Main",
+            "city": "Banaglore",
+            "state": "Karnataka",
+            "pinCode": "560034"
+          }
+        ],
+        "id": 1
+      },
+      "paymentMethod": "card",
+      "selectedAddress": {
+        "name": "Abhishek R",
+        "email": "test@gmail.com",
+        "phone": "1234567788",
+        "street": "11th Main",
+        "city": "Banaglore",
+        "state": "Karnataka",
+        "pinCode": "560034"
+      },
+      "status": "pending",
+      "id": 1
+    },
+    {
+      "id": "3073",
+      "items": [
+        {
+          "id": "71e3",
+          "title": "iPhone X",
+          "description": "SIM-Free, Model A19211 6.5-inch Super Retina HD display with OLED technology A12 Bionic chip with ...",
+          "price": 899,
+          "discountPercentage": 17.94,
+          "rating": 4.44,
+          "stock": 34,
+          "brand": "Apple",
+          "category": "smartphones",
+          "thumbnail": "https://cdn.dummyjson.com/product-images/2/thumbnail.jpg",
+          "images": [
+            "https://cdn.dummyjson.com/product-images/2/1.jpg",
+            "https://cdn.dummyjson.com/product-images/2/2.jpg",
+            "https://cdn.dummyjson.com/product-images/2/3.jpg",
+            "https://cdn.dummyjson.com/product-images/2/thumbnail.jpg"
+          ],
+          "quantity": 1,
+          "user": "9496"
+        },
+        {
+          "id": "d63a",
+          "title": "OPPOF19",
+          "description": "OPPO F19 is officially announced on April 2021.",
+          "price": 280,
+          "discountPercentage": 17.91,
+          "rating": 4.3,
+          "stock": 123,
+          "brand": "OPPO",
+          "category": "smartphones",
+          "thumbnail": "https://cdn.dummyjson.com/product-images/4/thumbnail.jpg",
+          "images": [
+            "https://cdn.dummyjson.com/product-images/4/1.jpg",
+            "https://cdn.dummyjson.com/product-images/4/2.jpg",
+            "https://cdn.dummyjson.com/product-images/4/3.jpg",
+            "https://cdn.dummyjson.com/product-images/4/4.jpg",
+            "https://cdn.dummyjson.com/product-images/4/thumbnail.jpg"
+          ],
+          "quantity": 1,
+          "user": "9496"
+        }
+      ],
+      "totalAmount": 1179,
+      "totalItems": 2,
+      "user": {
+        "id": "9496",
+        "email": "sudhanshu5@gmail.com",
+        "password": "Abcd1234",
+        "addresses": [
+          {
+            "name": ",njk.dtjkf",
+            "email": "ghhjdfhj#@dhdfhjdfku.opdc",
+            "phone": "4567890",
+            "street": "fjiudfhjkjf",
+            "city": ",hjk,gfhjf",
+            "state": "hjufihfjgrkf",
+            "pinCode": "ihjiglrur"
+          },
+          {
+            "name": "sudhanshu kumar",
+            "email": "sudhanshu@gmail.com",
+            "phone": "7870620961",
+            "street": "BELA pipra singhiya",
+            "city": "Singhia",
+            "state": "BH",
+            "pinCode": "848209"
+          },
+          {
+            "name": "Sudhanshu",
+            "email": "sudhanshu@gmail.com",
+            "phone": "1234567890-",
+            "street": "BELA pipra singhiya",
+            "city": "Singhia",
+            "state": "BH",
+            "pinCode": "34567890"
+          }
+        ]
+      },
+      "paymentMethod": "cash",
+      "selectedAddress": {
+        "name": "Sudhanshu",
+        "email": "sudhanshu@gmail.com",
+        "phone": "1234567890-",
+        "street": "BELA pipra singhiya",
+        "city": "Singhia",
+        "state": "BH",
+        "pinCode": "34567890"
+      },
+      "status": "pending"
+    },
+    {
+      "id": "2f61",
+      "items": [
+        {
+          "id": "2013",
+          "title": "iPhone X",
+          "description": "SIM-Free, Model A19211 6.5-inch Super Retina HD display with OLED technology A12 Bionic chip with ...",
+          "price": 899,
+          "discountPercentage": 17.94,
+          "rating": 4.44,
+          "stock": 34,
+          "brand": "Apple",
+          "category": "smartphones",
+          "thumbnail": "https://cdn.dummyjson.com/product-images/2/thumbnail.jpg",
+          "images": [
+            "https://cdn.dummyjson.com/product-images/2/1.jpg",
+            "https://cdn.dummyjson.com/product-images/2/2.jpg",
+            "https://cdn.dummyjson.com/product-images/2/3.jpg",
+            "https://cdn.dummyjson.com/product-images/2/thumbnail.jpg"
+          ],
+          "quantity": 1,
+          "user": "9496"
+        }
+      ],
+      "totalAmount": 899,
+      "totalItems": 1,
+      "user": {
+        "id": "9496",
+        "email": "sudhanshu5@gmail.com",
+        "password": "Abcd1234",
+        "addresses": [
+          {
+            "name": ",njk.dtjkf",
+            "email": "ghhjdfhj#@dhdfhjdfku.opdc",
+            "phone": "4567890",
+            "street": "fjiudfhjkjf",
+            "city": ",hjk,gfhjf",
+            "state": "hjufihfjgrkf",
+            "pinCode": "ihjiglrur"
+          },
+          {
+            "name": "sudhanshu kumar",
+            "email": "sudhanshu@gmail.com",
+            "phone": "7870620961",
+            "street": "BELA pipra singhiya",
+            "city": "Singhia",
+            "state": "BH",
+            "pinCode": "848209"
+          },
+          {
+            "name": "Sudhanshu",
+            "email": "sudhanshu@gmail.com",
+            "phone": "1234567890-",
+            "street": "BELA pipra singhiya",
+            "city": "Singhia",
+            "state": "BH",
+            "pinCode": "34567890"
+          }
+        ]
+      },
+      "paymentMethod": "card",
+      "selectedAddress": {
+        "name": "Sudhanshu",
+        "email": "sudhanshu@gmail.com",
+        "phone": "1234567890-",
+        "street": "BELA pipra singhiya",
+        "city": "Singhia",
+        "state": "BH",
+        "pinCode": "34567890"
+      },
+      "status": "pending"
+    },
+    {
+      "id": "d170",
+      "items": [
+        {
+          "id": "a8b5",
+          "title": "Samsung Galaxy Book",
+          "description": "Samsung Galaxy Book S (2020) Laptop With Intel Lakefield Chip, 8GB of RAM Launched",
+          "price": 1499,
+          "discountPercentage": 4.15,
+          "rating": 4.25,
+          "stock": 50,
+          "brand": "Samsung",
+          "category": "laptops",
+          "thumbnail": "https://cdn.dummyjson.com/product-images/7/thumbnail.jpg",
+          "images": [
+            "https://cdn.dummyjson.com/product-images/7/1.jpg",
+            "https://cdn.dummyjson.com/product-images/7/2.jpg",
+            "https://cdn.dummyjson.com/product-images/7/3.jpg",
+            "https://cdn.dummyjson.com/product-images/7/thumbnail.jpg"
+          ],
+          "quantity": 1,
+          "user": "9496"
+        }
+      ],
+      "totalAmount": 1499,
+      "totalItems": 1,
+      "user": {
+        "id": "9496",
+        "email": "sudhanshu5@gmail.com",
+        "password": "Abcd1234",
+        "addresses": [
+          {
+            "name": ",njk.dtjkf",
+            "email": "ghhjdfhj#@dhdfhjdfku.opdc",
+            "phone": "4567890",
+            "street": "fjiudfhjkjf",
+            "city": ",hjk,gfhjf",
+            "state": "hjufihfjgrkf",
+            "pinCode": "ihjiglrur"
+          },
+          {
+            "name": "sudhanshu kumar",
+            "email": "sudhanshu@gmail.com",
+            "phone": "7870620961",
+            "street": "BELA pipra singhiya",
+            "city": "Singhia",
+            "state": "BH",
+            "pinCode": "848209"
+          },
+          {
+            "name": "Sudhanshu",
+            "email": "sudhanshu@gmail.com",
+            "phone": "1234567890-",
+            "street": "BELA pipra singhiya",
+            "city": "Singhia",
+            "state": "BH",
+            "pinCode": "34567890"
+          }
+        ]
+      },
+      "paymentMethod": "card",
+      "selectedAddress": {
+        "name": "Sudhanshu",
+        "email": "sudhanshu@gmail.com",
+        "phone": "1234567890-",
+        "street": "BELA pipra singhiya",
+        "city": "Singhia",
+        "state": "BH",
+        "pinCode": "34567890"
+      },
+      "status": "pending"
+    },
+    {
+      "id": "7217",
+      "items": [
+        {
+          "id": "cf71",
+          "title": "iPhone 9",
+          "description": "An apple mobile which is nothing like apple",
+          "price": 549,
+          "discountPercentage": 12.96,
+          "rating": 3.69,
+          "stock": 94,
+          "brand": "Apple",
+          "category": "smartphones",
+          "thumbnail": "https://cdn.dummyjson.com/product-images/1/thumbnail.jpg",
+          "images": [
+            "https://cdn.dummyjson.com/product-images/1/1.jpg",
+            "https://cdn.dummyjson.com/product-images/1/2.jpg",
+            "https://cdn.dummyjson.com/product-images/1/3.jpg",
+            "https://cdn.dummyjson.com/product-images/1/4.jpg",
+            "https://cdn.dummyjson.com/product-images/1/thumbnail.jpg"
+          ],
+          "quantity": 1,
+          "user": "9496"
+        }
+      ],
+      "totalAmount": 549,
+      "totalItems": 1,
+      "user": {
+        "id": "9496",
+        "email": "sudhanshu5@gmail.com",
+        "password": "Abcd1234",
+        "addresses": [
+          {
+            "name": ",njk.dtjkf",
+            "email": "ghhjdfhj#@dhdfhjdfku.opdc",
+            "phone": "4567890",
+            "street": "fjiudfhjkjf",
+            "city": ",hjk,gfhjf",
+            "state": "hjufihfjgrkf",
+            "pinCode": "ihjiglrur"
+          },
+          {
+            "name": "sudhanshu kumar",
+            "email": "sudhanshu@gmail.com",
+            "phone": "7870620961",
+            "street": "BELA pipra singhiya",
+            "city": "Singhia",
+            "state": "BH",
+            "pinCode": "848209"
+          },
+          {
+            "name": "Sudhanshu",
+            "email": "sudhanshu@gmail.com",
+            "phone": "1234567890-",
+            "street": "BELA pipra singhiya",
+            "city": "Singhia",
+            "state": "BH",
+            "pinCode": "34567890"
+          }
+        ]
+      },
+      "paymentMethod": "card",
+      "selectedAddress": {
+        "name": "Sudhanshu",
+        "email": "sudhanshu@gmail.com",
+        "phone": "1234567890-",
+        "street": "BELA pipra singhiya",
+        "city": "Singhia",
+        "state": "BH",
+        "pinCode": "34567890"
+      },
+      "status": "pending"
+    },
+    {
+      "id": "0708",
+      "items": [
+        {
+          "id": "c429",
+          "title": "iPhone 9",
+          "description": "An apple mobile which is nothing like apple",
+          "price": 549,
+          "discountPercentage": 12.96,
+          "rating": 3.69,
+          "stock": 94,
+          "brand": "Apple",
+          "category": "smartphones",
+          "thumbnail": "https://cdn.dummyjson.com/product-images/1/thumbnail.jpg",
+          "images": [
+            "https://cdn.dummyjson.com/product-images/1/1.jpg",
+            "https://cdn.dummyjson.com/product-images/1/2.jpg",
+            "https://cdn.dummyjson.com/product-images/1/3.jpg",
+            "https://cdn.dummyjson.com/product-images/1/4.jpg",
+            "https://cdn.dummyjson.com/product-images/1/thumbnail.jpg"
+          ],
+          "quantity": 2,
+          "user": "9496"
+        }
+      ],
+      "totalAmount": 1098,
+      "totalItems": 2,
+      "user": {
+        "id": "9496",
+        "email": "sudhanshu5@gmail.com",
+        "password": "Abcd1234",
+        "addresses": [
+          {
+            "name": ",njk.dtjkf",
+            "email": "ghhjdfhj#@dhdfhjdfku.opdc",
+            "phone": "4567890",
+            "street": "fjiudfhjkjf",
+            "city": ",hjk,gfhjf",
+            "state": "hjufihfjgrkf",
+            "pinCode": "ihjiglrur"
+          },
+          {
+            "name": "sudhanshu kumar",
+            "email": "sudhanshu@gmail.com",
+            "phone": "7870620961",
+            "street": "BELA pipra singhiya",
+            "city": "Singhia",
+            "state": "BH",
+            "pinCode": "848209"
+          },
+          {
+            "name": "Sudhanshu",
+            "email": "sudhanshu@gmail.com",
+            "phone": "1234567890-",
+            "street": "BELA pipra singhiya",
+            "city": "Singhia",
+            "state": "BH",
+            "pinCode": "34567890"
+          }
+        ]
+      },
+      "paymentMethod": "cash",
+      "selectedAddress": {
+        "name": ",njk.dtjkf",
+        "email": "ghhjdfhj#@dhdfhjdfku.opdc",
+        "phone": "4567890",
+        "street": "fjiudfhjkjf",
+        "city": ",hjk,gfhjf",
+        "state": "hjufihfjgrkf",
+        "pinCode": "ihjiglrur"
+      },
+      "status": "pending"
+    },
+    {
+      "id": "866b",
+      "items": [
+        {
+          "id": "01b4",
+          "title": "iPhone X",
+          "description": "SIM-Free, Model A19211 6.5-inch Super Retina HD display with OLED technology A12 Bionic chip with ...",
+          "price": 899,
+          "discountPercentage": 17.94,
+          "rating": 4.44,
+          "stock": 34,
+          "brand": "Apple",
+          "category": "smartphones",
+          "thumbnail": "https://cdn.dummyjson.com/product-images/2/thumbnail.jpg",
+          "images": [
+            "https://cdn.dummyjson.com/product-images/2/1.jpg",
+            "https://cdn.dummyjson.com/product-images/2/2.jpg",
+            "https://cdn.dummyjson.com/product-images/2/3.jpg",
+            "https://cdn.dummyjson.com/product-images/2/thumbnail.jpg"
+          ],
+          "quantity": 1,
+          "user": "9496"
+        },
+        {
+          "id": "2f35",
+          "title": "Infinix INBOOK",
+          "description": "Infinix Inbook X1 Ci3 10th 8GB 256GB 14 Win10 Grey – 1 Year Warranty",
+          "price": 1099,
+          "discountPercentage": 11.83,
+          "rating": 4.54,
+          "stock": 96,
+          "brand": "Infinix",
+          "category": "laptops",
+          "thumbnail": "https://cdn.dummyjson.com/product-images/9/thumbnail.jpg",
+          "images": [
+            "https://cdn.dummyjson.com/product-images/9/1.jpg",
+            "https://cdn.dummyjson.com/product-images/9/2.png",
+            "https://cdn.dummyjson.com/product-images/9/3.png",
+            "https://cdn.dummyjson.com/product-images/9/4.jpg",
+            "https://cdn.dummyjson.com/product-images/9/thumbnail.jpg"
+          ],
+          "quantity": 1,
+          "user": "9496"
+        }
+      ],
+      "totalAmount": 1998,
+      "totalItems": 2,
+      "user": {
+        "id": "9496",
+        "email": "sudhanshu5@gmail.com",
+        "password": "Abcd1234",
+        "addresses": [
+          {
+            "name": ",njk.dtjkf",
+            "email": "ghhjdfhj#@dhdfhjdfku.opdc",
+            "phone": "4567890",
+            "street": "fjiudfhjkjf",
+            "city": ",hjk,gfhjf",
+            "state": "hjufihfjgrkf",
+            "pinCode": "ihjiglrur"
+          },
+          {
+            "name": "sudhanshu kumar",
+            "email": "sudhanshu@gmail.com",
+            "phone": "7870620961",
+            "street": "BELA pipra singhiya",
+            "city": "Singhia",
+            "state": "BH",
+            "pinCode": "848209"
+          },
+          {
+            "name": "Sudhanshu",
+            "email": "sudhanshu@gmail.com",
+            "phone": "1234567890-",
+            "street": "BELA pipra singhiya",
+            "city": "Singhia",
+            "state": "BH",
+            "pinCode": "34567890"
+          }
+        ]
+      },
+      "paymentMethod": "card",
+      "selectedAddress": {
+        "name": "Sudhanshu",
+        "email": "sudhanshu@gmail.com",
+        "phone": "1234567890-",
+        "street": "BELA pipra singhiya",
+        "city": "Singhia",
+        "state": "BH",
+        "pinCode": "34567890"
+      },
+      "status": "pending"
+    }
+  ]
 }

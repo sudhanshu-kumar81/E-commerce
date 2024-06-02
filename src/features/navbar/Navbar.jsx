@@ -4,7 +4,7 @@ import { Bars3Icon, ShoppingCartIcon, XMarkIcon } from '@heroicons/react/24/outl
 import { NavLink } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { selectItems } from '../cart/counterSlice'
-
+import { Link } from 'react-router-dom'
 
 const user = {
   name: 'Tom Cook',
@@ -18,7 +18,7 @@ const navigation = [
 ]
 const userNavigation = [
   { name: 'Your Profile', link: '/' },
-  { name: 'Settings', link: '/' },
+  { name: 'My Orders', link: '/orders' },
   { name: 'Sign out',link: '/login'},
 ]
 
@@ -111,7 +111,7 @@ const Navbar=({children})=> {
                                 <Menu.Item key={item.name}>
                                   {({ active }) => (
                                     <Link
-                                      to={item.link}
+                                      to={`${item.link}`}
                                       className={classNames(
                                         active ? 'bg-gray-100' : '',
                                         'block px-4 py-2 text-sm text-gray-700'
@@ -185,14 +185,13 @@ const Navbar=({children})=> {
                     </div>
                     <div className="mt-3 space-y-1 px-2">
                       {userNavigation.map((item) => (
-                        <Disclosure.Button
+                        <Link
                           key={item.name}
-                          as="a"
-                          href={item.href}
+                          to={`${item.link}`}
                           className="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white"
                         >
                           {item.name}
-                        </Disclosure.Button>
+                        </Link>
                       ))}
                     </div>
                   </div>

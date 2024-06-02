@@ -11,6 +11,9 @@ import CartPage from './pages/CartPage.jsx'
 import ProductDetailsPage from './pages/ProductDetailsPage.jsx'
 import Checkout from './pages/Checkout.jsx'
 import { useDispatch, useSelector } from 'react-redux'
+import PageNotFound from './pages/404.jsx';
+import OrderSuccessPage from './pages/OrderSuccessPage.jsx';
+import UserOrdersPage from './pages/UserOrdersPage.jsx';
 function App() {
 const dispatch=useDispatch();
 const user=useSelector(selectLoggedInUser)
@@ -34,6 +37,9 @@ useEffect(()=>{
         <Route path='/checkout' element={<Protected>
         <Checkout></Checkout>
       </Protected>}></Route>
+      <Route path='/order-success/:id' element={<OrderSuccessPage></OrderSuccessPage>}></Route>
+      <Route path='/orders' element={ <UserOrdersPage></UserOrdersPage>}></Route>
+      <Route path='*' element={  <PageNotFound></PageNotFound>}></Route>
       </Routes>
     </>
   )
