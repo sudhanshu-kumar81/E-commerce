@@ -1,25 +1,21 @@
-import { Fragment, useState } from 'react'
+import { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux';
 import { deleteItemFromCartAsync, selectItems, updateCartAsync, } from './counterSlice';
 import { NavLink } from 'react-router-dom'
-import { Dialog, Transition } from '@headlessui/react';
-import { XMarkIcon } from '@heroicons/react/24/outline';
-import { Link } from 'react-router-dom';
 import { Navigate } from 'react-router-dom';
 
 const Cart = () => {
   const dispatch = useDispatch()
 
   const handleRemove = (e, id) => {
-    console.log("it is handleremove product id", id);
+    // console.log("it is handleremove product id", id);
     dispatch(deleteItemFromCartAsync(id))
   }
   const handleQuantity = (e, item) => {
-    console.log("it is handlequantity e.target.value", e.target.value);
+    // console.log("it is handlequantity e.target.value", e.target.value);
     dispatch(updateCartAsync({ ...item, quantity: +e.target.value }));
   };
   const items = useSelector(selectItems);
-  const [open, setOpen] = useState(true)
   const totalAmount = items.reduce((amount, item) => item.price * item.quantity + amount, 0)
   const totalItems = items.reduce((total, item) => item.quantity + total, 0)
 
@@ -30,7 +26,7 @@ const Cart = () => {
         <div className="border-t border-gray-200 px-4 sm:px-6 lg:px-8 md:p-5">
           <h2 className='text-4xl font-bold tracking-tight text-gray-900 my-12'>Cart</h2>
           <div className="flow-root">
-            <ul role="list" className="-my-6 divide-y divide-gray-200">
+            <ul className="-my-6 divide-y divide-gray-200">
               {items.map((item) => (
                 <li key={item.id} className="flex py-6">
                   <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
@@ -109,7 +105,6 @@ const Cart = () => {
                 <button
                   type="button"
                   className="font-medium text-indigo-600 hover:text-indigo-500"
-                  onClick={() => setOpen(false)}
                 >
                   Continue Shopping
                   <span aria-hidden="true"> &rarr;</span>

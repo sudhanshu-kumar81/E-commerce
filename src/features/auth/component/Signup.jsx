@@ -3,7 +3,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { selectLoggedInUser, createUserAsync } from '../authSlice';
-import { Link } from 'react-router-dom';
 import { Navigate } from 'react-router-dom';
 const Signup = () => {
   const dispatch = useDispatch();
@@ -13,7 +12,7 @@ const Signup = () => {
     handleSubmit,
     formState: { errors },
   } = useForm()
-  console.log("errors is ",errors)
+  // console.log("errors is ",errors)
     return (
       <>
        {user && <Navigate to="/" replace={true}></Navigate>}
@@ -32,7 +31,6 @@ const Signup = () => {
  <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
    <form className="space-y-6" noValidate
    onSubmit={handleSubmit((data)=>{
-    console.log("data is ",data.email,  data.password);
     dispatch(createUserAsync({ email: data.email, password: data.password,addresses}))
    })}>
      <div>
@@ -87,8 +85,6 @@ const Signup = () => {
            id="cpassword"
            {...register("cpassword", { required: " confirm password is required",validate:(value,formValues)=>value===formValues.password||"password not matched"})}
            type="password"
-          //  autoComplete="current-password"
-          //  required
            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
          />
          <p className='text-red-500 '>{errors?.cpassword?.message}</p>

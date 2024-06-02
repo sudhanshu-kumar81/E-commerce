@@ -8,7 +8,7 @@ export function updateCart(update) {
       });
       const data = await response.json();
       // TODO: on server it will only return some info of user (not password)
-      console.log("data in updateCart",data);
+      // console.log("data in updateCart",data);
       resolve({ data });
     });
   }
@@ -19,7 +19,7 @@ export function updateCart(update) {
         headers: { 'content-type': 'application/json' },
       });
       const data = await response.json();
-      console.log("data in deleetItemfromCart",data);
+      // console.log("data in deleetItemfromCart",data);
       // TODO: on server it will only return some info of user (not password)
       resolve({ data:{id:itemId} });
     });

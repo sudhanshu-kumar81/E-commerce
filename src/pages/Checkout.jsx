@@ -1,6 +1,4 @@
-import { Fragment, useState } from 'react'
-import { Dialog, Transition } from '@headlessui/react'
-import { XMarkIcon } from '@heroicons/react/24/outline'
+import { useState } from 'react'
 import { NavLink, Navigate } from 'react-router-dom'
 import { selectUserInfo } from '../features/user/userSlice';
 import { useDispatch, useSelector } from 'react-redux'
@@ -10,62 +8,8 @@ import { deleteItemFromCartAsync, updateCartAsync } from '../features/cart/count
 import {createOrderAsync,selectCurrentOrder} from '../features/order/orderSlice'
 import { useForm } from 'react-hook-form';
 import {
-    selectLoggedInUser,
     updateUserAsync,
 } from '../features/auth/authSlice';
-const products = [
-    {
-        id: 1,
-        name: 'Throwback Hip Bag',
-        href: '#',
-        color: 'Salmon',
-        price: '$90.00',
-        quantity: 1,
-        imageSrc: 'https://tailwindui.com/img/ecommerce-images/shopping-cart-page-04-product-01.jpg',
-        imageAlt: 'Salmon orange fabric pouch with match zipper, gray zipper pull, and adjustable hip belt.',
-    },
-    {
-        id: 2,
-        name: 'Medium Stuff Satchel',
-        href: '#',
-        color: 'Blue',
-        price: '$32.00',
-        quantity: 1,
-        imageSrc: 'https://tailwindui.com/img/ecommerce-images/shopping-cart-page-04-product-02.jpg',
-        imageAlt:
-            'Front of satchel with blue canvas body, black straps and handle, drawstring top, and front zipper pouch.',
-    },
-    {
-        id: 2,
-        name: 'Medium Stuff Satchel',
-        href: '#',
-        color: 'Blue',
-        price: '$32.00',
-        quantity: 1,
-        imageSrc: 'https://tailwindui.com/img/ecommerce-images/shopping-cart-page-04-product-02.jpg',
-        imageAlt:
-            'Front of satchel with blue canvas body, black straps and handle, drawstring top, and front zipper pouch.',
-    },
-    // More products...
-]
-const address = [
-    {
-        name: 'john doe',
-        street: '15th may',
-        city: 'Bangalore',
-        pincode: '560034',
-        state: 'karnatka',
-        phone: '456780',
-    },
-    {
-        name: 'john doe',
-        street: '15th may',
-        city: 'Bangalore',
-        pincode: '560034',
-        state: 'karnatka',
-        phone: '1234567890',
-    },
-]
 const Checkout = () => {
     const currentOrder = useSelector(selectCurrentOrder);
     const user = useSelector(selectUserInfo);
@@ -78,27 +22,27 @@ const Checkout = () => {
     const dispatch = useDispatch()
 
     const handleRemove = (e, id) => {
-        console.log("it is handleremove product id", id);
+        // console.log("it is handleremove product id", id);
         dispatch(deleteItemFromCartAsync(id))
     }
     const handleQuantity = (e, item) => {
-        console.log("it is handlequantity e.target.value", e.target.value);
+        // console.log("it is handlequantity e.target.value", e.target.value);
         dispatch(updateCartAsync({ ...item, quantity: +e.target.value }));
     };
     const handleAddress = (e) => {
-        console.log(e.target.value);
+        // console.log(e.target.value);
         setSelectedAddress(user.addresses[e.target.value]);
     };
     const handlePayment = (e) => {
-        console.log(e.target.value);
+        // console.log(e.target.value);
         setPaymentMethod(e.target.value);
     };
     const handleOrder = (e) => {
-        console.log("in handleorder", items, paymentMethod, selectedAddress, totalAmount, totalItems, user)
+        // console.log("in handleorder", items, paymentMethod, selectedAddress, totalAmount, totalItems, user)
 
         if (selectedAddress && paymentMethod) {
             const order = { items, totalAmount, totalItems, user, paymentMethod, selectedAddress ,status:"pending"}
-            console.log("order is ", order);
+            // console.log("order is ", order);
             dispatch(createOrderAsync(order));
         } else {
             alert('Enter Address and Payment method')
@@ -127,7 +71,7 @@ const Checkout = () => {
                             className="bg-white px-5 py-12 mt-12"
                             noValidate
                             onSubmit={handleSubmit((data) => {
-                                console.log("complete form data is ", data);
+                                // console.log("complete form data is ", data);
                                 dispatch(
                                     updateUserAsync({
                                         ...user,

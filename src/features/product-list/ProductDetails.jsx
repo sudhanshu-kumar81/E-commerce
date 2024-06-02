@@ -50,16 +50,16 @@ export default function ProductDetail() {
   const params = useParams();
 
   useEffect(() => {
-    console.log("params.id is ",params);
+    // console.log("params.id is ",params);
     dispatch(fetchAllProductByIdAsync(params.id));
   }, [dispatch, params.id]);
   const handleCart = (e)=>{
     e.preventDefault();
     const newItem  = {...product,quantity:1,user:user.id }
-    console.log("newItem in handleCart",newItem);
+    // console.log("newItem in handleCart",newItem);
     delete newItem['id']
     dispatch(addToCartAsync(newItem))
-    console.log("item added and navigated")
+    // console.log("item added and navigated")
     navigate('/cart')
     
   }
@@ -70,7 +70,6 @@ export default function ProductDetail() {
         <div className="pt-6">
           <nav aria-label="Breadcrumb">
             <ol
-              role="list"
               className="mx-auto flex max-w-2xl items-center space-x-2 px-4 sm:px-6 lg:max-w-7xl lg:px-8"
             >
               {/* {product.breadcrumbs &&

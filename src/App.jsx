@@ -6,15 +6,15 @@ import Loginpage from './pages/Loginpage'
 import SignupPage from './pages/SignupPage.jsx'
 import { Route, Routes } from 'react-router-dom'
 import Home from './pages/Home.jsx'
-import Cart from './features/cart/Cart.jsx'
 import CartPage from './pages/CartPage.jsx'
 import ProductDetailsPage from './pages/ProductDetailsPage.jsx'
 import Checkout from './pages/Checkout.jsx'
 import { useDispatch, useSelector } from 'react-redux'
+import Logout from './features/auth/component/Logout.jsx';
+import ForgotPasswordPage from './pages/ForgetPasswordPage.jsx';
 import PageNotFound from './pages/404.jsx';
 import OrderSuccessPage from './pages/OrderSuccessPage.jsx';
 import UserOrdersPage from './pages/UserOrdersPage.jsx';
-import UserProfile from './features/user/components/UserProfile';
 import UserProfilePage from './pages/UserProfilePage';
 import { fetchLoggedInUserAsync } from './features/user/userSlice';
 function App() {
@@ -44,6 +44,8 @@ useEffect(()=>{
       <Route path='/order-success/:id' element={<OrderSuccessPage></OrderSuccessPage>}></Route>
       <Route path='/orders' element={ <UserOrdersPage></UserOrdersPage>}></Route>
       <Route path='/profile' element={  <UserProfilePage></UserProfilePage>}></Route>
+      <Route path='/logout' element={   <Logout></Logout>}></Route>
+      <Route path='/forgot-password' element={   <ForgotPasswordPage></ForgotPasswordPage>}></Route>
       <Route path='*' element={  <PageNotFound></PageNotFound>}></Route>
       </Routes>
     </>

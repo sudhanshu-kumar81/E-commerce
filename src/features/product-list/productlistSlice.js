@@ -5,16 +5,16 @@ export const fetchAllProductsAsync = createAsyncThunk(
   'product/fetchAllProducts',
   async () => {
     const response = await fetchAllProducts();
-    console.log("response from fetchAllProductsAsync is ", response);
+    // console.log("response from fetchAllProductsAsync is ", response);
     return response.data
   },
 )
 export const fetchAllProductsByFilterAsync = createAsyncThunk(
   'product/fetchAllProductsByFilter',
   async ({ fil, sort, pagination }) => {
-    console.log("fil ans sort and pageination are are", fil, sort, pagination);
+    // console.log("fil ans sort and pageination are are", fil, sort, pagination);
     const response = await fetchAllProductsByFilter(fil, sort, pagination);
-    console.log("response from fetchAllProductsAsync is ", response);
+    // console.log("response from fetchAllProductsAsync is ", response);
     return response.data
   },
 )
@@ -22,7 +22,7 @@ export const fetchBrandsAsync = createAsyncThunk(
   'product/fetchBrands',
   async () => {
     const response = await fetchBrands();
-    console.log("response from fetchBrandAsync is ", response);
+    // console.log("response from fetchBrandAsync is ", response);
     return response.data;
   }
 )
@@ -30,7 +30,7 @@ export const fetchCategoriesAsync = createAsyncThunk(
   'product/fetchCategories',
   async () => {
     const response = await fetchCategories();
-    console.log("response from fetchBrandAsync is ", response);
+    // console.log("response from fetchBrandAsync is ", response);
     return response.data;
   }
 )
@@ -57,9 +57,6 @@ export const productSlice = createSlice({
   name: 'product',
   initialState,
   reducers: {
-    increment: (state) => {
-      state.value += 1;
-    },
     // standard reducer logic, with auto-generated action types per reducer
   },
   extraReducers: (builder) => {
@@ -103,7 +100,6 @@ export const productSlice = createSlice({
 
   },
 })
-export const { increment } = productSlice.actions;
 export const selectAllProducts = (state) => state.product.products.data
 export const selectBrands = (state) => state.product.brands
 export const selectProductById = (state) => state.product.selectedProduct;

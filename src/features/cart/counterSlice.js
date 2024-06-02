@@ -37,13 +37,12 @@ export const deleteItemFromCartAsync = createAsyncThunk(
 export const resetCartAsync = createAsyncThunk(
   'cart/resetCart',
   async (userId) => {
-    console.log("in resecartAsync");
     const response = await resetCart(userId);
     // The value we return becomes the `fulfilled` action payload
     return response.data;
   }
 );
-export const counterSlice = createSlice({
+export const cartSlice = createSlice({
   name: 'cart',
   initialState: {
     value: 0,
@@ -51,9 +50,6 @@ export const counterSlice = createSlice({
   items: [],
   },
   reducers: {
-    increment: (state) => {
-      state.value += 1
-    },
   },
   extraReducers:(builder)=>{
     builder
@@ -97,8 +93,5 @@ export const counterSlice = createSlice({
 },
 });
 
-
-export const { increment } = counterSlice.actions
-
 export const selectItems = (state) => state.cart.items;
-export default counterSlice.reducer
+export default cartSlice.reducer

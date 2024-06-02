@@ -2,13 +2,13 @@ import { Fragment, useEffect, useState } from 'react'
 import { Dialog, Disclosure, Menu, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { ChevronDownIcon, FunnelIcon, MinusIcon, PlusIcon, Squares2X2Icon } from '@heroicons/react/20/solid'
-import {StarIcon} from '@heroicons/react/20/solid'
-import {useSelector,useDispatch} from 'react-redux'
-import {fetchAllProductsAsync, selectAllProducts,fetchAllProductsByFilterAsync, selectTotalItems, selectBrands, selectCategories, fetchBrandsAsync, fetchCategoriesAsync} from '../product-list/productlistSlice'
-import {ITEM_PER_PAGE} from '../../app/constants.js'
+import { StarIcon } from '@heroicons/react/20/solid'
+import { useSelector, useDispatch } from 'react-redux'
+import { selectAllProducts, fetchAllProductsByFilterAsync, selectTotalItems, selectBrands, selectCategories, fetchBrandsAsync, fetchCategoriesAsync } from '../product-list/productlistSlice'
+import { ITEM_PER_PAGE } from '../../app/constants.js'
 const sortOptions = [
   { name: 'Best Rating', sort: 'rating', current: false },
-  
+
   { name: 'Price: Low to High', sort: 'price', current: false },
   { name: 'Price: High to Low', sort: 'price', current: false },
 ]
@@ -26,11 +26,11 @@ const items = [
 ]
 
 export default function ProductList() {
-  const dispatch=useDispatch()
-  const totalItems=useSelector(selectTotalItems)
-  const products=useSelector(selectAllProducts)
-  const brands=useSelector(selectBrands)
-  const categories=useSelector(selectCategories)
+  const dispatch = useDispatch()
+  const totalItems = useSelector(selectTotalItems)
+  const products = useSelector(selectAllProducts)
+  const brands = useSelector(selectBrands)
+  const categories = useSelector(selectCategories)
   const filters = [
     {
       id: 'brand',
@@ -40,65 +40,65 @@ export default function ProductList() {
     {
       id: 'category',
       name: 'Category',
-      options:categories,
+      options: categories,
     },
-    
-   
+
+
   ]
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
-  const [fil,setFil]=useState({})
-  const [sort,setSort]=useState({})
+  const [fil, setFil] = useState({})
+  const [sort, setSort] = useState({})
 
 
-  const [page,setPage]=useState(1);
- 
- const  filterHandler=(e,section,option)=>{4
-  console.log("e is ",e.target.checked);
-  const newFil={...fil}
-  if(e.target.checked){
-    if(newFil[section.id]){
-      newFil[section.id].push(option.value)
-    }else{
-      newFil[section.id]=[option.value];
+  const [page, setPage] = useState(1);
+
+  const filterHandler = (e, section, option) => {
+    // console.log("e is ",e.target.checked);
+    const newFil = { ...fil }
+    if (e.target.checked) {
+      if (newFil[section.id]) {
+        newFil[section.id].push(option.value)
+      } else {
+        newFil[section.id] = [option.value];
+      }
+    } else {
+      const index = newFil[section.id].findIndex(el => el === option.value);
+      newFil[section.id].splice(index, 1);//delete one element;
     }
-  }else{
-    const index=newFil[section.id].findIndex(el=>el===option.value);
-    newFil[section.id].splice(index,1);//delete one element;
+    console.log("after update newFil is ", newFil);
+    setFil(newFil)
+    // dispatch(fetchAllProductsByFilterAsync(newFil))
+    // console.log(section.id,option.value)
   }
-  console.log("after update newFil is ",newFil);
-  setFil(newFil)
-  // dispatch(fetchAllProductsByFilterAsync(newFil))
-  console.log(section.id,option.value)
- }
 
- useEffect(()=>{
-  console.log("arrived in useEffect");
-  console.log(" fil and sort is ",fil,sort);
-  console.log("page and item_per_page is ",page,ITEM_PER_PAGE)
-  const pagination={_page:page,_per_page:ITEM_PER_PAGE}
-  dispatch(fetchAllProductsByFilterAsync({fil,sort,pagination}))
-},[dispatch,fil,sort,page])
-useEffect(()=>{
-  setPage(1)
-},[totalItems,sort])
-useEffect(()=>{
-  dispatch(fetchBrandsAsync());
-  dispatch(fetchCategoriesAsync());
-},[])
-const sortHandler=(option)=>{
-  console.log(option)
-  const newSort={_sort:option.sort}
-  setSort(newSort)
-  
-}
-const HandlePage=(page)=>{
-  console.log("in handle page")
-  console.log("page is ",page);
-   if(page>=1&&page<(totalItems/ITEM_PER_PAGE+1)){
-    setPage(page);
-   }
-    
-}
+  useEffect(() => {
+    // console.log("arrived in useEffect");
+    // console.log(" fil and sort is ",fil,sort);
+    // console.log("page and item_per_page is ",page,ITEM_PER_PAGE)
+    const pagination = { _page: page, _per_page: ITEM_PER_PAGE }
+    dispatch(fetchAllProductsByFilterAsync({ fil, sort, pagination }))
+  }, [dispatch, fil, sort, page])
+  useEffect(() => {
+    setPage(1)
+  }, [totalItems, sort])
+  useEffect(() => {
+    dispatch(fetchBrandsAsync());
+    dispatch(fetchCategoriesAsync());
+  }, [])
+  const sortHandler = (option) => {
+    // console.log(option)
+    const newSort = { _sort: option.sort }
+    setSort(newSort)
+
+  }
+  const HandlePage = (page) => {
+    // console.log("in handle page")
+    // console.log("page is ",page);
+    if (page >= 1 && page < (totalItems / ITEM_PER_PAGE + 1)) {
+      setPage(page);
+    }
+
+  }
 
 
 
@@ -139,7 +139,7 @@ const HandlePage=(page)=>{
                         <Menu.Item key={option.name}>
                           {({ active }) => (
                             <div
-                            onClick={(e)=>sortHandler(option)}
+                              onClick={(e) => sortHandler(option)}
                               className={classNames(
                                 option.current ? 'font-medium text-gray-900' : 'text-gray-500',
                                 active ? 'bg-gray-100' : '',
@@ -177,18 +177,18 @@ const HandlePage=(page)=>{
             </h2>
 
             <div className="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-4">
-              <DeskTopFilter filterHandler={filterHandler} filters={filters}/>
+              <DeskTopFilter filterHandler={filterHandler} filters={filters} />
               <div className="lg:col-span-3">
                 {/* //ProductList */}
-                <ProductGrid products={products}/>
+                <ProductGrid products={products} />
               </div>
             </div>
           </section>
 
-         
-         <Pagination HandlePage={HandlePage} page={page} setPage={setPage} totalItems={totalItems}/>
-     
-    
+
+          <Pagination HandlePage={HandlePage} page={page} setPage={setPage} totalItems={totalItems} />
+
+
         </main>
       </div>
     </div>
@@ -196,49 +196,49 @@ const HandlePage=(page)=>{
 }
 
 
-const MobileFilter=({mobileFiltersOpen,setMobileFiltersOpen,filterHandler,filters})=>{
-  
+const MobileFilter = ({ mobileFiltersOpen, setMobileFiltersOpen, filterHandler, filters }) => {
 
-  return(<Transition.Root show={mobileFiltersOpen} as={Fragment}>
-          <Dialog as="div" className="relative z-40 lg:hidden" onClose={setMobileFiltersOpen}>
-            <Transition.Child
-              as={Fragment}
-              enter="transition-opacity ease-linear duration-300"
-              enterFrom="opacity-0"
-              enterTo="opacity-100"
-              leave="transition-opacity ease-linear duration-300"
-              leaveFrom="opacity-100"
-              leaveTo="opacity-0"
-            >
-              <div className="fixed inset-0 bg-black bg-opacity-25" />
-            </Transition.Child>
-            <div className="fixed inset-0 z-40 flex">
-              <Transition.Child
-                as={Fragment}
-                enter="transition ease-in-out duration-300 transform"
-                enterFrom="translate-x-full"
-                enterTo="translate-x-0"
-                leave="transition ease-in-out duration-300 transform"
-                leaveFrom="translate-x-0"
-                leaveTo="translate-x-full"
+
+  return (<Transition.Root show={mobileFiltersOpen} as={Fragment}>
+    <Dialog as="div" className="relative z-40 lg:hidden" onClose={setMobileFiltersOpen}>
+      <Transition.Child
+        as={Fragment}
+        enter="transition-opacity ease-linear duration-300"
+        enterFrom="opacity-0"
+        enterTo="opacity-100"
+        leave="transition-opacity ease-linear duration-300"
+        leaveFrom="opacity-100"
+        leaveTo="opacity-0"
+      >
+        <div className="fixed inset-0 bg-black bg-opacity-25" />
+      </Transition.Child>
+      <div className="fixed inset-0 z-40 flex">
+        <Transition.Child
+          as={Fragment}
+          enter="transition ease-in-out duration-300 transform"
+          enterFrom="translate-x-full"
+          enterTo="translate-x-0"
+          leave="transition ease-in-out duration-300 transform"
+          leaveFrom="translate-x-0"
+          leaveTo="translate-x-full"
+        >
+          <Dialog.Panel className="relative ml-auto flex h-full w-full max-w-xs flex-col overflow-y-auto bg-white py-4 pb-12 shadow-xl">
+            <div className="flex items-center justify-between px-4">
+              <h2 className="text-lg font-medium text-gray-900">Filters</h2>
+              <button
+                type="button"
+                className="-mr-2 flex h-10 w-10 items-center justify-center rounded-md bg-white p-2 text-gray-400"
+                onClick={() => setMobileFiltersOpen(false)}
               >
-                <Dialog.Panel className="relative ml-auto flex h-full w-full max-w-xs flex-col overflow-y-auto bg-white py-4 pb-12 shadow-xl">
-                  <div className="flex items-center justify-between px-4">
-                    <h2 className="text-lg font-medium text-gray-900">Filters</h2>
-                    <button
-                      type="button"
-                      className="-mr-2 flex h-10 w-10 items-center justify-center rounded-md bg-white p-2 text-gray-400"
-                      onClick={() => setMobileFiltersOpen(false)}
-                    >
-                      <span className="sr-only">Close menu</span>
-                      <XMarkIcon className="h-6 w-6" aria-hidden="true" />
-                    </button>
-                  </div>
+                <span className="sr-only">Close menu</span>
+                <XMarkIcon className="h-6 w-6" aria-hidden="true" />
+              </button>
+            </div>
 
-                  {/* Filters */}
-                  <form className="mt-4 border-t border-gray-200">
-                    <h3 className="sr-only">Categories</h3>
-                    {/* <ul role="list" className="px-2 py-3 font-medium text-gray-900">
+            {/* Filters */}
+            <form className="mt-4 border-t border-gray-200">
+              <h3 className="sr-only">Categories</h3>
+              {/* <ul role="list" className="px-2 py-3 font-medium text-gray-900">
                       {subCategories.map((category) => (
                         <li key={category.name}>
                           <a href={category.href} className="block px-2 py-3">
@@ -248,208 +248,207 @@ const MobileFilter=({mobileFiltersOpen,setMobileFiltersOpen,filterHandler,filter
                       ))}
                     </ul> */}
 
-                    {filters.map((section) => (
-                      <Disclosure as="div" key={section.id} className="border-t border-gray-200 px-4 py-6">
-                        {({ open }) => (
-                          <>
-                            <h3 className="-mx-2 -my-3 flow-root">
-                              <Disclosure.Button className="flex w-full items-center justify-between bg-white px-2 py-3 text-gray-400 hover:text-gray-500">
-                                <span className="font-medium text-gray-900">{section.name}</span>
-                                <span className="ml-6 flex items-center">
-                                  {open ? (
-                                    <MinusIcon className="h-5 w-5" aria-hidden="true" />
-                                  ) : (
-                                    <PlusIcon className="h-5 w-5" aria-hidden="true" />
-                                  )}
-                                </span>
-                              </Disclosure.Button>
-                            </h3>
-                            <Disclosure.Panel className="pt-6">
-                              <div className="space-y-6">
-                                {section.options.map((option, optionIdx) => (
-                                  <div key={option.value} className="flex items-center">
-                                    <input
-                                      id={`filter-mobile-${section.id}-${optionIdx}`}
-                                      name={`${section.id}[]`}
-                                      defaultValue={option.value}
-                                      type="checkbox"
-                                      onChange={(e)=>filterHandler(e,section,option)}
-                                      defaultChecked={option.checked}
-                                      className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                                    />
-                                    <label
-                                      htmlFor={`filter-mobile-${section.id}-${optionIdx}`}
-                                      className="ml-3 min-w-0 flex-1 text-gray-500"
-                                    >
-                                      {option.label}
-                                    </label>
-                                  </div>
-                                ))}
-                              </div>
-                            </Disclosure.Panel>
-                          </>
-                        )}
-                      </Disclosure>
-                    ))}
-                  </form>
-                </Dialog.Panel>
-              </Transition.Child>
-            </div>
-          </Dialog>
-        </Transition.Root>);
-}
-const DeskTopFilter=({filterHandler,filters})=>{
-
-  return(<form className="hidden lg:block">
-  <h3 className="sr-only">Categories</h3>
-  {filters.map((section) => (
-    <Disclosure as="div" key={section.id} className="border-b border-gray-200 py-6">
-      {({ open }) => (
-        <>
-          <h3 className="-my-3 flow-root">
-            <Disclosure.Button className="flex w-full items-center justify-between bg-white py-3 text-sm text-gray-400 hover:text-gray-500">
-              <span className="font-medium text-gray-900">{section.name}</span>
-              <span className="ml-6 flex items-center">
-                {open ? (
-                  <MinusIcon className="h-5 w-5" aria-hidden="true" />
-                ) : (
-                  <PlusIcon className="h-5 w-5" aria-hidden="true" />
-                )}
-              </span>
-            </Disclosure.Button>
-          </h3>
-          <Disclosure.Panel className="pt-6">
-            <div className="space-y-4">
-              {section.options.map((option, optionIdx) => (
-                <div key={option.value} className="flex items-center">
-                  <input
-                    id={`filter-${section.id}-${optionIdx}`}
-                    name={`${section.id}[]`}
-                    defaultValue={option.value}
-                    type="checkbox"
-                    onChange={(e)=>filterHandler(e,section,option)}
-                    defaultChecked={option.checked}
-                    className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                  />
-                  <label
-                    htmlFor={`filter-${section.id}-${optionIdx}`}
-                    className="ml-3 text-sm text-gray-600"
-                  >
-                    {option.label}
-                  </label>
-                </div>
+              {filters.map((section) => (
+                <Disclosure as="div" key={section.id} className="border-t border-gray-200 px-4 py-6">
+                  {({ open }) => (
+                    <>
+                      <h3 className="-mx-2 -my-3 flow-root">
+                        <Disclosure.Button className="flex w-full items-center justify-between bg-white px-2 py-3 text-gray-400 hover:text-gray-500">
+                          <span className="font-medium text-gray-900">{section.name}</span>
+                          <span className="ml-6 flex items-center">
+                            {open ? (
+                              <MinusIcon className="h-5 w-5" aria-hidden="true" />
+                            ) : (
+                              <PlusIcon className="h-5 w-5" aria-hidden="true" />
+                            )}
+                          </span>
+                        </Disclosure.Button>
+                      </h3>
+                      <Disclosure.Panel className="pt-6">
+                        <div className="space-y-6">
+                          {section.options.map((option, optionIdx) => (
+                            <div key={option.value} className="flex items-center">
+                              <input
+                                id={`filter-mobile-${section.id}-${optionIdx}`}
+                                name={`${section.id}[]`}
+                                defaultValue={option.value}
+                                type="checkbox"
+                                onChange={(e) => filterHandler(e, section, option)}
+                                defaultChecked={option.checked}
+                                className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                              />
+                              <label
+                                htmlFor={`filter-mobile-${section.id}-${optionIdx}`}
+                                className="ml-3 min-w-0 flex-1 text-gray-500"
+                              >
+                                {option.label}
+                              </label>
+                            </div>
+                          ))}
+                        </div>
+                      </Disclosure.Panel>
+                    </>
+                  )}
+                </Disclosure>
               ))}
-            </div>
-          </Disclosure.Panel>
-        </>
-      )}
-    </Disclosure>
-  ))}
-</form>);
+            </form>
+          </Dialog.Panel>
+        </Transition.Child>
+      </div>
+    </Dialog>
+  </Transition.Root>);
+}
+const DeskTopFilter = ({ filterHandler, filters }) => {
+
+  return (<form className="hidden lg:block">
+    <h3 className="sr-only">Categories</h3>
+    {filters.map((section) => (
+      <Disclosure as="div" key={section.id} className="border-b border-gray-200 py-6">
+        {({ open }) => (
+          <>
+            <h3 className="-my-3 flow-root">
+              <Disclosure.Button className="flex w-full items-center justify-between bg-white py-3 text-sm text-gray-400 hover:text-gray-500">
+                <span className="font-medium text-gray-900">{section.name}</span>
+                <span className="ml-6 flex items-center">
+                  {open ? (
+                    <MinusIcon className="h-5 w-5" aria-hidden="true" />
+                  ) : (
+                    <PlusIcon className="h-5 w-5" aria-hidden="true" />
+                  )}
+                </span>
+              </Disclosure.Button>
+            </h3>
+            <Disclosure.Panel className="pt-6">
+              <div className="space-y-4">
+                {section.options.map((option, optionIdx) => (
+                  <div key={option.value} className="flex items-center">
+                    <input
+                      id={`filter-${section.id}-${optionIdx}`}
+                      name={`${section.id}[]`}
+                      defaultValue={option.value}
+                      type="checkbox"
+                      onChange={(e) => filterHandler(e, section, option)}
+                      defaultChecked={option.checked}
+                      className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                    />
+                    <label
+                      htmlFor={`filter-${section.id}-${optionIdx}`}
+                      className="ml-3 text-sm text-gray-600"
+                    >
+                      {option.label}
+                    </label>
+                  </div>
+                ))}
+              </div>
+            </Disclosure.Panel>
+          </>
+        )}
+      </Disclosure>
+    ))}
+  </form>);
 }
 
-const Pagination=({HandlePage,page,setPage,totalItems})=>{
-  return( 
+const Pagination = ({ HandlePage, page, setPage, totalItems }) => {
+  return (
     <div className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6">
-    <div className="flex flex-1 justify-between sm:hidden">
-      <p
-         onClick={(e)=>HandlePage(page-1)}
-        className="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
-      >
-        Previous
-      </p>
-      <p
-       onClick={(e)=>HandlePage(page+1)}
-        className="relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
-      >
-        Next
-      </p>
-    </div>
-    <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
-      <div>
-        <p className="text-sm text-gray-700">
-          Showing <span className="font-medium">{(page-1)*ITEM_PER_PAGE+1}</span> to{' '}
-          <span className="font-medium">{page*ITEM_PER_PAGE<totalItems?(page*ITEM_PER_PAGE):(totalItems)}</span> of{' '}
-          <span className="font-medium">{totalItems}</span> results
+      <div className="flex flex-1 justify-between sm:hidden">
+        <p
+          onClick={(e) => HandlePage(page - 1)}
+          className="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+        >
+          Previous
+        </p>
+        <p
+          onClick={(e) => HandlePage(page + 1)}
+          className="relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+        >
+          Next
         </p>
       </div>
-      <div>
-        <nav
-          className="isolate inline-flex -space-x-px rounded-md shadow-sm"
-          aria-label="Pagination"
-        >
-          <p
-          onClick={(e)=>HandlePage(page-1)}
-            href="#"
-            className="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
-          >
-            <span className="sr-only">Previous</span>
-            <ChevronLeftIcon className="h-5 w-5" aria-hidden="true" />
+      <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
+        <div>
+          <p className="text-sm text-gray-700">
+            Showing <span className="font-medium">{(page - 1) * ITEM_PER_PAGE + 1}</span> to{' '}
+            <span className="font-medium">{page * ITEM_PER_PAGE < totalItems ? (page * ITEM_PER_PAGE) : (totalItems)}</span> of{' '}
+            <span className="font-medium">{totalItems}</span> results
           </p>
-          
-          {
-            Array.from({length:Math.ceil(totalItems/ITEM_PER_PAGE)}).map((el,index)=>(<div
-              onClick={(e)=>HandlePage(index+1)}
-              aria-current="page"
-              className={`relative z-10 inline-flex items-center ${index+1===page?'bg-indigo-600 text-white':'text-gray-400 '} px-4 py-2 text-sm font-semibold  focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 cursor-pointer focus-visible:outline-indigo-600`}
+        </div>
+        <div>
+          <nav
+            className="isolate inline-flex -space-x-px rounded-md shadow-sm"
+            aria-label="Pagination"
+          >
+            <p
+              onClick={(e) => HandlePage(page - 1)}
+              href="#"
+              className="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
             >
-              {index+1}
-            </div>))
-            }
-          
+              <span className="sr-only">Previous</span>
+              <ChevronLeftIcon className="h-5 w-5" aria-hidden="true" />
+            </p>
 
-          <p
-          onClick={(e)=>HandlePage(page+1)}
-            href="#"
-            className="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
-          >
-            <span className="sr-only">Next</span>
-            <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />
-          </p>
-        </nav>
+            {
+              Array.from({ length: Math.ceil(totalItems / ITEM_PER_PAGE) }).map((el, index) => (<div
+                onClick={(e) => HandlePage(index + 1)}
+                aria-current="page"
+                key={index}
+                className={`relative z-10 inline-flex items-center ${index + 1 === page ? 'bg-indigo-600 text-white' : 'text-gray-400 '} px-4 py-2 text-sm font-semibold  focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 cursor-pointer focus-visible:outline-indigo-600`}
+              >
+                {index + 1}
+              </div>))
+            }
+
+
+            <p
+              onClick={(e) => HandlePage(page + 1)}
+              href="#"
+              className="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
+            >
+              <span className="sr-only">Next</span>
+              <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />
+            </p>
+          </nav>
+        </div>
+      </div>
+    </div>);
+}
+const ProductGrid = ({ products }) => {
+  // console.log("products in product grid is ",products);
+  return (<div className="bg-white">
+    <div className="mx-auto max-w-2xl px-4 py-0 sm:px-6 sm:py-0 lg:max-w-7xl lg:px-8">
+
+
+      <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:gap-x-8">
+        {products?.map((product, index) => (
+          <NavLink to={`/product-details/${product.id}`} key={product.id}>
+            <div  className="group relative border-solid border-2 border-gray-200 p-2">
+              <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-60">
+                <img
+                  src={product.thumbnail}
+                  alt={product.title}
+                  className="h-full w-full object-cover object-center lg:h-full lg:w-full"
+                />
+              </div>
+              <div className="mt-4 flex justify-between">
+                <div>
+                  <h3 className="text-sm text-gray-700">
+                    <a href={product.thumbnail}>
+                      <span aria-hidden="true" className="absolute inset-0" />
+                      {product.title}
+                    </a>
+                  </h3>
+                  <p className="mt-1 text-sm text-gray-500"><StarIcon className='w-6 h-6 inline' /><span className='align-bottom'>{product.rating}</span></p>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-900">{Math.round((product.price * (1 - product.discountPercentage / 100)))}</p>
+                  <p className="text-sm font-medium text-gray-400 line-through">{product.price}</p>
+
+                </div>
+              </div>
+            </div>
+          </NavLink>
+        ))}
       </div>
     </div>
   </div>);
-}
-const ProductGrid=({products})=>{
-  console.log("products in product grid is ",products);
-  return(<div className="bg-white">
-  <div className="mx-auto max-w-2xl px-4 py-0 sm:px-6 sm:py-0 lg:max-w-7xl lg:px-8">
-
-
-    <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:gap-x-8">
-      {products?.map((product,index) => (
-        <NavLink to={`/product-details/${product.id}`}>
-
-        
-        <div key={product.id} className="group relative border-solid border-2 border-gray-200 p-2">
-          <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-60">
-            <img
-              src={product.thumbnail}
-              alt={product.title}
-              className="h-full w-full object-cover object-center lg:h-full lg:w-full"
-            />
-          </div>
-          <div className="mt-4 flex justify-between">
-            <div>
-              <h3 className="text-sm text-gray-700">
-                <a href={product.thumbnail}>
-                  <span aria-hidden="true" className="absolute inset-0" />
-                  {product.title}
-                </a>
-              </h3>
-              <p className="mt-1 text-sm text-gray-500"><StarIcon className='w-6 h-6 inline'/><span className='align-bottom'>{product.rating}</span></p>
-            </div>
-        <div>
-        <p className="text-sm font-medium text-gray-900">{Math.round((product.price*(1-product.discountPercentage/100)))}</p>
-        <p className="text-sm font-medium text-gray-400 line-through">{product.price}</p>
-            
-        </div>
-          </div>
-        </div>
-        </NavLink>
-      ))}
-    </div>
-  </div>
-</div>);
 }

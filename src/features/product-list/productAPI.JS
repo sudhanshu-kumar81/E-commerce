@@ -4,7 +4,7 @@ export function fetchAllProducts() {
       const response = await fetch('http://localhost:3000/products') 
     
       const data = await response.json()
-      console.log("data in productapi id ",data);
+      // console.log("data in productapi id ",data);
       resolve({data})
     }
     );
@@ -12,9 +12,9 @@ export function fetchAllProducts() {
 
 
 export function fetchAllProductsByFilter(fil,sort,pagination) {
-  console.log("filter is ",fil);
-  console.log("sort is ",sort);
-  console.log("pagination  is ",pagination);
+  // console.log("filter is ",fil);
+  // console.log("sort is ",sort);
+  // console.log("pagination  is ",pagination);
   let queryString='';
   for(let key in fil){
     const categoryValues=fil[key];
@@ -24,7 +24,7 @@ export function fetchAllProductsByFilter(fil,sort,pagination) {
     }
   }
   for(let key in sort){
-    console.log("hi sir",sort[key]);
+    // console.log("hi sir",sort[key]);
       queryString+=`${key}=${sort[key]}&`
     }
   for(let key in pagination){
@@ -32,10 +32,10 @@ export function fetchAllProductsByFilter(fil,sort,pagination) {
   }
     return new Promise(async (resolve) =>{
       const response = await fetch('http://localhost:3000/products?'+queryString)
-      console.log("response after query string is ",response);  
+      // console.log("response after query string is ",response);  
       const totalItems=100;
       const data = await response.json()
-      console.log("data in productapi id ",data);
+      // console.log("data in productapi id ",data);
       resolve({data:{products:data,totalItems:totalItems}})
     }
     );
@@ -43,11 +43,11 @@ export function fetchAllProductsByFilter(fil,sort,pagination) {
 
   export function fetchBrands(){
     return new Promise(async (resolve)=>{
-      console.log("before requets");
+      // console.log("before requets");
       const response=await fetch('http://localhost:3000/brands')
-      console.log("after requets");
+      // console.log("after requets");
       const data=await response.json()
-      console.log("brand in productApi",data)
+      // console.log("brand in productApi",data)
       resolve({data})
     })
   }
@@ -55,7 +55,7 @@ export function fetchAllProductsByFilter(fil,sort,pagination) {
     return new Promise(async (resolve)=>{
       const response=await fetch('http://localhost:3000/categories')
       const data=await response.json()
-      console.log("category in productApi",data)
+      // console.log("category in productApi",data)
       resolve({data})
     })
   }
@@ -63,7 +63,7 @@ export function fetchAllProductsByFilter(fil,sort,pagination) {
     return new Promise(async (resolve)=>{
       const response=await fetch('http://localhost:3000/products/'+id)
       const data=await response.json()
-      console.log("category in productApi fetcchProductApi",data)
+      // console.log("category in productApi fetcchProductApi",data)
       resolve({data})
     })
   }
