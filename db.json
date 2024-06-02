@@ -2473,22 +2473,13 @@
       "password": "Abcd1234",
       "addresses": [
         {
-          "name": ",njk.dtjkf",
-          "email": "ghhjdfhj#@dhdfhjdfku.opdc",
-          "phone": "4567890",
-          "street": "fjiudfhjkjf",
-          "city": ",hjk,gfhjf",
-          "state": "hjufihfjgrkf",
-          "pinCode": "ihjiglrur"
-        },
-        {
-          "name": "sudhanshu kumar",
+          "name": "himanshu kumar sah",
           "email": "sudhanshu@gmail.com",
-          "phone": "7870620961",
-          "street": "BELA pipra singhiya",
           "city": "Singhia",
           "state": "BH",
-          "pinCode": "848209"
+          "pinCode": "848209",
+          "phone": "7870620961",
+          "street": "BELA pipra singhiya"
         },
         {
           "name": "Sudhanshu",
@@ -2498,6 +2489,24 @@
           "city": "Singhia",
           "state": "BH",
           "pinCode": "34567890"
+        },
+        {
+          "name": "sudhanshu kumar",
+          "email": "sudhanshu@gmail.com",
+          "city": "Singhia",
+          "state": "BH",
+          "pinCode": "848209",
+          "phone": "7870620961",
+          "street": "BELA pipra singhiya"
+        },
+        {
+          "name": "sudhanshu kumar",
+          "email": "sudhanshu@gmail.com",
+          "city": "Singhia",
+          "state": "BH",
+          "pinCode": "848209",
+          "phone": "7870620961",
+          "street": "BELA pipra singhiya"
         }
       ]
     }
@@ -3165,6 +3174,87 @@
         "city": "Singhia",
         "state": "BH",
         "pinCode": "34567890"
+      },
+      "status": "pending"
+    },
+    {
+      "id": "f72b",
+      "items": [
+        {
+          "id": "7d07",
+          "title": "iPhone X",
+          "description": "SIM-Free, Model A19211 6.5-inch Super Retina HD display with OLED technology A12 Bionic chip with ...",
+          "price": 899,
+          "discountPercentage": 17.94,
+          "rating": 4.44,
+          "stock": 34,
+          "brand": "Apple",
+          "category": "smartphones",
+          "thumbnail": "https://cdn.dummyjson.com/product-images/2/thumbnail.jpg",
+          "images": [
+            "https://cdn.dummyjson.com/product-images/2/1.jpg",
+            "https://cdn.dummyjson.com/product-images/2/2.jpg",
+            "https://cdn.dummyjson.com/product-images/2/3.jpg",
+            "https://cdn.dummyjson.com/product-images/2/thumbnail.jpg"
+          ],
+          "quantity": 1,
+          "user": "9496"
+        }
+      ],
+      "totalAmount": 899,
+      "totalItems": 1,
+      "user": {
+        "id": "9496",
+        "email": "sudhanshu5@gmail.com",
+        "password": "Abcd1234",
+        "addresses": [
+          {
+            "name": "himanshu kumar sah",
+            "email": "sudhanshu@gmail.com",
+            "city": "Singhia",
+            "state": "BH",
+            "pinCode": "848209",
+            "phone": "7870620961",
+            "street": "BELA pipra singhiya"
+          },
+          {
+            "name": "Sudhanshu",
+            "email": "sudhanshu@gmail.com",
+            "phone": "1234567890-",
+            "street": "BELA pipra singhiya",
+            "city": "Singhia",
+            "state": "BH",
+            "pinCode": "34567890"
+          },
+          {
+            "name": "sudhanshu kumar",
+            "email": "sudhanshu@gmail.com",
+            "city": "Singhia",
+            "state": "BH",
+            "pinCode": "848209",
+            "phone": "7870620961",
+            "street": "BELA pipra singhiya"
+          },
+          {
+            "name": "sudhanshu kumar",
+            "email": "sudhanshu@gmail.com",
+            "city": "Singhia",
+            "state": "BH",
+            "pinCode": "848209",
+            "phone": "7870620961",
+            "street": "BELA pipra singhiya"
+          }
+        ]
+      },
+      "paymentMethod": "cash",
+      "selectedAddress": {
+        "name": "himanshu kumar sah",
+        "email": "sudhanshu@gmail.com",
+        "city": "Singhia",
+        "state": "BH",
+        "pinCode": "848209",
+        "phone": "7870620961",
+        "street": "BELA pipra singhiya"
       },
       "status": "pending"
     }

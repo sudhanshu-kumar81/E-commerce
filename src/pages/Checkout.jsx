@@ -2,6 +2,7 @@ import { Fragment, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { NavLink, Navigate } from 'react-router-dom'
+import { selectUserInfo } from '../features/user/userSlice';
 import { useDispatch, useSelector } from 'react-redux'
 import { } from 'react-redux'
 import { selectItems } from '../features/cart/counterSlice'
@@ -67,7 +68,7 @@ const address = [
 ]
 const Checkout = () => {
     const currentOrder = useSelector(selectCurrentOrder);
-    const user = useSelector(selectLoggedInUser);
+    const user = useSelector(selectUserInfo);
     const {
         register,
         handleSubmit,

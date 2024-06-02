@@ -14,12 +14,16 @@ import { useDispatch, useSelector } from 'react-redux'
 import PageNotFound from './pages/404.jsx';
 import OrderSuccessPage from './pages/OrderSuccessPage.jsx';
 import UserOrdersPage from './pages/UserOrdersPage.jsx';
+import UserProfile from './features/user/components/UserProfile';
+import UserProfilePage from './pages/UserProfilePage';
+import { fetchLoggedInUserAsync } from './features/user/userSlice';
 function App() {
 const dispatch=useDispatch();
 const user=useSelector(selectLoggedInUser)
 useEffect(()=>{
   if(user){
     dispatch(fetchItemsByUserIdAsync(user.id))
+    dispatch(fetchLoggedInUserAsync(user.id))
   }
 },[dispatch, user])
   return (
@@ -39,6 +43,7 @@ useEffect(()=>{
       </Protected>}></Route>
       <Route path='/order-success/:id' element={<OrderSuccessPage></OrderSuccessPage>}></Route>
       <Route path='/orders' element={ <UserOrdersPage></UserOrdersPage>}></Route>
+      <Route path='/profile' element={  <UserProfilePage></UserProfilePage>}></Route>
       <Route path='*' element={  <PageNotFound></PageNotFound>}></Route>
       </Routes>
     </>

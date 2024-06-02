@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { checkUser,createUser, updateUser} from './authAPI'
+import { checkUser,createUser} from './authAPI'
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import { updateUser } from '../user/userAPI';
 export const createUserAsync = createAsyncThunk(
   'user/createUser',
   async (userData) => {
