@@ -6,7 +6,7 @@ import { addToCartAsync } from '../cart/counterSlice';
 import { selectLoggedInUser } from '../auth/authSlice';
 import { RadioGroup } from '@headlessui/react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchAllProductByIdAsync, selectProductById } from '../product-list/productlistSlice';
+import { fetchProductByIdAsync, selectProductById } from '../product-list/productlistSlice';
 import { useNavigate, useParams } from 'react-router-dom';
 
 // TODO: In server data we will add colors, sizes , highlights. to each product
@@ -51,7 +51,7 @@ export default function ProductDetail() {
 
   useEffect(() => {
     // console.log("params.id is ",params);
-    dispatch(fetchAllProductByIdAsync(params.id));
+    dispatch(fetchProductByIdAsync(params.id));
   }, [dispatch, params.id]);
   const handleCart = (e)=>{
     e.preventDefault();

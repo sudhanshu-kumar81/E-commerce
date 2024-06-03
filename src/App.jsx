@@ -4,7 +4,7 @@ import { fetchItemsByUserIdAsync } from './features/cart/counterSlice.js';
 import Protected from './features/auth/component/Protected.jsx'
 import Loginpage from './pages/Loginpage'
 import SignupPage from './pages/SignupPage.jsx'
-import { Route, Routes } from 'react-router-dom'
+import { Route, Routes,Link } from 'react-router-dom'
 import Home from './pages/Home.jsx'
 import CartPage from './pages/CartPage.jsx'
 import ProductDetailsPage from './pages/ProductDetailsPage.jsx'
@@ -17,6 +17,10 @@ import OrderSuccessPage from './pages/OrderSuccessPage.jsx';
 import UserOrdersPage from './pages/UserOrdersPage.jsx';
 import UserProfilePage from './pages/UserProfilePage';
 import { fetchLoggedInUserAsync } from './features/user/userSlice';
+import ProtectedAdmin from './features/admin/components/ProtectedAdmin.jsx'
+import AdminHome from './pages/AdminHome';
+import AdminProductDetailPage from './pages/AdminProductDetailPage';
+import AdminProductFormPage from './pages/AdminProductFormPage.jsx';
 function App() {
 const dispatch=useDispatch();
 const user=useSelector(selectLoggedInUser)
@@ -46,6 +50,21 @@ useEffect(()=>{
       <Route path='/profile' element={  <UserProfilePage></UserProfilePage>}></Route>
       <Route path='/logout' element={   <Logout></Logout>}></Route>
       <Route path='/forgot-password' element={   <ForgotPasswordPage></ForgotPasswordPage>}></Route>
+      <Route path='/admin' element={   <ProtectedAdmin>
+        <AdminHome></AdminHome>
+      </ProtectedAdmin>}></Route>
+      <Route path='/admin/product-detail/:id' element={   <ProtectedAdmin>
+        <AdminProductDetailPage></AdminProductDetailPage>
+      </ProtectedAdmin>  }></Route>
+      <Route path='/admin/product-form' element={   <ProtectedAdmin>
+        <AdminProductFormPage></AdminProductFormPage>
+      </ProtectedAdmin> }></Route>
+      <Route path='/admin/product-form/edit/:id' element={   <ProtectedAdmin>
+        <AdminProductFormPage></AdminProductFormPage>
+      </ProtectedAdmin> }></Route>
+
+
+
       <Route path='*' element={  <PageNotFound></PageNotFound>}></Route>
       </Routes>
     </>
