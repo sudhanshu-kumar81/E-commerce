@@ -91,7 +91,7 @@ export const productSlice = createSlice({
       })
       .addCase( fetchProductsByFiltersAsync.fulfilled, (state, action) => {
         state.status = 'idle'
-        state.products = action.payload.products
+        state.products = action.payload.products.data
         state.totalItems = action.payload.products.items
       })
       .addCase(fetchBrandsAsync.pending, (state) => {
@@ -135,7 +135,7 @@ export const productSlice = createSlice({
 
   },
 })
-export const selectAllProducts = (state) => state.product.products.data
+export const selectAllProducts = (state) => state.product.products
 export const selectBrands = (state) => state.product.brands
 export const selectProductById = (state) => state.product.selectedProduct;
 export const selectCategories = (state) => state.product.categories

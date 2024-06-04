@@ -31,6 +31,7 @@ export function fetchAllProductsByFilter(fil,sort,pagination) {
     queryString+=`${key}=${pagination[key]}&`
   }
     return new Promise(async (resolve) =>{
+      console.log('http://localhost:3000/products?'+queryString);
       const response = await fetch('http://localhost:3000/products?'+queryString)
       // console.log("response after query string is ",response);  
       const totalItems=100;

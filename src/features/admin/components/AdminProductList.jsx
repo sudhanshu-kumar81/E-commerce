@@ -6,7 +6,7 @@ import { StarIcon } from '@heroicons/react/20/solid'
 import { useSelector, useDispatch } from 'react-redux'
 import { selectAllProducts,  fetchProductsByFiltersAsync, selectTotalItems, selectBrands, selectCategories, fetchBrandsAsync, fetchCategoriesAsync } from '../../product-list/productlistSlice'
 import { Link } from 'react-router-dom'
-import {ITEM_PER_PAGE} from '../../../app/constants.js'
+import {ITEM_PER_PAGE,discountedPrice} from '../../../app/constants.js'
 const sortOptions = [
   { name: 'Best Rating', sort: 'rating', current: false },
 
@@ -447,7 +447,7 @@ const ProductGrid = ({ products }) => {
                   <p className="mt-1 text-sm text-gray-500"><StarIcon className='w-6 h-6 inline' /><span className='align-bottom'>{product.rating}</span></p>
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-gray-900">{Math.round((product.price * (1 - product.discountPercentage / 100)))}</p>
+                  <p className="text-sm font-medium text-gray-900"> {discountedPrice(product)}</p>
                   <p className="text-sm font-medium text-gray-400 line-through">${product.price}</p>
 
                 </div>
