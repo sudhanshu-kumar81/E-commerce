@@ -1,20 +1,21 @@
-export function fetchAllProducts() {
-    return new Promise(async (resolve) =>{
-      //TODO: we will not hard-code server URL here
-      const response = await fetch('http://localhost:3000/products') 
+// export function fetchAllProducts() {
+//     return new Promise(async (resolve) =>{
+//       //TODO: we will not hard-code server URL here
+//       const response = await fetch('http://localhost:3000/products') 
     
-      const data = await response.json()
-      // console.log("data in productapi id ",data);
-      resolve({data})
-    }
-    );
-  }
+//       const data = await response.json()
+//       // console.log("data in productapi id ",data);
+//       resolve({data})
+//     }
+//     );
+//   }
 
 
 export function fetchAllProductsByFilter(fil,sort,pagination) {
   // console.log("filter is ",fil);
   // console.log("sort is ",sort);
   // console.log("pagination  is ",pagination);
+  console.log("fetchAllProductsByFilter is called");
   let queryString='';
   for(let key in fil){
     const categoryValues=fil[key];
@@ -31,12 +32,13 @@ export function fetchAllProductsByFilter(fil,sort,pagination) {
     queryString+=`${key}=${pagination[key]}&`
   }
     return new Promise(async (resolve) =>{
-      console.log('http://localhost:3000/products?'+queryString);
+      console.log("before fetchAllProductByFilter")
+      console.log('http://localhost:3000/products?',queryString);
       const response = await fetch('http://localhost:3000/products?'+queryString)
       // console.log("response after query string is ",response);  
       const totalItems=100;
       const data = await response.json()
-      // console.log("data in productapi id ",data);
+      console.log("data in fetchAll product after response ",data);
       resolve({data:{products:data,totalItems:totalItems}})
     }
     );
@@ -56,11 +58,12 @@ export function fetchAllProductsByFilter(fil,sort,pagination) {
     return new Promise(async (resolve)=>{
       const response=await fetch('http://localhost:3000/categories')
       const data=await response.json()
-      // console.log("category in productApi",data)
+      console.log("data in fetch category ",data);
       resolve({data})
     })
   }
   export function fetchProductById(id){
+    console.log("id is ",id);
     return new Promise(async (resolve)=>{
       const response=await fetch('http://localhost:3000/products/'+id)
       const data=await response.json()
@@ -77,6 +80,7 @@ export function fetchAllProductsByFilter(fil,sort,pagination) {
         headers: { 'content-type': 'application/json' },
       });
       const data = await response.json();
+      
       resolve({ data });
     });
   }
@@ -92,6 +96,7 @@ export function fetchAllProductsByFilter(fil,sort,pagination) {
         }
       );
       const data = await response.json();
+      console.log("data in update payload",data);
       // TODO: on server it will only return some info of user (not password)
       resolve({ data });
     });

@@ -2,13 +2,14 @@
 
 import { useState, useEffect } from 'react';
 import { StarIcon } from '@heroicons/react/20/solid';
-import { addToCartAsync } from '../cart/counterSlice';
+import { addToCartAsync, selectItems } from '../cart/counterSlice';
 import { selectLoggedInUser } from '../auth/authSlice';
 import { RadioGroup } from '@headlessui/react';
 import { useDispatch, useSelector } from 'react-redux';
 import { discountedPrice } from '../../app/constants';
 import { fetchProductByIdAsync, selectProductById } from '../product-list/productlistSlice';
 import { useNavigate, useParams } from 'react-router-dom';
+import { useAlert } from 'react-alert';
 
 // TODO: In server data we will add colors, sizes , highlights. to each product
 
@@ -42,6 +43,7 @@ function classNames(...classes) {
 // TODO : Loading UI  
 
 export default function ProductDetail() {
+  const alert=useAlert()
   const navigate=useNavigate();
   const user = useSelector(selectLoggedInUser)
   const [selectedColor, setSelectedColor] = useState(colors[0]);
@@ -49,19 +51,25 @@ export default function ProductDetail() {
   const product = useSelector(selectProductById);
   const dispatch = useDispatch();
   const params = useParams();
-
+  const items=useSelector(selectItems)
   useEffect(() => {
-    // console.log("params.id is ",params);
+    console.log("params.id is ",params);
     dispatch(fetchProductByIdAsync(params.id));
   }, [dispatch, params.id]);
   const handleCart = (e)=>{
+    console.log("in handle cart")
     e.preventDefault();
-    const newItem  = {...product,quantity:1,user:user.id }
-    // console.log("newItem in handleCart",newItem);
-    delete newItem['id']
+    const index=items.findIndex((item)=>item.product.id===product.id)
+   if(index===-1){
+    const newItem={
+      product:product.id,quantity:1,user:user.id
+    }
     dispatch(addToCartAsync(newItem))
-    // console.log("item added and navigated")
+    alert.success('Item added successfully');
     navigate('/cart')
+   }else{
+    alert.error('Item Already Added');
+   }
     
   }
 

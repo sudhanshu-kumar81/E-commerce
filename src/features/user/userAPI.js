@@ -18,6 +18,7 @@ export function fetchLoggedInUserOrders(userId) {
 
 
   export function updateUser(update) {
+    console.log("data in update user is ",update)
     return new Promise(async (resolve) => {
       const response = await fetch('http://localhost:3000/users/'+update.id, {
         method: 'PATCH',

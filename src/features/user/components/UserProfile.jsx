@@ -22,12 +22,15 @@ export default function UserProfile() {
   const handleEdit = (addressUpdate, index) => {
     const newUser = { ...user, addresses: [...user.addresses] }; // for shallow copy issue
     newUser.addresses.splice(index, 1, addressUpdate);
+    console.log(" newUser in handle Edit for address", newUser);
     dispatch(updateUserAsync(newUser));
     setSelectedEditIndex(-1);
   };
   const handleRemove = (e, index) => {
     const newUser = { ...user, addresses: [...user.addresses] }; // for shallow copy issue
+    console.log(" newUser in handle Edit for address", newUser);
     newUser.addresses.splice(index, 1);
+   console.log(" newUser.id", newUser.id);
     dispatch(updateUserAsync(newUser));
   };
 
@@ -44,7 +47,10 @@ export default function UserProfile() {
   };
 
   const handleAdd = (address)=>{
+    console.log("address is ",address);
+    console.log("user is ",user);
     const newUser = { ...user, addresses: [...user.addresses, address] }; 
+    console.log("new user is in handleAdd ",newUser)
     dispatch(updateUserAsync(newUser));//some doubt
     setShowAddAddressForm(false);
   }

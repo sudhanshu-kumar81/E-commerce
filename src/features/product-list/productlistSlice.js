@@ -1,15 +1,15 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { fetchAllProducts, fetchAllProductsByFilter,fetchBrands,fetchCategories, fetchProductById, createProduct,
+import {  fetchAllProductsByFilter,fetchBrands,fetchCategories, fetchProductById, createProduct,
   updateProduct,} from './productAPI.JS'
 // First, create the thunk
-export const fetchAllProductsAsync = createAsyncThunk(
-  'product/fetchAllProducts',
-  async () => {
-    const response = await fetchAllProducts();
-    // console.log("response from fetchAllProductsAsync is ", response);
-    return response.data
-  },
-)
+// export const fetchAllProductsAsync = createAsyncThunk(
+//   'product/fetchAllProducts',
+//   async () => {
+//     const response = await fetchAllProducts();
+//     // console.log("response from fetchAllProductsAsync is ", response);
+//     return response.data
+//   },
+// )
 export const  fetchProductsByFiltersAsync = createAsyncThunk(
   'product/fetchAllProductsByFilter',
   async ({ fil, sort, pagination }) => {
@@ -79,58 +79,60 @@ export const productSlice = createSlice({
   },
   extraReducers: (builder) => {
 
-    builder.addCase(fetchAllProductsAsync.pending, (state) => {
-      state.status = 'loading'
-    })
-      .addCase(fetchAllProductsAsync.fulfilled, (state, action) => {
-        state.status = 'idle'
-        state.products = action.payload
-      })
+    builder
+    // .addCase(fetchAllProductsAsync.pending, (state) => {
+    //   state.status = 'loading'
+    // })
+    //   .addCase(fetchAllProductsAsync.fulfilled, (state, action) => {
+    //     state.status = 'idle'
+    //     state.products = action.payload
+    //   })
       .addCase( fetchProductsByFiltersAsync.pending, (state) => {
         state.status = 'loading'
       })
       .addCase( fetchProductsByFiltersAsync.fulfilled, (state, action) => {
         state.status = 'idle'
-        state.products = action.payload.products.data
-        state.totalItems = action.payload.products.items
+        state.products = action.payload.products.product
+        state.totalItems = action.payload.products.totalDocs
       })
       .addCase(fetchBrandsAsync.pending, (state) => {
         state.status = 'loading'
       })
       .addCase(fetchBrandsAsync.fulfilled, (state,action) => {
         state.status = 'idle'
-        state.brands = action.payload
+        state.brands = action.payload.brands
       })
       .addCase(fetchCategoriesAsync.pending, (state) => {
         state.status = 'loading'
       })
       .addCase(fetchCategoriesAsync.fulfilled, (state,action) => {
         state.status = 'idle'
-        state.categories = action.payload
+        state.categories = action.payload.category
       })
       .addCase(fetchProductByIdAsync.pending, (state) => {
         state.status = 'loading';
       })
       .addCase(fetchProductByIdAsync.fulfilled, (state, action) => {
         state.status = 'idle';
-        state.selectedProduct = action.payload;
+        state.selectedProduct = action.payload.product;
       })
       .addCase(createProductAsync.pending, (state) => {
         state.status = 'loading';
       })
       .addCase(createProductAsync.fulfilled, (state, action) => {
         state.status = 'idle';
-        state.products.data.push(action.payload);
+        state.products.push(action.payload.doc);
       })
       .addCase(updateProductAsync.pending, (state) => {
         state.status = 'loading';
       })
       .addCase(updateProductAsync.fulfilled, (state, action) => {
         state.status = 'idle';
-        const index = state.products.data.findIndex(
-          (product) => product.id === action.payload.id
+        const index = state.products.findIndex(
+          (product) => product.id === action.payload.product.id
         );
-        state.products[index] = action.payload;
+        state.products[index] = action.payload.product;
+        state.selectedProduct=action.payload.product
       });
 
   },
@@ -140,5 +142,6 @@ export const selectBrands = (state) => state.product.brands
 export const selectProductById = (state) => state.product.selectedProduct;
 export const selectCategories = (state) => state.product.categories
 export const selectTotalItems = (state) => state.product.totalItems
+export const selectProductListStatus= (state) => state.product.status
 export default productSlice.reducer
 export const {clearSelectedProduct}=productSlice.actions

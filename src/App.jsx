@@ -46,9 +46,9 @@ function App() {
         <Route path='/checkout' element={<Protected>
           <Checkout></Checkout>
         </Protected>}></Route>
-        <Route path='/order-success/:id' element={<OrderSuccessPage></OrderSuccessPage>}></Route>
-        <Route path='/orders' element={<UserOrdersPage></UserOrdersPage>}></Route>
-        <Route path='/profile' element={<UserProfilePage></UserProfilePage>}></Route>
+        <Route path='/order-success/:id' element={<Protected><OrderSuccessPage></OrderSuccessPage></Protected>}></Route>
+        <Route path='/orders' element={<Protected><UserOrdersPage></UserOrdersPage></Protected>}></Route>
+        <Route path='/profile' element={<Protected><UserProfilePage></UserProfilePage></Protected>}></Route>
         <Route path='/logout' element={<Logout></Logout>}></Route>
         <Route path='/forgot-password' element={<ForgotPasswordPage></ForgotPasswordPage>}></Route>
         <Route path='/admin' element={<ProtectedAdmin>

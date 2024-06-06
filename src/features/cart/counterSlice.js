@@ -3,6 +3,7 @@ import { addToCart, deleteItemFromCart, fetchItemsByUserId, updateCart,resetCart
 export const addToCartAsync = createAsyncThunk(
   'cart/addToCart',
   async (item) => {
+    console.log("item in addTocart in frontend",item);
     const response = await addToCart(item);
     // The value we return becomes the `fulfilled` action payload
     return response.data;
@@ -19,8 +20,8 @@ export const fetchItemsByUserIdAsync = createAsyncThunk(
 );
 export const updateCartAsync = createAsyncThunk(
   'cart/updateCart',
-  async (update) => {
-    const response = await updateCart(update);
+  async (updatedItem) => {
+    const response = await updateCart(updatedItem);
     // The value we return becomes the `fulfilled` action payload
     return response.data;
   }
@@ -58,29 +59,29 @@ export const cartSlice = createSlice({
     })
     .addCase(addToCartAsync.fulfilled, (state, action) => {
       state.status = 'idle';
-      state.items.push(action.payload);
+      state.items.push(action.payload.cartDetails);
     })
     .addCase(fetchItemsByUserIdAsync.pending, (state) => {
       state.status = 'loading';
     })
     .addCase(fetchItemsByUserIdAsync.fulfilled, (state, action) => {
       state.status = 'idle';
-      state.items = action.payload;
+      state.items = action.payload.cartItems;
     })
     .addCase(updateCartAsync.pending, (state) => {
       state.status = 'loading';
     })
     .addCase(updateCartAsync.fulfilled, (state, action) => {
       state.status = 'idle';
-      const index =  state.items.findIndex(item=>item.id===action.payload.id)
-      state.items[index] = action.payload;
+      const index =  state.items.findIndex(item=>item.id===action.payload.updatedItem.id)
+      state.items[index] = action.payload.updatedItem;
     })
     .addCase(deleteItemFromCartAsync.pending, (state) => {
       state.status = 'loading';
     })
     .addCase(deleteItemFromCartAsync.fulfilled, (state, action) => {
       state.status = 'idle';
-      const index =  state.items.findIndex(item=>item.id===action.payload.id)
+      const index =  state.items.findIndex(item=>item.id===action.payload.deletedItem.id)
       state.items.splice(index,1);
     })
     .addCase(resetCartAsync.pending, (state) => {

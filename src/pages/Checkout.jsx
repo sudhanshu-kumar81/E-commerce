@@ -8,9 +8,7 @@ import { selectItems } from '../features/cart/counterSlice'
 import { deleteItemFromCartAsync, updateCartAsync } from '../features/cart/counterSlice'
 import {createOrderAsync,selectCurrentOrder} from '../features/order/orderSlice'
 import { useForm } from 'react-hook-form';
-import {
-    updateUserAsync,
-} from '../features/auth/authSlice';
+import { updateUserAsync } from '../features/user/userSlice';
 const Checkout = () => {
     const currentOrder = useSelector(selectCurrentOrder);
     const user = useSelector(selectUserInfo);
@@ -28,7 +26,8 @@ const Checkout = () => {
     }
     const handleQuantity = (e, item) => {
         // console.log("it is handlequantity e.target.value", e.target.value);
-        dispatch(updateCartAsync({ ...item, quantity: +e.target.value }));
+        const updatedItem={id:item.id,product:item.product.id,user:item.user.id ,quantity: +e.target.value }
+        dispatch(updateCartAsync(updatedItem));
     };
     const handleAddress = (e) => {
         // console.log(e.target.value);
@@ -42,8 +41,8 @@ const Checkout = () => {
         // console.log("in handleorder", items, paymentMethod, selectedAddress, totalAmount, totalItems, user)
 
         if (selectedAddress && paymentMethod) {
-            const order = { items, totalAmount, totalItems, user, paymentMethod, selectedAddress ,status:"pending"}
-            // console.log("order is ", order);
+            const order = { items, totalAmount, totalItems, user:user.id, paymentMethod, selectedAddress ,status:"pending"}
+            console.log("order is ", order);
             dispatch(createOrderAsync(order));
         } else {
             alert('Enter Address and Payment method')
@@ -55,7 +54,7 @@ const Checkout = () => {
     };
 
     const items = useSelector(selectItems);
-    const totalAmount = items.reduce((amount, item) => discountedPrice(item) * item.quantity + amount, 0)
+    const totalAmount = items.reduce((amount, item) => discountedPrice(item.product) * item.quantity + amount, 0)
     const totalItems = items.reduce((total, item) => item.quantity + total, 0)
     const [selectedAddress, setSelectedAddress] = useState(null);
     const [paymentMethod, setPaymentMethod] = useState(null);
@@ -73,11 +72,11 @@ const Checkout = () => {
                             noValidate
                             onSubmit={handleSubmit((data) => {
                                 // console.log("complete form data is ", data);
+                                const newUser={...user,
+                                    addresses: [...user.addresses, data]}
+                                    console.log("new User in checkout for update User",newUser);
                                 dispatch(
-                                    updateUserAsync({
-                                        ...user,
-                                        addresses: [...user.addresses, data],
-                                    })
+                                    updateUserAsync(newUser)
                                 );
                                 reset();
                             })}
@@ -376,8 +375,8 @@ const Checkout = () => {
                                             <li key={item.id} className="flex py-6">
                                                 <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
                                                     <img
-                                                        src={item.thumbnail}
-                                                        alt={item.title}
+                                                        src={item.product.thumbnail}
+                                                        alt={item.product.title}
                                                         className="h-full w-full object-cover object-center"
                                                     />
                                                 </div>
@@ -386,11 +385,11 @@ const Checkout = () => {
                                                     <div>
                                                         <div className="flex justify-between text-base font-medium text-gray-900">
                                                             <h3>
-                                                                <a href={item.href}>{item.title}</a>
+                                                                <a href={item.product.href}>{item.product.title}</a>
                                                             </h3>
-                                                            <p className="ml-4">${discountedPrice(item)}</p>
+                                                            <p className="ml-4">${discountedPrice(item.product)}</p>
                                                         </div>
-                                                        <p className="mt-1 text-sm text-gray-500">{item.brand}</p>
+                                                        <p className="mt-1 text-sm text-gray-500">{item.product.brand}</p>
                                                     </div>
                                                     <div className="flex flex-1 items-end justify-between text-sm">
                                                         <div className="text-gray-500">
@@ -427,7 +426,7 @@ const Checkout = () => {
                             <div className="border-t border-gray-200 px-4 py-6 sm:px-6">
                                 <div className="flex my-2 justify-between text-base font-medium text-gray-900">
                                     <p>Subtotal</p>
-                                    <p>$ {totalAmount}</p>
+                                    <p>${totalAmount}</p>
                                 </div>
                                 <div className="flex justify-between my-2 text-base font-medium text-gray-900">
                                     <p>Total Items in Cart</p>
@@ -439,7 +438,7 @@ const Checkout = () => {
                                     <div
 
                                         onClick={(e) => handleOrder(e)}
-                                        className="flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
+                                        className="flex cursor-pointer items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
                                     >
                                         Order Now
                                     </div>

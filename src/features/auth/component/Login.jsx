@@ -16,6 +16,9 @@ const Login = () => {
   } = useForm()
     return (
         <>
+        {
+          errors&&console.log("errors is ",errors)
+        }
         {user&&<Navigate to='/' replace={true}></Navigate>}
              <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
@@ -100,6 +103,9 @@ const Login = () => {
               >
                 Sign in
               </button>
+              {error && (
+                  <p className="text-red-500 ">{error}</p>
+                )}
             </div>
           </form>
 
@@ -109,7 +115,9 @@ const Login = () => {
               Create a account
             </NavLink>
           </p>
+          
         </div>
+        
       </div>
         </>
     )

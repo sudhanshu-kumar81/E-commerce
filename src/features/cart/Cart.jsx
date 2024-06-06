@@ -4,19 +4,22 @@ import { deleteItemFromCartAsync, selectItems, updateCartAsync, } from './counte
 import { NavLink } from 'react-router-dom'
 import { Navigate } from 'react-router-dom';
 import { discountedPrice } from '../../app/constants';
+import Modal from '../common/Modal';
 const Cart = () => {
   const dispatch = useDispatch()
+  const [openModal, setOpenModal] = useState(null);
 
   const handleRemove = (e, id) => {
-    // console.log("it is handleremove product id", id);
+    console.log("it is handleremove product id", id);
     dispatch(deleteItemFromCartAsync(id))
   }
   const handleQuantity = (e, item) => {
+    const updatedItem={id:item.id,product:item.product.id,user:item.user.id ,quantity: +e.target.value }
     // console.log("it is handlequantity e.target.value", e.target.value);
-    dispatch(updateCartAsync({ ...item, quantity: +e.target.value }));
+    dispatch(updateCartAsync(updatedItem));
   };
   const items = useSelector(selectItems);
-  const totalAmount = items.reduce((amount, item) => discountedPrice(item) * item.quantity + amount, 0)
+  const totalAmount = items.reduce((amount, item) => discountedPrice(item.product) * item.quantity + amount, 0)
   const totalItems = items.reduce((total, item) => item.quantity + total, 0)
 
   return (
@@ -31,8 +34,8 @@ const Cart = () => {
                 <li key={item.id} className="flex py-6">
                   <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
                     <img
-                      src={item.thumbnail}
-                      alt={item.title}
+                      src={item.product.thumbnail}
+                      alt={item.product.title}
                       className="h-full w-full object-cover object-center"
                     />
                   </div>
@@ -41,11 +44,11 @@ const Cart = () => {
                     <div>
                       <div className="flex justify-between text-base font-medium text-gray-900">
                         <h3>
-                          <a href={item.href}>{item.title}</a>
+                          <a href={item.product.href}>{item.product.title}</a>
                         </h3>
-                        <p className="ml-4">${discountedPrice(item)}</p>
+                        <p className="ml-4">${discountedPrice(item.product)}</p>
                       </div>
-                      <p className="mt-1 text-sm text-gray-500">{item.brand}</p>
+                      <p className="mt-1 text-sm text-gray-500">{item.product.brand}</p>
                     </div>
                     <div className="flex flex-1 items-end justify-between text-sm">
                       <div className="text-gray-500">
@@ -62,8 +65,17 @@ const Cart = () => {
                       </div>
 
                       <div className="flex">
+                      <Modal
+                            title={`Delete ${item.product.title}`}
+                            message="Are you sure you want to delete this Cart item ?"
+                            dangerOption="Delete"
+                            cancelOption="Cancel"
+                            dangerAction={(e) => handleRemove(e, item.id)}
+                            cancelAction={()=>setOpenModal(null)}
+                            showModal={openModal === item.id}
+                          ></Modal>
                         <button
-                          onClick={(e) => handleRemove(e, item.id)}
+                          onClick={(e) => {setOpenModal(item.id)}}
                           type="button"
                           className="font-medium text-indigo-600 hover:text-indigo-500"
                         >
@@ -82,7 +94,7 @@ const Cart = () => {
         <div className="border-t border-gray-200 px-4 py-6 sm:px-6">
           <div className="flex my-2 justify-between text-base font-medium text-gray-900">
             <p>Subtotal</p>
-            <p>$ {totalAmount}</p>
+            <p>${totalAmount}</p>
           </div>
           <div className="flex justify-between my-2 text-base font-medium text-gray-900">
             <p>Total Items in Cart</p>

@@ -2,16 +2,18 @@ import { Fragment, useEffect, useState } from 'react'
 import { Dialog, Disclosure, Menu, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { ChevronDownIcon, FunnelIcon, MinusIcon, PlusIcon, Squares2X2Icon } from '@heroicons/react/20/solid'
+ import {Grid,Audio } from 'react-loader-spinner'
 import { StarIcon } from '@heroicons/react/20/solid'
 import Pagination from '../common/Pagination.jsx'
 import { useSelector, useDispatch } from 'react-redux'
+import { selectProductListStatus } from '../product-list/productlistSlice'
 import { selectAllProducts,  fetchProductsByFiltersAsync, selectTotalItems, selectBrands, selectCategories, fetchBrandsAsync, fetchCategoriesAsync } from '../product-list/productlistSlice'
 import { ITEM_PER_PAGE,discountedPrice } from '../../app/constants.js'
 const sortOptions = [
-  { name: 'Best Rating', sort: 'rating', current: false },
+  { name: 'Best Rating', sort: 'rating', current: false ,order:'desc'},
 
-  { name: 'Price: Low to High', sort: 'price', current: false },
-  { name: 'Price: High to Low', sort: 'price', current: false },
+  { name: 'Price: Low to High', sort: 'price', current: false,order:'asc'},
+  { name: 'Price: High to Low', sort: 'price', current: false ,order:'desc'},
 ]
 
 function classNames(...classes) {
@@ -32,6 +34,7 @@ export default function ProductList() {
   const products = useSelector(selectAllProducts)
   const brands = useSelector(selectBrands)
   const categories = useSelector(selectCategories)
+  const status=useSelector(selectProductListStatus)
   const filters = [
     {
       id: 'brand',
@@ -88,9 +91,8 @@ export default function ProductList() {
   }, [])
   const sortHandler = (option) => {
     // console.log(option)
-    const newSort = { _sort: option.sort }
+    const newSort = { _sort: option.sort,_order:option.order }
     setSort(newSort)
-
   }
   const HandlePage = (page) => {
     // console.log("in handle page")
@@ -106,6 +108,8 @@ export default function ProductList() {
   return (
     <div className="bg-white">
       <div>
+   
+
         <MobileFilter filterHandler={filterHandler} filters={filters} mobileFiltersOpen={mobileFiltersOpen} setMobileFiltersOpen={setMobileFiltersOpen} />
 
 
@@ -182,7 +186,7 @@ export default function ProductList() {
               <div className="lg:col-span-3">
                 {/* //ProductList */}
               
-                <ProductGrid products={products} />
+                <ProductGrid products={products} status={status}/>
               </div>
             </div>
           </section>
@@ -351,15 +355,28 @@ const DeskTopFilter = ({ filterHandler, filters }) => {
 }
 
 
-const ProductGrid = ({ products }) => {
+const ProductGrid = ({ products,status }) => {
   // console.log("products in product grid is ",products);
+  // https://mhnpd.github.io/react-loader-spinner/docs/intro
   return (<div className="bg-white">
+    {
+      status==='loading'?(<Grid
+        visible={true}
+        height="80"
+        width="80"
+        color="#4fa94d"
+        ariaLabel="grid-loading"
+        radius="12.5"
+        wrapperStyle={{}}
+        wrapperClass="grid-wrapper"
+        />):null
+    }
     <div className="mx-auto max-w-2xl px-4 py-0 sm:px-6 sm:py-0 lg:max-w-7xl lg:px-8">
 
 
       <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:gap-x-8">
         {products&&products?.map((product, index) => (
-          <NavLink to={`/product-details/${product.id}`} key={product.id}>
+          <NavLink to={`/product-details/${product.id}`} key={product._id}>
             <div  className="group relative border-solid border-2 border-gray-200 p-2">
               <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-60">
                 <img
