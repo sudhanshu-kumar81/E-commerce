@@ -15,6 +15,7 @@ export function fetchAllProductsByFilter(fil,sort,pagination) {
   // console.log("filter is ",fil);
   // console.log("sort is ",sort);
   // console.log("pagination  is ",pagination);
+  const token=localStorage.getItem('token');
   console.log("fetchAllProductsByFilter is called");
   let queryString='';
   for(let key in fil){
@@ -34,7 +35,12 @@ export function fetchAllProductsByFilter(fil,sort,pagination) {
     return new Promise(async (resolve) =>{
       console.log("before fetchAllProductByFilter")
       console.log('http://localhost:3000/products?',queryString);
-      const response = await fetch('http://localhost:3000/products?'+queryString)
+      const response = await fetch('http://localhost:3000/products?'+queryString,{
+        headers:{
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        }
+      })
       // console.log("response after query string is ",response);  
       const totalItems=100;
       const data = await response.json()
@@ -63,9 +69,15 @@ export function fetchAllProductsByFilter(fil,sort,pagination) {
     })
   }
   export function fetchProductById(id){
+    const token=localStorage.getItem('token');
     console.log("id is ",id);
     return new Promise(async (resolve)=>{
-      const response=await fetch('http://localhost:3000/products/'+id)
+      const response=await fetch('http://localhost:3000/products/'+id,{
+        headers:{
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        }
+      })
       const data=await response.json()
       // console.log("category in productApi fetcchProductApi",data)
       resolve({data})
@@ -73,11 +85,15 @@ export function fetchAllProductsByFilter(fil,sort,pagination) {
   }
 
   export function createProduct(product) {
+    const token=localStorage.getItem('token');
     return new Promise(async (resolve) => {
       const response = await fetch('http://localhost:3000/products/', {
         method: 'POST',
         body: JSON.stringify(product),
-        headers: { 'content-type': 'application/json' },
+        headers:{
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        }
       });
       const data = await response.json();
       
@@ -86,13 +102,17 @@ export function fetchAllProductsByFilter(fil,sort,pagination) {
   }
   
   export function updateProduct(update) {
+    const token=localStorage.getItem('token');
     return new Promise(async (resolve) => {
       const response = await fetch(
         'http://localhost:3000/products/' + update.id,
         {
           method: 'PATCH',
           body: JSON.stringify(update),
-          headers: { 'content-type': 'application/json' },
+          headers:{
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+          }
         }
       );
       const data = await response.json();

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux';
 import { deleteItemFromCartAsync, selectItems, updateCartAsync, } from './counterSlice';
 import { NavLink } from 'react-router-dom'
@@ -21,10 +21,18 @@ const Cart = () => {
   const items = useSelector(selectItems);
   const totalAmount = items.reduce((amount, item) => discountedPrice(item.product) * item.quantity + amount, 0)
   const totalItems = items.reduce((total, item) => item.quantity + total, 0)
+  const [orderPossible,setOrderPossible]=useState(false);
+  useEffect(()=>{
+  
+   const isOrderPossible = items.every(item =>item.product.stock >= item.quantity);
+   console.log("is Order Possible",isOrderPossible);
+   setOrderPossible(isOrderPossible);
 
+  },[dispatch,items]);
   return (
     <>
-      {!items.length && <Navigate to='/' replace={true}></Navigate>}
+      {
+        items?(<>
       <div className="mx-auto bg-white max-w-7xl px-4 sm:px-6 lg:px-8 ">
         <div className="border-t border-gray-200 px-4 sm:px-6 lg:px-8 md:p-5">
           <h2 className='text-4xl font-bold tracking-tight text-gray-900 my-12'>Cart</h2>
@@ -62,9 +70,12 @@ const Cart = () => {
                           <option value="3">3</option>
                           <option value="4">4</option>
                         </select>
+                      <div className='text-blue-600 mt-1 font-semibold'><p>stock:{item.product.stock}</p></div>
+                     
                       </div>
-
+                      
                       <div className="flex">
+                     
                       <Modal
                             title={`Delete ${item.product.title}`}
                             message="Are you sure you want to delete this Cart item ?"
@@ -73,7 +84,7 @@ const Cart = () => {
                             dangerAction={(e) => handleRemove(e, item.id)}
                             cancelAction={()=>setOpenModal(null)}
                             showModal={openModal === item.id}
-                          ></Modal>
+                          ></Modal>     
                         <button
                           onClick={(e) => {setOpenModal(item.id)}}
                           type="button"
@@ -103,12 +114,26 @@ const Cart = () => {
 
           <p className="mt-0.5 text-sm text-gray-500">Shipping and taxes calculated at checkout.</p>
           <div className="mt-6">
-            <NavLink
+           
+
+
+
+          {
+            orderPossible?( <NavLink
               to='/checkout'
               className="flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
             >
               Checkout
+            </NavLink>):(
+              <NavLink
+              className="flex items-center justify-center rounded-md border border-transparent bg-gray-400 px-6 py-3 text-base font-medium text-white shadow-sm cursor-not-allowed"
+              disabled
+            >
+              Out of Stock
             </NavLink>
+            )
+          }
+           
           </div>
           <div className="mt-6 flex justify-center text-center text-sm text-gray-500">
             <p>
@@ -126,6 +151,8 @@ const Cart = () => {
           </div>
         </div>
       </div>
+        </>):(<></>)
+      }
     </>
   )
 }

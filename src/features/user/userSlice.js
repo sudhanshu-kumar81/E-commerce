@@ -50,7 +50,7 @@ export const userSlice = createSlice({
       .addCase(fetchLoggedInUserOrderAsync.fulfilled, (state, action) => {
         state.status = 'idle';
         // this info can be different or more from logged-in User info
-        state.userOrders = action.payload.orders;
+        state.userOrders = action.payload.userOrder;
       })
       .addCase(updateUserAsync.pending, (state) => {
         state.status = 'loading';
@@ -61,18 +61,23 @@ export const userSlice = createSlice({
       })
       .addCase(fetchLoggedInUserAsync.pending, (state) => {
         state.status = 'loading';
+        state.UserLoggedInstatus='pending';
       })
       .addCase(fetchLoggedInUserAsync.fulfilled, (state, action) => {
         state.status = 'idle';
         // this info can be different or more from logged-in User info
         state.userInfo = action.payload.user;
+        state.UserLoggedInstatus='fulfilled';
       });
 
   },
 });
 
 export const selectUserOrders = (state)=>state.user.userOrders;
+export const selectUserStatus=(state)=>state.user.status;
 export const selectUserInfo = (state)=>state.user.userInfo;
+export const selectUserLoggedInstatus = (state)=>state.user.UserLoggedInstatus;
+
 export const { increment } = userSlice.actions;
 
 export default userSlice.reducer;

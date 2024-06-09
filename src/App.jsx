@@ -4,7 +4,7 @@ import { fetchItemsByUserIdAsync } from './features/cart/counterSlice.js';
 import Protected from './features/auth/component/Protected.jsx'
 import Loginpage from './pages/Loginpage'
 import SignupPage from './pages/SignupPage.jsx'
-import { Route, Routes, Link } from 'react-router-dom'
+import { Route, Routes, Link, Navigate } from 'react-router-dom'
 import AdminOrdersPage from './pages/AdminOrderPage.jsx';
 import Home from './pages/Home.jsx'
 import CartPage from './pages/CartPage.jsx'
@@ -23,14 +23,38 @@ import AdminHome from './pages/AdminHome';
 import AdminProductDetailPage from './pages/AdminProductDetailPage';
 import AdminProductFormPage from './pages/AdminProductFormPage.jsx';
 function App() {
+  // const [token,setToken]=useState(null);
+  // const [id,setId]=useState(null);
+  // useEffect(()=>{
+  //   const storedToken = localStorage.getItem('token');
+  //   const storedId = localStorage.getItem('id');
+  //   if (storedToken && storedId) {
+  //     setToken(storedToken);
+  //     setId(storedId);
+  //   }
+  // },[])
   const dispatch = useDispatch();
   const user = useSelector(selectLoggedInUser)
+  const token = localStorage.getItem('token');
+    const id= localStorage.getItem('id');
+   
   useEffect(() => {
+    const token = localStorage.getItem('token');
+    const id= localStorage.getItem('id');
+    console.log("in use effect after refresh in app.js")
+    if (id&&token) {
+      dispatch(fetchItemsByUserIdAsync(id))
+      dispatch(fetchLoggedInUserAsync(id))
+    }
+  }, []);
+  useEffect(() => {
+    console.log("in use effect due to saved data in app.js")
     if (user) {
       dispatch(fetchItemsByUserIdAsync(user.id))
       dispatch(fetchLoggedInUserAsync(user.id))
     }
-  }, [dispatch, user])
+  }, [dispatch, user]);
+
   return (
     <>
       <Routes>
@@ -71,6 +95,10 @@ function App() {
 
       <Route path='*' element={<PageNotFound></PageNotFound>}></Route>
     </Routes >
+    {
+      !id&&!token&&(<><Navigate to='/login'></Navigate></>)
+    }
+
     </>
   )
 }

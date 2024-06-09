@@ -12,8 +12,10 @@ import { useForm } from 'react-hook-form';
 import Modal from '../../common/Modal'
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useEffect,useState } from 'react';
+import { useAlert } from 'react-alert';
 
 function ProductForm() {
+  const alert=useAlert()
   const [openModal, setOpenModal] = useState(null);
   const {
     register,
@@ -57,6 +59,7 @@ const navigate=useNavigate();
     const product = {...selectedProduct};
     product.deleted = true;
     dispatch(updateProductAsync(product));
+    alert.success("product deleted");
     navigate('/admin')
   }
 
@@ -86,12 +89,14 @@ const navigate=useNavigate();
           product.id = params.id;
           product.rating = selectedProduct.rating || 0;
           dispatch(updateProductAsync(product));
-          reset();
-          navigate('/admin')
+          alert.success("product updated successfully");
+          // reset();
+          // navigate('/admin')
         } else {
           dispatch(createProductAsync(product));
-          reset();
-          navigate('/admin')
+          alert.success("product created successfully");
+          // reset();
+          // navigate('/admin')
           //TODO:  on product successfully added clear fields and show a message
         }
       })}

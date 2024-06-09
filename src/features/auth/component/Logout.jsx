@@ -9,6 +9,8 @@ function Logout() {
     const user = useSelector(selectLoggedInUser)
 
     useEffect(()=>{
+        localStorage.removeItem('token');
+        localStorage.removeItem('id');
         dispatch(signOutAsync())
     })
 

@@ -396,14 +396,14 @@ const ProductGrid = ({ products,status }) => {
                   <p className="mt-1 text-sm text-gray-500"><StarIcon className='w-6 h-6 inline' /><span className='align-bottom'>{product.rating}</span></p>
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-gray-900">discountedPrice(product)</p>
+                  <p className="text-sm font-medium text-gray-900">${discountedPrice(product)}</p>
                   <p className="text-sm font-medium text-gray-400 line-through">${product.price}</p>
 
                 </div>
               </div>
-              {product.deleted && (
+              {product.stock<=0 && (
                   <div>
-                    <p className="text-sm text-red-400">product deleted</p>
+                    <p className="text-sm text-red-400">out of stock</p>
                   </div>
                 )}
                 {/* will not be needed when backend is implemented */}

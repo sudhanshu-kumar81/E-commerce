@@ -5,13 +5,16 @@ import { ChevronDownIcon, FunnelIcon, MinusIcon, PlusIcon, Squares2X2Icon } from
 import { StarIcon } from '@heroicons/react/20/solid'
 import { useSelector, useDispatch } from 'react-redux'
 import { selectAllProducts,  fetchProductsByFiltersAsync, selectTotalItems, selectBrands, selectCategories, fetchBrandsAsync, fetchCategoriesAsync } from '../../product-list/productlistSlice'
+import {Grid} from 'react-loader-spinner'
+import { selectProductListStatus } from '../../product-list/productlistSlice'
 import { Link } from 'react-router-dom'
+import Pagination from '../../common/Pagination.jsx'
 import {ITEM_PER_PAGE,discountedPrice} from '../../../app/constants.js'
 const sortOptions = [
-  { name: 'Best Rating', sort: 'rating', current: false },
+  { name: 'Best Rating', sort: 'rating', current: false,order:'desc' },
 
-  { name: 'Price: Low to High', sort: 'price', current: false },
-  { name: 'Price: High to Low', sort: 'price', current: false },
+  { name: 'Price: Low to High', sort: 'price', current: false ,order:'asc'},
+  { name: 'Price: High to Low', sort: 'price', current: false,order:'desc' },
 ]
 
 function classNames(...classes) {
@@ -27,6 +30,7 @@ const items = [
 ]
 
 export default function ProductList() {
+  const status=useSelector(selectProductListStatus)
   const dispatch = useDispatch()
   const totalItems = useSelector(selectTotalItems)
   const products = useSelector(selectAllProducts)
@@ -88,7 +92,7 @@ export default function ProductList() {
   }, [])
   const sortHandler = (option) => {
     // console.log(option)
-    const newSort = { _sort: option.sort }
+    const newSort = { _sort: option.sort,_order:option.order }
     setSort(newSort)
 
   }
@@ -186,13 +190,13 @@ export default function ProductList() {
                     Add New Product
                   </Link>
                 </div>
-                <ProductGrid products={products} />
+                <ProductGrid products={products} status={status}/>
               </div>
             </div>
           </section>
 
 
-          <Pagination HandlePage={HandlePage} page={page} setPage={setPage} totalItems={totalItems} />
+          <Pagination HandlePage={HandlePage} page={page} setPage={setPage} totalItems={totalItems}  />
 
 
         </main>
@@ -354,80 +358,92 @@ const DeskTopFilter = ({ filterHandler, filters }) => {
   </form>);
 }
 
-const Pagination = ({ HandlePage, page, setPage, totalItems }) => {
-  return (
-    <div className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6">
-      <div className="flex flex-1 justify-between sm:hidden">
-        <p
-          onClick={(e) => HandlePage(page - 1)}
-          className="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
-        >
-          Previous
-        </p>
-        <p
-          onClick={(e) => HandlePage(page + 1)}
-          className="relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
-        >
-          Next
-        </p>
-      </div>
-      <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
-        <div>
-          <p className="text-sm text-gray-700">
-            Showing <span className="font-medium">{(page - 1) * ITEM_PER_PAGE + 1}</span> to{' '}
-            <span className="font-medium">{page * ITEM_PER_PAGE < totalItems ? (page * ITEM_PER_PAGE) : (totalItems)}</span> of{' '}
-            <span className="font-medium">{totalItems}</span> results
-          </p>
-        </div>
-        <div>
-          <nav
-            className="isolate inline-flex -space-x-px rounded-md shadow-sm"
-            aria-label="Pagination"
-          >
-            <p
-              onClick={(e) => HandlePage(page - 1)}
-              href="#"
-              className="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
-            >
-              <span className="sr-only">Previous</span>
-              <ChevronLeftIcon className="h-5 w-5" aria-hidden="true" />
-            </p>
+// const Pagination = ({ HandlePage, page, setPage, totalItems }) => {
+//   return (
+//     <div className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6">
+//       <div className="flex flex-1 justify-between sm:hidden">
+//         <p
+//           onClick={(e) => HandlePage(page - 1)}
+//           className="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+//         >
+//           Previous
+//         </p>
+//         <p
+//           onClick={(e) => HandlePage(page + 1)}
+//           className="relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+//         >
+//           Next
+//         </p>
+//       </div>
+//       <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
+//         <div>
+//           <p className="text-sm text-gray-700">
+//             Showing <span className="font-medium">{(page - 1) * ITEM_PER_PAGE + 1}</span> to{' '}
+//             <span className="font-medium">{page * ITEM_PER_PAGE < totalItems ? (page * ITEM_PER_PAGE) : (totalItems)}</span> of{' '}
+//             <span className="font-medium">{totalItems}</span> results
+//           </p>
+//         </div>
+//         <div>
+//           <nav
+//             className="isolate inline-flex -space-x-px rounded-md shadow-sm"
+//             aria-label="Pagination"
+//           >
+//             <p
+//               onClick={(e) => HandlePage(page - 1)}
+//               href="#"
+//               className="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
+//             >
+//               <span className="sr-only">Previous</span>
+//               <ChevronLeftIcon className="h-5 w-5" aria-hidden="true" />
+//             </p>
 
-            {
-              Array.from({ length: Math.ceil(totalItems / ITEM_PER_PAGE) }).map((el, index) => (<div
-                onClick={(e) => HandlePage(index + 1)}
-                aria-current="page"
-                key={index}
-                className={`relative z-10 inline-flex items-center ${index + 1 === page ? 'bg-indigo-600 text-white' : 'text-gray-400 '} px-4 py-2 text-sm font-semibold  focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 cursor-pointer focus-visible:outline-indigo-600`}
-              >
-                {index + 1}
-              </div>))
-            }
+//             {
+//               Array.from({ length: Math.ceil(totalItems / ITEM_PER_PAGE) }).map((el, index) => (<div
+//                 onClick={(e) => HandlePage(index + 1)}
+//                 aria-current="page"
+//                 key={index}
+//                 className={`relative z-10 inline-flex items-center ${index + 1 === page ? 'bg-indigo-600 text-white' : 'text-gray-400 '} px-4 py-2 text-sm font-semibold  focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 cursor-pointer focus-visible:outline-indigo-600`}
+//               >
+//                 {index + 1}
+//               </div>))
+//             }
 
 
-            <p
-              onClick={(e) => HandlePage(page + 1)}
-              href="#"
-              className="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
-            >
-              <span className="sr-only">Next</span>
-              <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />
-            </p>
-          </nav>
-        </div>
-      </div>
-    </div>);
-}
-const ProductGrid = ({ products }) => {
+//             <p
+//               onClick={(e) => HandlePage(page + 1)}
+//               href="#"
+//               className="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
+//             >
+//               <span className="sr-only">Next</span>
+//               <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />
+//             </p>
+//           </nav>
+//         </div>
+//       </div>
+//     </div>);
+// }
+const ProductGrid = ({ products,status }) => {
   // console.log("products in product grid is ",products);
   return (<div className="bg-white">
+     {
+      status==='loading'?(<Grid
+        visible={true}
+        height="80"
+        width="80"
+        color="#4fa94d"
+        ariaLabel="grid-loading"
+        radius="12.5"
+        wrapperStyle={{}}
+        wrapperClass="grid-wrapper"
+        />):null
+    }
     <div className="mx-auto max-w-2xl px-4 py-0 sm:px-6 sm:py-0 lg:max-w-7xl lg:px-8">
 
-
+    
       <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:gap-x-8">
-        {products?.map((product, index) => (
+        {products?.map((product) => (
           <div key={product.id}>
-          <NavLink to={`/product-details/${product.id}`} >
+          <NavLink to={`/admin/product-detail/${product.id}`} >
             <div  className="group relative border-solid border-2 border-gray-200 p-2">
               <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-60">
                 <img
@@ -447,8 +463,8 @@ const ProductGrid = ({ products }) => {
                   <p className="mt-1 text-sm text-gray-500"><StarIcon className='w-6 h-6 inline' /><span className='align-bottom'>{product.rating}</span></p>
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-gray-900"> {discountedPrice(product)}</p>
-                  <p className="text-sm font-medium text-gray-400 line-through">${product.price}</p>
+                  <p className="text-sm font-medium text-gray-900"> ${discountedPrice(product)}</p>
+                  <p className="text-sm font-medium text-gray-400 line-through">{product.price}</p>
 
                 </div>
               </div>
@@ -458,11 +474,11 @@ const ProductGrid = ({ products }) => {
                   </div>
                 )}
                 {/* will not be needed when backend is implemented */}
-                {product.stock<=0 && (
+            
                   <div>
-                    <p className="text-sm text-red-400">out of stock</p>
+                    <p className="text-sm text-blue-400">stock:{product.stock}</p>
                   </div>
-                )}
+             
 
             </div>
           </NavLink>

@@ -1,11 +1,11 @@
 import { Fragment } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, ShoppingCartIcon, XMarkIcon } from '@heroicons/react/24/outline'
-import { NavLink } from 'react-router-dom'
+import { NavLink, Navigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { selectItems } from '../cart/counterSlice'
-import { selectLoggedInUser } from '../auth/authSlice'
 import { Link } from 'react-router-dom'
+import { selectUserInfo } from '../user/userSlice'
 
 const user = {
   name: 'Tom Cook',
@@ -31,11 +31,12 @@ function classNames(...classes) {
 
 const Navbar=({children})=> {
   const items = useSelector(selectItems);
-  const user = useSelector(selectLoggedInUser);
+  const user = useSelector(selectUserInfo);
     return (
       <>
+      {
        
-        <div className="min-h-full">
+        items&&user&&( <div className="min-h-full">
           <Disclosure as="nav" className="bg-gray-800">
             {({ open }) => (
               <>
@@ -215,7 +216,10 @@ const Navbar=({children})=> {
             {children}
             </div>
           </main>
-        </div>
+        </div>)
+      }
+       
+       
       </>
     )
   }

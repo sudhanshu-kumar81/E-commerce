@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { StarIcon } from '@heroicons/react/20/solid';
 import { addToCartAsync, selectItems } from '../cart/counterSlice';
-import { selectLoggedInUser } from '../auth/authSlice';
+import { selectUserInfo } from '../user/userSlice';
 import { RadioGroup } from '@headlessui/react';
 import { useDispatch, useSelector } from 'react-redux';
 import { discountedPrice } from '../../app/constants';
@@ -45,7 +45,7 @@ function classNames(...classes) {
 export default function ProductDetail() {
   const alert=useAlert()
   const navigate=useNavigate();
-  const user = useSelector(selectLoggedInUser)
+  const user = useSelector(selectUserInfo)
   const [selectedColor, setSelectedColor] = useState(colors[0]);
   const [selectedSize, setSelectedSize] = useState(sizes[2]);
   const product = useSelector(selectProductById);

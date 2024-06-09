@@ -26,6 +26,8 @@ export function createUser(userData) {
       const data = await response.json();
       console.log("data in check user is ",data);
       if(data.success){
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('id',data.user.id);
         resolve({ data });
       }else{
         reject({data})
@@ -38,7 +40,7 @@ export function createUser(userData) {
 }
 export function signOut(userId) {
   return new Promise(async (resolve) => {
-    // TODO: on server we will remove user session info
+
     resolve({ data: 'success' });
   });
 }

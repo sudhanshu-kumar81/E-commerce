@@ -1,9 +1,12 @@
 import { useEffect, useState } from 'react';
-import { ITEM_PER_PAGE, discountedPrice } from '../../../app/constants';
+import {Grid} from 'react-loader-spinner'
+import {discountedPrice } from '../../../app/constants';
 import { useDispatch, useSelector } from 'react-redux';
+import { selectStatusForOrder } from '../../order/orderSlice';
+import { ITEM_PER_PAGE } from '../../../app/constants';
 import {
   fetchAllOrdersAsync,
-  selectOrders,
+  selectAllOrdersForAdmin,
   selectTotalOrders,
   updateOrderAsync,
 } from '../../order/orderSlice';
@@ -14,11 +17,14 @@ import {
   ArrowDownIcon,
 } from '@heroicons/react/24/outline';
 import Pagination from '../../common/Pagination';
+import { useAlert } from 'react-alert';
 
 function AdminOrders() {
+  const status=useSelector(selectStatusForOrder)
+  const alert=useAlert()
   const [page, setPage] = useState(1);
   const dispatch = useDispatch();
-  const orders = useSelector(selectOrders);
+  const orders = useSelector(selectAllOrdersForAdmin);
   const totalOrders = useSelector(selectTotalOrders);
   const [editableOrderId, setEditableOrderId] = useState(-1);
   const [sort, setSort] = useState({});
@@ -27,12 +33,27 @@ function AdminOrders() {
     setEditableOrderId(order.id);
   };
   const handleShow = () => {
-    console.log('handleShow');
+    console.log('order');
+   
   };
 
+
+  // items: { type: [mongoose.Schema.Types.Mixed], required: true },
+  // totalAmount: { type: Number },
+  // totalItems: { type: Number },
+  // user: { type: mongoose.Schema.Types.ObjectId, ref: 'user', required: true },
+  // //TODO:  we can add enum types
+  // paymentMethod: { type: String, required: true },
+  // status: { type: String, default: 'pending' },
+  // selectedAddress: { type: [mongoose.Schema.Types.Mixed], required: true },
+
+
   const handleUpdate = (e, order) => {
-    const updatedOrder = { ...order, status: e.target.value };
+    console.log("order is ",order);
+    const updatedOrder = { ...order, status: e.target.value,user:order.user.id};
+    console.log("updated order is ",order)
     dispatch(updateOrderAsync(updatedOrder));
+    alert.success("updated successfully");
     setEditableOrderId(-1);
   };
 
@@ -69,9 +90,24 @@ function AdminOrders() {
   return (
   
     <>
+    
     <div className="overflow-x-auto">
+    
       <div className="bg-gray-100 flex items-center justify-center font-sans overflow-hidden">
+      
         <div className="w-full">
+        {
+      status==='loading'?(<Grid
+        visible={true}
+        height="80"
+        width="80"
+        color="#4fa94d"
+        ariaLabel="grid-loading"
+        radius="12.5"
+        wrapperStyle={{}}
+        wrapperClass="grid-wrapper"
+        />):null
+    }
           <div className="bg-white shadow-md rounded my-6">
             <table className="min-w-max w-full table-auto">
               <thead>
@@ -118,25 +154,25 @@ function AdminOrders() {
               </thead>
               <tbody className="text-gray-600 text-sm font-light">
                 {(orders&&totalOrders)&&orders.map((order) => (
-                  <tr className="border-b border-gray-200 hover:bg-gray-100">
+                  <tr key={order.id} className="border-b border-gray-200 hover:bg-gray-100">
                     <td className="py-3 px-6 text-left whitespace-nowrap">
                       <div className="flex items-center">
                         <div className="mr-2"></div>
-                        <span className="font-medium">{order.index}</span>
+                        <span className="font-medium">{order.id}</span>
                       </div>
                     </td>
                     <td className="py-3 px-6 text-left">
-                      {order.items.map((item) => (
-                        <div className="flex items-center">
+                      {order.items.map((item,index) => (
+                        <div key={index} className="flex items-center">
                           <div className="mr-2">
                             <img
                               className="w-6 h-6 rounded-full"
-                              src={item.thumbnail}
+                              src={item.product.thumbnail}
                             />
                           </div>
                           <span>
-                            {item.title} - #{item.quantity} - $
-                            {discountedPrice(item)}
+                            {item.product.title} - #{item.quantity} - $
+                            {discountedPrice(item.product)}
                           </span>
                         </div>
                       ))}
@@ -149,13 +185,13 @@ function AdminOrders() {
                     <td className="py-3 px-6 text-center">
                       <div >
                         <div>
-                          <strong>{order.selectedAddress.name}</strong>,
+                          <strong>{order.selectedAddress[0].name}</strong>,
                         </div>
-                        <div>{order.selectedAddress.street},</div>
-                        <div>{order.selectedAddress.city}, </div>
-                        <div>{order.selectedAddress.state}, </div>
-                        <div>{order.selectedAddress.pinCode}, </div>
-                        <div>{order.selectedAddress.phone}, </div>
+                        <div>{order.selectedAddress[0].street},</div>
+                        <div>{order.selectedAddress[0].city}, </div>
+                        <div>{order.selectedAddress[0].state}, </div>
+                        <div>{order.selectedAddress[0].pinCode}, </div>
+                        <div>{order.selectedAddress[0].phone}, </div>
                       </div>
                     </td>
                     <td className="py-3 px-6 text-center">

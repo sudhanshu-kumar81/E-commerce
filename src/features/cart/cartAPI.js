@@ -1,5 +1,6 @@
 
 export function updateCart(updatedItem) {
+  const token=localStorage.getItem('token');
   console.log("update in updatecart is in frontend ",updatedItem)
   const id=updatedItem.id;
   console.log("id is ",id);
@@ -8,7 +9,10 @@ export function updateCart(updatedItem) {
       const response = await fetch('http://localhost:3000/cart/'+id, {
         method: 'PATCH',
         body: JSON.stringify(updatedItem),
-        headers: { 'content-type': 'application/json' },
+        headers:{
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        }
       });
       const data = await response.json();
       // TODO: on server it will only return some info of user (not password)
@@ -16,11 +20,15 @@ export function updateCart(updatedItem) {
       resolve({ data });
     });
   }
-  export function deleteItemFromCart(itemId) {
+export function deleteItemFromCart(itemId) {
+  const token=localStorage.getItem('token');
     return new Promise(async (resolve) => {
       const response = await fetch('http://localhost:3000/cart/'+itemId, {
         method: 'DELETE',
-        headers: { 'content-type': 'application/json' },
+        headers:{
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        }
       });
       const data = await response.json();
       console.log("data in deleetItemfromCart after response",data);
@@ -30,11 +38,15 @@ export function updateCart(updatedItem) {
   }
 
 export function addToCart(item) {
+  const token=localStorage.getItem('token');
     return new Promise(async (resolve) => {
       const response = await fetch('http://localhost:3000/cart', {
         method: 'POST',
         body: JSON.stringify(item),
-        headers: { 'content-type': 'application/json' },
+        headers:{
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        }
       });
       const data = await response.json();
       // TODO: on server it will only return some info of user (not password)
@@ -43,10 +55,16 @@ export function addToCart(item) {
   }
   
 export function fetchItemsByUserId(userId) {
+  const token=localStorage.getItem('token');
     return new Promise(async (resolve) =>{
       //TODO: we will not hard-code server URL here
-      const response = await fetch('http://localhost:3000/cart?user='+userId) 
-      console.log("http://localhost:3000/cart?user='+userId",+userId);
+      const response = await fetch('http://localhost:3000/cart?user='+userId,{
+        headers:{
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        }
+      }) 
+    
       const data = await response.json()
       resolve({data})
     })

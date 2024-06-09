@@ -52,6 +52,7 @@ export default function Pagination({ page, setPage, HandlePage, totalItems }) {
 
               {Array.from({ length: totalPages }).map((el, index) => (
                 <div
+                key={index}
                   onClick={(e) => HandlePage(index + 1)}
                   aria-current="page"
                   className={`relative cursor-pointer z-10 inline-flex items-center ${

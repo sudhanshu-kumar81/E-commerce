@@ -5,8 +5,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { discountedPrice } from '../../../app/constants';
 import { fetchProductByIdAsync, selectProductById } from '../../product-list/productlistSlice';
 import { useParams } from 'react-router-dom';
-import { addToCartAsync } from '../../cart/counterSlice';
-import { selectLoggedInUser } from '../../auth/authSlice';
+import { addToCartAsync, selectItems } from '../../cart/counterSlice';
+import {selectUserInfo} from '../../user/userSlice'
+import { useAlert } from 'react-alert';
 
 // TODO: In server data we will add colors, sizes , highlights. to each product
 
@@ -40,19 +41,32 @@ function classNames(...classes) {
 // TODO : Loading UI
 
 export default function AdminProductDetail() {
+  const items=useSelector(selectItems)
   const [selectedColor, setSelectedColor] = useState(colors[0]);
   const [selectedSize, setSelectedSize] = useState(sizes[2]);
-  const user = useSelector(selectLoggedInUser);
+   const user = useSelector(selectUserInfo);
   const product = useSelector(selectProductById);
   const dispatch = useDispatch();
   const params = useParams();
+  const alert=useAlert()
 
-  const handleCart = (e) => {
+  
+  const handleCart = (e)=>{
+    console.log("in handle cart")
     e.preventDefault();
-    const newItem = { ...product, quantity: 1, user: user.id };
-    delete newItem['id'];//why this line
-    dispatch(addToCartAsync(newItem));
-  };
+    const index=items.findIndex((item)=>item.product.id===product.id)
+   if(index===-1){
+    const newItem={
+      product:product.id,quantity:1,user:user.id
+    }
+    dispatch(addToCartAsync(newItem))
+    alert.success('Item added successfully');
+    // navigate('/cart')
+   }else{
+    alert.error('Item Already Added');
+   }
+    
+  }
 
   useEffect(() => {
     dispatch(fetchProductByIdAsync(params.id));
@@ -95,7 +109,7 @@ export default function AdminProductDetail() {
                   aria-current="page"
                   className="font-medium text-gray-500 hover:text-gray-600"
                 >
-                 product.title: {product.title}
+                 {product.title}
                 </a>
               </li>
             </ol>
@@ -304,7 +318,7 @@ export default function AdminProductDetail() {
                   className="mt-10 flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                 >
                   Add to Cart
-                </button>
+                </button> 
               </form>
             </div>
 
