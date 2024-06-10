@@ -54,11 +54,12 @@ export function addToCart(item) {
     });
   }
   
-export function fetchItemsByUserId(userId) {
+export function fetchItemsByUserId() {
   const token=localStorage.getItem('token');
     return new Promise(async (resolve) =>{
+     
       //TODO: we will not hard-code server URL here
-      const response = await fetch('http://localhost:3000/cart?user='+userId,{
+      const response = await fetch('http://localhost:3000/cart/userCart/',{
         headers:{
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`,
@@ -66,6 +67,7 @@ export function fetchItemsByUserId(userId) {
       }) 
     
       const data = await response.json()
+      console.log("tems in cart is for checking ",data);
       resolve({data})
     })
 }

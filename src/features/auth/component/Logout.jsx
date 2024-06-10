@@ -1,18 +1,21 @@
 import { useEffect } from "react";
-import { selectLoggedInUser, signOutAsync } from "../authSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
+import { selectUserInfo } from "../../user/userSlice";
+import { signOutAsync } from "../../user/userSlice";
+import { resetCartTemp } from "../../cart/counterSlice";
 
 
 function Logout() {
     const dispatch = useDispatch();
-    const user = useSelector(selectLoggedInUser)
+    const user = useSelector(selectUserInfo)
 
     useEffect(()=>{
+        dispatch(signOutAsync())
+        dispatch(resetCartTemp())
         localStorage.removeItem('token');
         localStorage.removeItem('id');
-        dispatch(signOutAsync())
-    })
+    },[])
 
     // but useEffect runs after render, so we have to delay navigate part
     return ( 

@@ -1,14 +1,16 @@
 import { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux';
 import { deleteItemFromCartAsync, selectItems, updateCartAsync, } from './counterSlice';
+import { fetchItemsByUserIdAsync } from './counterSlice';
 import { NavLink } from 'react-router-dom'
 import { Navigate } from 'react-router-dom';
 import { discountedPrice } from '../../app/constants';
 import Modal from '../common/Modal';
 const Cart = () => {
+ 
   const dispatch = useDispatch()
   const [openModal, setOpenModal] = useState(null);
-
+  
   const handleRemove = (e, id) => {
     console.log("it is handleremove product id", id);
     dispatch(deleteItemFromCartAsync(id))
@@ -23,22 +25,30 @@ const Cart = () => {
   const totalItems = items.reduce((total, item) => item.quantity + total, 0)
   const [orderPossible,setOrderPossible]=useState(false);
   useEffect(()=>{
-  
+      
    const isOrderPossible = items.every(item =>item.product.stock >= item.quantity);
    console.log("is Order Possible",isOrderPossible);
    setOrderPossible(isOrderPossible);
+   if(items.length===0){
+    setOrderPossible(false);
+   }
 
   },[dispatch,items]);
+  const [selectedItem,setSelectedItem]=useState(0)
+  useEffect(()=>{
+   setSelectedItem(items.length)
+  },[items])
+
   return (
     <>
       {
-        items?(<>
+       items?(<>
       <div className="mx-auto bg-white max-w-7xl px-4 sm:px-6 lg:px-8 ">
         <div className="border-t border-gray-200 px-4 sm:px-6 lg:px-8 md:p-5">
           <h2 className='text-4xl font-bold tracking-tight text-gray-900 my-12'>Cart</h2>
           <div className="flow-root">
             <ul className="-my-6 divide-y divide-gray-200">
-              {items.map((item) => (
+              {items&&items.map((item) => (
                 <li key={item.id} className="flex py-6">
                   <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
                     <img
@@ -129,7 +139,7 @@ const Cart = () => {
               className="flex items-center justify-center rounded-md border border-transparent bg-gray-400 px-6 py-3 text-base font-medium text-white shadow-sm cursor-not-allowed"
               disabled
             >
-              Out of Stock
+             {selectedItem?(<>out of stock</>):(<>Missing Cart items?</>)}
             </NavLink>
             )
           }
@@ -137,11 +147,11 @@ const Cart = () => {
           </div>
           <div className="mt-6 flex justify-center text-center text-sm text-gray-500">
             <p>
-              or{' '}
+              {' '}
               <NavLink to='/'>
                 <button
                   type="button"
-                  className="font-medium text-indigo-600 hover:text-indigo-500"
+                  className="font-medium text-indigo-600 hover:text-indigo-800"
                 >
                   Continue Shopping
                   <span aria-hidden="true"> &rarr;</span>

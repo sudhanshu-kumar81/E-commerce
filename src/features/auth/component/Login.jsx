@@ -1,19 +1,21 @@
 
 import { useSelector, useDispatch } from 'react-redux';
-import { selectError, selectLoggedInUser } from '../authSlice';
+import { selectLoginError } from '../../user/userSlice';
+import { selectUserInfo } from '../../user/userSlice';
 import { Circles } from 'react-loader-spinner'
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form'
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { checkUserAsync, selectauthStatus } from '../authSlice';
+import { checkUserAsync } from '../../user/userSlice';
+import { selectLoginStatus } from '../../user/userSlice';
 const Login = () => {
   const navigate=useNavigate()
   const token=localStorage.getItem('token')
-  const status = useSelector(selectauthStatus);
+  const status = useSelector(selectLoginStatus);
   const dispatch = useDispatch();
-  const error = useSelector(selectError)
-  const user = useSelector(selectLoggedInUser)
+  const error = useSelector(selectLoginError)
+  const user = useSelector(selectUserInfo)
   const {
     register,
     handleSubmit,

@@ -1,13 +1,19 @@
 import { useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
-import {selectLoggedInUser} from '../authSlice'
 import { useEffect,useState } from "react";
 import { Grid } from "react-loader-spinner";
 import { selectUserLoggedInstatus } from "../../user/userSlice";
 import { selectUserInfo } from "../../user/userSlice";
 function Protected({children}) {
+    console.log("in protected");
     const user = useSelector(selectUserInfo)
     const FetchedStatus=useSelector(selectUserLoggedInstatus)
+    const token=localStorage.getItem('token');
+    const id=localStorage.getItem('id');
+    if(!token&&!id){
+        console.log("returning from protected");
+        return <Navigate to='/login' replace={true} />; 
+    }
     
     if (FetchedStatus === 'pending') {
         <Grid

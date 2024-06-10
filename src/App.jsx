@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { selectLoggedInUser } from './features/auth/authSlice.js'
+import { selectUserInfo } from './features/user/userSlice';
 import { fetchItemsByUserIdAsync } from './features/cart/counterSlice.js';
 import Protected from './features/auth/component/Protected.jsx'
 import Loginpage from './pages/Loginpage'
@@ -23,37 +23,26 @@ import AdminHome from './pages/AdminHome';
 import AdminProductDetailPage from './pages/AdminProductDetailPage';
 import AdminProductFormPage from './pages/AdminProductFormPage.jsx';
 function App() {
-  // const [token,setToken]=useState(null);
-  // const [id,setId]=useState(null);
-  // useEffect(()=>{
-  //   const storedToken = localStorage.getItem('token');
-  //   const storedId = localStorage.getItem('id');
-  //   if (storedToken && storedId) {
-  //     setToken(storedToken);
-  //     setId(storedId);
-  //   }
-  // },[])
   const dispatch = useDispatch();
-  const user = useSelector(selectLoggedInUser)
-  const token = localStorage.getItem('token');
-    const id= localStorage.getItem('id');
+  const user = useSelector(selectUserInfo)
    
   useEffect(() => {
     const token = localStorage.getItem('token');
     const id= localStorage.getItem('id');
     console.log("in use effect after refresh in app.js")
     if (id&&token) {
-      dispatch(fetchItemsByUserIdAsync(id))
-      dispatch(fetchLoggedInUserAsync(id))
+      dispatch(fetchItemsByUserIdAsync())
+      dispatch(fetchLoggedInUserAsync())
     }
   }, []);
   useEffect(() => {
-    console.log("in use effect due to saved data in app.js")
-    if (user) {
-      dispatch(fetchItemsByUserIdAsync(user.id))
-      dispatch(fetchLoggedInUserAsync(user.id))
+    const token=localStorage.getItem('token');
+    console.log("in use effect due in user is ",user);
+    if (token) {
+      dispatch(fetchItemsByUserIdAsync())
+      dispatch(fetchLoggedInUserAsync())
     }
-  }, [dispatch, user]);
+  }, [dispatch,user?.id]);
 
   return (
     <>
@@ -95,9 +84,6 @@ function App() {
 
       <Route path='*' element={<PageNotFound></PageNotFound>}></Route>
     </Routes >
-    {
-      !id&&!token&&(<><Navigate to='/login'></Navigate></>)
-    }
 
     </>
   )

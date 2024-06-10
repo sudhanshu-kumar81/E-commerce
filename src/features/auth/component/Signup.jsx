@@ -3,26 +3,28 @@ import { useSelector, useDispatch } from 'react-redux';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { Circles } from 'react-loader-spinner'
 import { useForm } from 'react-hook-form';
-import {  createUserAsync, selectauthStatus } from '../authSlice';
+import { createUserAsync } from '../../user/userSlice';
 import { Navigate } from 'react-router-dom';
-import { selectSignupStatus } from '../authSlice';
+import { selectSignupStatus, selectauthStatus } from '../../user/userSlice';
 import { selectUserInfo } from '../../user/userSlice';
-import { selectError } from '../authSlice';
+import {selectSignUpError } from '../../user/userSlice';
+import { resetSignUpStatus } from '../../user/userSlice';
 const Signup = () => {
   const navigate=useNavigate()
+  const dispatch = useDispatch();
+  const signupStatus = useSelector(selectSignupStatus);
   const status=useSelector(selectauthStatus)
-  const signupStatus=useSelector(selectSignupStatus)
   useEffect(() => {
     if (signupStatus === 'fulfilled') {
+      dispatch(resetSignUpStatus());
       navigate('/login');
     }
-  }, [signupStatus, navigate]);
-  const dispatch = useDispatch();
-  useEffect(()=>{
-   console.log("status is ",status);
-  },[status]);
+  }, [signupStatus, navigate,dispatch]);
 
-  const error=useSelector(selectError)
+ 
+
+  const token=localStorage.getItem('token')
+  const error=useSelector(selectSignUpError)
   const user = useSelector(selectUserInfo);
   const {
     register,
@@ -32,20 +34,6 @@ const Signup = () => {
   // console.log("errors is ",errors)
     return (
       <>
-
-
-  
-    {/* <div className=" h-[100vh] flex items-center justify-center">
-      <Circles
-          height="80"
-          width="80"
-          color="#4fa94d"
-          ariaLabel="circles-loading"
-          wrapperStyle={{}}
-          wrapperClass=""
-          visible={true}
-        />
-    </div> */}
   
       {  status === 'loading' ? (<div className=" h-[100vh] flex items-center justify-center"><Circles
           height="80"
@@ -55,7 +43,7 @@ const Signup = () => {
           wrapperStyle={{}}
           wrapperClass=""
           visible={true}
-        /></div>) : (<> {user && <Navigate to="/" replace={true}></Navigate>}
+        /></div>) : (<> {user&&token && <Navigate to="/" replace={true}></Navigate>}
           <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
      <div className="sm:mx-auto sm:w-full sm:max-w-sm">
        <img

@@ -376,7 +376,7 @@ const ProductGrid = ({ products,status }) => {
 
       <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:gap-x-8">
         {products&&products?.map((product, index) => (
-          <NavLink to={`/product-details/${product.id}`} key={product._id}>
+          <NavLink to={`/product-details/${product.id}`} key={index}>
             <div  className="group relative border-solid border-2 border-gray-200 p-2">
               <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-60">
                 <img
