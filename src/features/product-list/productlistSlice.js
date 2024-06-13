@@ -1,18 +1,15 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import {  fetchAllProductsByFilter,fetchBrands,fetchCategories, fetchProductById, createProduct,
   updateProduct,} from './productAPI.JS'
-// First, create the thunk
-// export const fetchAllProductsAsync = createAsyncThunk(
-//   'product/fetchAllProducts',
-//   async () => {
-//     const response = await fetchAllProducts();
-//     // console.log("response from fetchAllProductsAsync is ", response);
-//     return response.data
-//   },
-// )
+
 export const  fetchProductsByFiltersAsync = createAsyncThunk(
   'product/fetchAllProductsByFilter',
   async ({ fil, sort, pagination }) => {
+
+
+  
+
+
     // console.log("fil ans sort and pageination are are", fil, sort, pagination);
     const response = await fetchAllProductsByFilter(fil, sort, pagination);
     // console.log("response from fetchAllProductsAsync is ", response);
@@ -21,41 +18,84 @@ export const  fetchProductsByFiltersAsync = createAsyncThunk(
 )
 export const fetchBrandsAsync = createAsyncThunk(
   'product/fetchBrands',
-  async () => {
-    const response = await fetchBrands();
-    // console.log("response from fetchBrandAsync is ", response);
-    return response.data;
-  }
-)
+  async (_,{ rejectWithValue }) => {
+    try {
+      const response = await fetchBrands();
+      if (response.data.success) {
+        return response.data;
+      } else {
+        return rejectWithValue(response.data.message); // Pass only the data property
+      }
+    }catch (error) {
+      console.log('error in catch block is ',error);
+      return rejectWithValue(error.data.message || { message: error.message });
+    }
+  
+})
 export const fetchCategoriesAsync = createAsyncThunk(
   'product/fetchCategories',
-  async () => {
-    const response = await fetchCategories();
-    // console.log("response from fetchBrandAsync is ", response);
-    return response.data;
-  }
-)
+  async (_,{ rejectWithValue }) => {
+    try {
+      const response = await fetchCategories();
+      if (response.data.success) {
+        return response.data;
+      } else {
+        return rejectWithValue(response.data.message); // Pass only the data property
+      }
+    }catch (error) {
+      console.log('error in catch block is ',error);
+      return rejectWithValue(error.data.message || { message: error.message });
+    }
+  
+})
 export const createProductAsync = createAsyncThunk(
   'product/create',
-  async (product) => {
-    const response = await createProduct(product);
-    return response.data;
-  }
+    async (product,{ rejectWithValue }) => {
+    try {
+      const response = await createProduct(product);
+      if (response.data.success) {
+        return response.data;
+      } else {
+        return rejectWithValue(response.data.message); // Pass only the data property
+      }
+    }catch (error) {
+      console.log('error in catch block is ',error);
+      return rejectWithValue(error.data.message || { message: error.message });
+    }
+  
+}
 );
 
 export const updateProductAsync = createAsyncThunk(
   'product/update',
-  async (update) => {
-    const response = await updateProduct(update);
-    return response.data;
+  async (update,{ rejectWithValue }) => {
+    try {
+      const response = await updateProduct(update);
+      if (response.data.success) {
+        return response.data;
+      } else {
+        return rejectWithValue(response.data.message); // Pass only the data property
+      }
+    }catch (error) {
+      console.log('error in catch block is ',error);
+      return rejectWithValue(error.data.message || { message: error.message });
+    }
   }
 );
 export const fetchProductByIdAsync  = createAsyncThunk(
   'product/fetchProductById',
-  async (id) => {
-    const response = await fetchProductById(id);
-    // The value we return becomes the `fulfilled` action payload
-    return response.data;
+  async (id,{ rejectWithValue }) => {
+    try {
+      const response = await fetchProductById(id);
+      if (response.data.success) {
+        return response.data;
+      } else {
+        return rejectWithValue(response.data.message); // Pass only the data property
+      }
+    }catch (error) {
+      console.log('error in catch block is ',error);
+      return rejectWithValue(error.data.message || { message: error.message });
+    }
   }
 );
 
@@ -64,7 +104,8 @@ const initialState = {
   brands: [],
   categories: [],
   totalItems: 0,
-  status: 'idle',
+  status: '',
+  message:null,
   selectedProduct:null,
 }
 
@@ -75,57 +116,87 @@ export const productSlice = createSlice({
   reducers: {
     clearSelectedProduct:(state)=>{
       state.selectedProduct = null
+    },
+    clearStatusAndMessage:(state)=>{
+      state.status = '';
+      state.message=null;
     }
   },
   extraReducers: (builder) => {
 
     builder
       .addCase( fetchProductsByFiltersAsync.pending, (state) => {
-        state.status = 'loading'
+        state.status = 'pending'
       })
       .addCase( fetchProductsByFiltersAsync.fulfilled, (state, action) => {
-        state.status = 'idle'
+        state.status = 'fulfilled'
         state.products = action.payload.products.product
         state.totalItems = action.payload.products.totalDocs
       })
+      .addCase( fetchProductsByFiltersAsync.rejected, (state,action) => {
+        state.status = 'rejected'
+        state.message=action?.payload||"failed to fetch product"
+      })
       .addCase(fetchBrandsAsync.pending, (state) => {
-        state.status = 'loading'
+        state.status = 'pending'
       })
       .addCase(fetchBrandsAsync.fulfilled, (state,action) => {
-        state.status = 'idle'
+        state.status = 'fulfilled'
         state.brands = action.payload.brands
       })
+      .addCase(fetchBrandsAsync.rejected, (state,action) => {
+        state.status = 'rejected'
+          state.message=action?.payload||"failed to fetch Brand"
+      })
+
       .addCase(fetchCategoriesAsync.pending, (state) => {
-        state.status = 'loading'
+        state.status = 'pending'
       })
       .addCase(fetchCategoriesAsync.fulfilled, (state,action) => {
-        state.status = 'idle'
+        state.status = 'fulfilled'
         state.categories = action.payload.category
       })
+      .addCase(fetchCategoriesAsync.rejected, (state,action) => {
+        state.status = 'rejected';
+        state.message=action?.payload||"failed to fetch category"
+      })
       .addCase(fetchProductByIdAsync.pending, (state) => {
-        state.status = 'loading';
+        state.status = 'pending';
       })
       .addCase(fetchProductByIdAsync.fulfilled, (state, action) => {
-        state.status = 'idle';
+        state.status = 'fulfilled';
         state.selectedProduct = action.payload.product;
       })
+      .addCase(fetchProductByIdAsync.rejected, (state,action) => {
+        state.status = 'rejected';
+        state.selectedProduct = null;
+        state.message=action?.payload||"failed to fetch product By Id"
+      })
       .addCase(createProductAsync.pending, (state) => {
-        state.status = 'loading';
+        state.status = 'pending';
       })
       .addCase(createProductAsync.fulfilled, (state, action) => {
-        state.status = 'idle';
+        state.status = 'fulfilled';
         state.products.push(action.payload.doc);
       })
+      .addCase(createProductAsync.rejected, (state,action) => {
+        state.status = 'rejected';
+        state.message=action?.payload||"failed to create product"
+      })
       .addCase(updateProductAsync.pending, (state) => {
-        state.status = 'loading';
+        state.status = 'pending';
       })
       .addCase(updateProductAsync.fulfilled, (state, action) => {
-        state.status = 'idle';
+        state.status = 'fulfilled';
         const index = state.products.findIndex(
           (product) => product.id === action.payload.product.id
         );
         state.products[index] = action.payload.product;
         state.selectedProduct=action.payload.product
+      })
+      .addCase(updateProductAsync.rejected, (state,action) => {
+        state.status = 'rejected';
+         state.message=action?.payload||"failed to update product"
       });
 
   },
@@ -136,5 +207,6 @@ export const selectProductById = (state) => state.product.selectedProduct;
 export const selectCategories = (state) => state.product.categories
 export const selectTotalItems = (state) => state.product.totalItems
 export const selectProductListStatus= (state) => state.product.status
+export const selectProductListMessage= (state) => state.product.message
 export default productSlice.reducer
-export const {clearSelectedProduct}=productSlice.actions
+export const {clearSelectedProduct,clearStatusAndMessage}=productSlice.actions

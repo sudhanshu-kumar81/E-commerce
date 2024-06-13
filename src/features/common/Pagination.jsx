@@ -3,7 +3,6 @@ import { ITEM_PER_PAGE } from "../../app/constants";
 export default function Pagination({ page, setPage, HandlePage, totalItems }) {
   console.log("consoling in pagination",page,  totalItems )
     const totalPages = Math.ceil(totalItems / ITEM_PER_PAGE);
-    console.log("totalPages",totalPages)
     return (
       <div className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6">
         <div className="flex flex-1 justify-between sm:hidden">

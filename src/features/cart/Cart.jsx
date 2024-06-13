@@ -1,13 +1,17 @@
 import { useEffect, useState } from 'react'
+import { Audio } from 'react-loader-spinner'
 import { useSelector, useDispatch } from 'react-redux';
 import { deleteItemFromCartAsync, selectItems, updateCartAsync, } from './counterSlice';
-import { fetchItemsByUserIdAsync } from './counterSlice';
 import { NavLink } from 'react-router-dom'
-import { Navigate } from 'react-router-dom';
+import { selectCartStatus,selectCartError,resetCartStatusandError  } from './counterSlice';
+
 import { discountedPrice } from '../../app/constants';
 import Modal from '../common/Modal';
+import {useAlert} from 'react-alert'
 const Cart = () => {
- 
+  
+  const alert=useAlert()
+  const [selectedItem,setSelectedItem]=useState(0)
   const dispatch = useDispatch()
   const [openModal, setOpenModal] = useState(null);
   
@@ -25,19 +29,27 @@ const Cart = () => {
   const totalItems = items.reduce((total, item) => item.quantity + total, 0)
   const [orderPossible,setOrderPossible]=useState(false);
   useEffect(()=>{
-      
+    setSelectedItem(items.length)
    const isOrderPossible = items.every(item =>item.product.stock >= item.quantity);
    console.log("is Order Possible",isOrderPossible);
    setOrderPossible(isOrderPossible);
    if(items.length===0){
     setOrderPossible(false);
    }
-
   },[dispatch,items]);
-  const [selectedItem,setSelectedItem]=useState(0)
+  const status=useSelector(selectCartStatus);
+  const error=useSelector(selectCartError);
   useEffect(()=>{
-   setSelectedItem(items.length)
-  },[items])
+   if(status==='rejected'){
+    alert.error(error);
+    dispatch(resetCartStatusandError())
+   }else if(status==='fulfilled'){
+    alert.success(error);
+    dispatch(resetCartStatusandError())
+   }
+  },[dispatch,status])
+  const [isLoading,setIsLoading]=useState(true)
+  
 
   return (
     <>

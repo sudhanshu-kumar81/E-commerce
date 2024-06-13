@@ -339,6 +339,7 @@ const Checkout = () => {
                                                 </div>
                                                 <div className="flex items-center gap-x-3">
                                                     <input
+                                                    disabled
                                                         id="card"
                                                         onChange={handlePayment}
                                                         name="payments"
@@ -351,7 +352,7 @@ const Checkout = () => {
                                                         htmlFor="card"
                                                         className="block text-sm font-medium leading-6 text-gray-900"
                                                     >
-                                                        Card Payment
+                                                        Card Payment<p className='text-red-600'>currently unavailable</p>
                                                     </label>
                                                 </div>
                                             </div>

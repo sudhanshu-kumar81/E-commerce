@@ -1,27 +1,48 @@
-import React, { useEffect} from 'react';
+import React, { useEffect, useState} from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchLoggedInUserOrderAsync, selectUserOrders ,selectUserInfo} from '../userSlice';
+import { fetchLoggedInUserOrderAsync, selectUserOrders ,selectUserInfo, resetStatusAndmessage} from '../userSlice';
 import { discountedPrice } from '../../../app/constants';
 import { selectUserStatus } from '../userSlice';
 import {Grid} from 'react-loader-spinner'
+import {useAlert} from 'react-alert'
+import { useNavigate } from 'react-router-dom';
+import { selectUserMessage } from '../userSlice';
 export default function UserOrders() {
+  const user = useSelector(selectUserInfo);
+  const orders = useSelector(selectUserOrders);
+  const [failedLoading,setFailedLoading]=useState({status:'',error:null});
+  const navigate=useNavigate()
+  const alert=useAlert()
   const status=useSelector(selectUserStatus);
-    const dispatch = useDispatch();
-    const user = useSelector(selectUserInfo);
-    const orders = useSelector(selectUserOrders);
-    useEffect(()=>{
-      console.log("userOrders is ",orders);
-    },[orders]);
-  
+  const error=useSelector(selectUserMessage)
+  const dispatch = useDispatch();
     useEffect(() => {
       console.log("dispatch(fetchLoggedInUserOrderAsync(user.id))-user.id",user.id);
       dispatch(fetchLoggedInUserOrderAsync(user.id));
-    }, [dispatch,user]);
+    }, []);
+    useEffect(()=>{
+      if(status==='rejected'){
+        setFailedLoading({status:'rejected',error:error})
+        alert.error(error)
+        dispatch(resetStatusAndmessage())
+      }else if(status==='fulfilled'){
+        setFailedLoading({status:'fulfilled',error:error})
+        dispatch(resetStatusAndmessage())
+        
+      }
+    },[dispatch,status,error,alert])
+   
   
     return (
       <div>
+       {
+  failedLoading === 'rejected' ? (
+    <div className='text-red-600'>failed to load your orders</div>
+  ) : null
+}
+
             {
-      status==='loading'?(<Grid
+      status==='pending'?(<Grid
         visible={true}
         height="80"
         width="80"
@@ -32,6 +53,7 @@ export default function UserOrders() {
         wrapperClass="grid-wrapper"
         />):null
     }
+   
         {orders&&orders.map((order) => (
            <div key={order.id}>
   

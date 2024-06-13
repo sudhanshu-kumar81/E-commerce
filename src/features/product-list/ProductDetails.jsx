@@ -8,7 +8,10 @@ import { RadioGroup } from '@headlessui/react';
 import { useDispatch, useSelector } from 'react-redux';
 import { discountedPrice } from '../../app/constants';
 import { fetchProductByIdAsync, selectProductById } from '../product-list/productlistSlice';
+import { selectProductListStatus } from '../product-list/productlistSlice';
+import { selectCartStatus,resetCartStatusandError } from '../cart/counterSlice';
 import { useNavigate, useParams } from 'react-router-dom';
+import { selectCartError } from '../cart/counterSlice';
 import { useAlert } from 'react-alert';
 
 // TODO: In server data we will add colors, sizes , highlights. to each product
@@ -43,6 +46,12 @@ function classNames(...classes) {
 // TODO : Loading UI  
 
 export default function ProductDetail() {
+  useEffect(()=>{
+   console.log("entered in product details")
+  },[])
+  const productStatus=useSelector(selectProductListStatus)
+  const cartStatus=useSelector(selectCartStatus)
+  const cartError=useSelector(selectCartError)
   const alert=useAlert()
   const navigate=useNavigate();
   const user = useSelector(selectUserInfo)
@@ -65,17 +74,35 @@ export default function ProductDetail() {
       product:product.id,quantity:1,user:user.id
     }
     dispatch(addToCartAsync(newItem))
-    alert.success('Item added successfully');
-    navigate('/cart')
    }else{
     alert.error('Item Already Added');
    }
     
   }
+  useEffect(()=>{
+      if(productStatus==='fulfilled'){
+        // dispatch()
+        console.log("i have to do");
+      }
+  },[dispatch,productStatus])
+
+  useEffect(() => {
+    if (cartStatus === 'fulfilled') {
+      dispatch(resetCartStatusandError())
+      alert.success('Item added successfully');
+      navigate('/cart');
+    } else if (cartStatus === 'rejected') {
+      alert.error(`Failed to add item: ${cartError}`);
+      dispatch(resetCartStatusandError())
+    }
+  }, [cartStatus, cartError, alert, navigate]);
 
   return (
     <div className="bg-white">
-      {product && (
+      {
+        productStatus==='rejected'&&(<><div className=' flex items-center bg-red-200 justify-center text-red-600 text-5xl'>Error</div><div className='h-[25vh] flex items-center bg-red-200 justify-center text-red-600 text-3xl'>Failed to load details</div></>)
+      }
+      {product&&items && (
         <div className="pt-6">
           <nav aria-label="Breadcrumb">
             <ol
@@ -314,7 +341,7 @@ export default function ProductDetail() {
                 </div>
 
                 <button
-                onClick={handleCart}
+                onClick={(e)=>{handleCart(e)}}
                   type="submit"
                   className="mt-10 flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                 >

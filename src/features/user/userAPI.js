@@ -34,7 +34,8 @@ export function fetchLoggedInUserOrders(userId) {
     const token=localStorage.getItem('token');
     console.log("data in update user is ",update)
     return new Promise(async (resolve) => {
-      const response = await fetch('http://localhost:3000/users/updateUser'+update.id, {
+    try{
+      const response = await fetch('http://localhost:3000/users/updateUser/'+update.id, {
         method: 'PATCH',
         body: JSON.stringify(update),
         headers:{
@@ -43,8 +44,11 @@ export function fetchLoggedInUserOrders(userId) {
         }
       });
       const data = await response.json();
-      // TODO: on server it will only return some info of user (not password)
       resolve({ data });
+    }catch(error){
+      reject({error:error.message})
+    }
+      
     });
   }
 

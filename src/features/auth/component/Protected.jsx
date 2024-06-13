@@ -1,43 +1,28 @@
-import { useSelector } from "react-redux";
-import { Navigate } from "react-router-dom";
-import { useEffect,useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Navigate, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { Grid } from "react-loader-spinner";
-import { selectUserLoggedInstatus } from "../../user/userSlice";
+import { selectLoggedInStatus } from "../../user/userSlice";
 import { selectUserInfo } from "../../user/userSlice";
-function Protected({children}) {
+function Protected({ children }) {
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
     console.log("in protected");
     const user = useSelector(selectUserInfo)
-    const FetchedStatus=useSelector(selectUserLoggedInstatus)
-    const token=localStorage.getItem('token');
-    const id=localStorage.getItem('id');
-    if(!token&&!id){
-        console.log("returning from protected");
-        return <Navigate to='/login' replace={true} />; 
-    }
-    
-    if (FetchedStatus === 'pending') {
-        <Grid
-              visible={true}
-              height="80"
-              width="80"
-              color="#4fa94d"
-              ariaLabel="grid-loading"
-              radius="12.5"
-              wrapperStyle={{}}
-              wrapperClass="grid-wrapper"
-              />
-          }
-    
-    if (FetchedStatus === 'fulfilled' && !user) {
-        return <Navigate to='/login' replace={true} />; 
-    }
+    const userStatus = useSelector(selectLoggedInStatus)
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        const id = localStorage.getItem('id');
+        if (!id && !token) {
+          console.log("returning from protected for no token and id");
+          navigate('/login', { replace: true });
+        } 
+        if (userStatus === 'rejected'&&!user) {
+          console.log("Navigating to login page from Protected component");
+          navigate('/login', { replace: true });
+        }
+      }, [user, userStatus, navigate]);
+      return user ? children : null;
 
-    if (FetchedStatus === 'fulfilled' && user) {
-        return children; // Render children if user data is available
-    }
-   
-    return null;
-    
-    
 }
 export default Protected;

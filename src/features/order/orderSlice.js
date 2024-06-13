@@ -1,40 +1,67 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { createOrder, fetchAllOrders,updateOrder  } from './orderAPI';
 
-const initialState = {
-  orders: [],
-  status: 'idle',
-  currentOrder:null,
-  totalOrders: 0
-};
+
 export const updateOrderAsync = createAsyncThunk(
   'order/updateOrder',
-  async (order) => {
-    const response = await updateOrder(order);
-    // The value we return becomes the `fulfilled` action payload
-    return response.data;
+  async (order,{ rejectWithValue }) => {
+    try {
+      const response = await updateOrder(order);
+      if (response.data.success) {
+        return response.data;
+      } else {
+        return rejectWithValue(response.data.message); // Pass only the data property
+      }
+    }catch (error) {
+      console.log('error in catch block is ',error);
+      return rejectWithValue(error.data.message || { message: error.message });
+    }
   }
+  
 );
 
 export const fetchAllOrdersAsync = createAsyncThunk(
   'order/fetchAllOrders',
-  async ({sort, pagination}) => {
-    console.log("fetchAllOrdersAsync sort and pagination",sort,pagination)
+  async ({sort, pagination},{ rejectWithValue }) => {
+    try {
+      console.log("fetchAllOrdersAsync sort and pagination",sort,pagination)
     const response = await fetchAllOrders(sort,pagination);
-    // The value we return becomes the `fulfilled` action payload
-    return response.data;
+      if (response.data.success) {
+        return response.data;
+      } else {
+        return rejectWithValue(response.data.message); // Pass only the data property
+      }
+    }catch (error) {
+      console.log('error in catch block is ',error);
+      return rejectWithValue(error.data.message || { message: error.message });
+    }
   }
 );
 
 export const createOrderAsync = createAsyncThunk(
   'order/createOrder',
-  async (order) => {
-    console.log("in the begining of createOrderAsync",order);
-    const response = await createOrder(order);
-    // The value we return becomes the `fulfilled` action payload
-    return response.data;
+  async (order,{ rejectWithValue }) => {
+    try {
+      console.log("in the begining of createOrderAsync",order);
+      const response = await createOrder(order);
+      if (response.data.success) {
+        return response.data;
+      } else {
+        return rejectWithValue(response.data.message); // Pass only the data property
+      }
+    }catch (error) {
+      console.log('error in catch block is ',error);
+      return rejectWithValue(error.data.message || { message: error.message });
+    }
   }
 );
+const initialState = {
+  orders: [],
+  status: 'idle',
+  message:null,
+  currentOrder:null,
+  totalOrders: 0
+};
 
 export const orderSlice = createSlice({
   name: 'order',

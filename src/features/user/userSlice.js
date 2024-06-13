@@ -2,21 +2,29 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { fetchLoggedInUserOrders, updateUser, fetchLoggedInUser  } from './userAPI';
 import { checkUser,createUser,signOut} from './userAPI'
 const initialState = {
-  status: 'idle',
+  status: '',
+  message:null,
   userInfo: null,//detailed
   userOrders:[],
+  LoggedInStatus:'',
   token:null,
-  loginError:null,
-  signUpError:null,
-  signupStatus:'',
-  LoginStatus:'idle',
 };
 export const signOutAsync = createAsyncThunk(
   'user/signOut',
-  async (loginInfo) => {
-    const response = await signOut(loginInfo);
-    // The value we return becomes the `fulfilled` action payload
-    return response.data;
+  async (loginInfo,{ rejectWithValue }) => {
+    try {
+      const response = await signOut(loginInfo);
+      console.log("response in async function is", response);
+      if (response.data.success) {
+        return response.data;
+      } else {
+        console.log("in else condition");
+        return rejectWithValue(response.data.message); // Pass only the data property
+      }
+    } catch (error) {
+      console.log('error in catch block is Async ',error);
+      return rejectWithValue(error.data?.message || { message: error?.message });
+    }
   }
 );
 export const createUserAsync = createAsyncThunk(
@@ -46,6 +54,48 @@ export const checkUserAsync = createAsyncThunk(
       const response = await checkUser(loginInfo);
       console.log("response in async function is", response);
       if (response.data.success) {
+        localStorage.setItem('token', response.data.token);
+        localStorage.setItem('id', response.data.user.id);
+        return response.data;
+      } else {
+        console.log("in else condition");
+        return rejectWithValue(response.data.message); // Pass only the data property
+      }
+    } catch (error) {
+      console.log('error in catch block is ',error);
+      return rejectWithValue(error.data.message || { message: error.message }||{ message: error.TypeError});
+    }
+
+  }
+);
+export const fetchLoggedInUserAsync = createAsyncThunk(
+  'user/fetchLoggedInUser',
+  async (_,{ rejectWithValue }) => {
+
+
+      try {
+        const response = await fetchLoggedInUser();
+        console.log("response in async function fetchLoggedInUser is", response);
+        if (response.data.success) {
+          return response.data;
+        } else {
+          console.log("in else condition");
+          return rejectWithValue(response.data.message); // Pass only the data property
+        }
+      } catch (error) {
+        console.log('error in catch block is ',error);
+        return rejectWithValue(error.data.message || { message: error.message });
+      }
+  }
+);
+
+export const updateUserAsync = createAsyncThunk(
+  'user/updateUser',
+  async (update,{ rejectWithValue }) => {
+    try {
+      const response = await updateUser(update);
+      console.log("response in async function is", response);
+      if (response.data.success) {
         return response.data;
       } else {
         console.log("in else condition");
@@ -55,33 +105,26 @@ export const checkUserAsync = createAsyncThunk(
       console.log('error in catch block is ',error);
       return rejectWithValue(error.data.message || { message: error.message });
     }
-
-  }
-);
-export const fetchLoggedInUserAsync = createAsyncThunk(
-  'user/fetchLoggedInUser',
-  async () => {
-    const response = await fetchLoggedInUser();
-    // The value we return becomes the `fulfilled` action payload
-    return response.data;
-  }
-);
-
-export const updateUserAsync = createAsyncThunk(
-  'user/updateUser',
-  async (update) => {
-    const response = await updateUser(update);
-    // The value we return becomes the `fulfilled` action payload
-    return response.data;
+ 
   }
 );
 
 export const fetchLoggedInUserOrderAsync = createAsyncThunk(
   'user/fetchLoggedInUserOrders',
-  async (id) => {
-    const response = await fetchLoggedInUserOrders(id);
-    // The value we return becomes the `fulfilled` action payload
-    return response.data;
+  async (id,{ rejectWithValue }) => {
+    try {
+      const response = await fetchLoggedInUserOrders(id);
+      console.log("response in async function is", response);
+      if (response.data.success) {
+        return response.data;
+      } else {
+        console.log("in else condition");
+        return rejectWithValue(response.data.message); // Pass only the data property
+      }
+    }catch (error) {
+      console.log('error in catch block is ',error);
+      return rejectWithValue(error.data.message || { message: error.message });
+    }
   }
 );
 
@@ -89,94 +132,109 @@ export const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    increment: (state) => {
-      state.value += 1;
+    resetStatusAndmessage:(state) => {
+      state.status = '';
+      state.message=null;
     },
-    resetSignUpStatus: (state) => {
-      state.signupStatus = '';
-    }
+    resetLoggedInStatus:(state) => {
+      state.LoggedInStatus = '';
+     
+    },
+   
+   
     
   },
   extraReducers: (builder) => {
     builder
     .addCase(createUserAsync.pending, (state) => {
-      state.status="loading";
-      state.signupStatus="pending";
+      state.status="pending";
     })
     .addCase(createUserAsync.fulfilled, (state,action) => {
-      state.status = 'idle';
-      // state.userInfo = action.payload.user;
-      state.signupStatus="fulfilled";
-      state.signUpError=null
+      state.status = 'fulfilled';
+       state.message=action.payload.message;
+      state.error=null;
     })
     .addCase(createUserAsync.rejected, (state,action) => {
-      state.status = 'idle';
-      state.signupStatus="rejected";
-      state.signUpError=action.payload
+      state.status = 'rejected';
+      state.message=action?.payload||"failed to create User"
     })
     .addCase(checkUserAsync.pending, (state) => {
-      state.status = 'loading';
-      state.LoginStatus='loading';
+      state.status = 'pending';
+      // state.LoginStatus='loading';
     })
     .addCase(checkUserAsync.fulfilled, (state, action) => {
-      state.status = 'idle';
+      state.status = 'fulfilled';
       state.userInfo = action.payload.user;
-      state.LoginStatus="idle";
-      state.loginError=null
+      state.message=action.payload.message;
     })
     .addCase(checkUserAsync.rejected, (state, action) => {
-      state.status = 'idle';
-      state.LoginStatus="idle";
-      state.loginError = action.payload;
+      state.status = 'rejected';
+       state.message=action?.payload||"failed to Log in"
     })
     .addCase(signOutAsync.pending, (state) => {
-      state.status = 'loading';
+      state.status = 'pending';
     })
     .addCase(signOutAsync.fulfilled, (state, action) => {
-      state.status = 'idle';
+      state.status = 'fulfilled';
+      state.message=action.payload.message;
       state.userInfo = null;
       state.userOrders=[];
     })
+    .addCase(signOutAsync.rejected, (state) => {
+      state.status = 'rejected';
+       state.message=action?.payload||"failed to signout out"
+    })
       .addCase(fetchLoggedInUserOrderAsync.pending, (state) => {
-        state.status = 'loading';
+        state.status = 'pending';
       })
       .addCase(fetchLoggedInUserOrderAsync.fulfilled, (state, action) => {
-        state.status = 'idle';
-        // this info can be different or more from logged-in User info
+        state.status = 'fulfilled';
+        state.message=action.payload.message;
         state.userOrders = action.payload.userOrder;
+       
+      })
+      .addCase(fetchLoggedInUserOrderAsync?.rejected, (state) => {
+        state.status = 'rejected';
+        state.message=action.payload||"failed to fetch Your orders"
+        state.userOrders = []
       })
       .addCase(updateUserAsync.pending, (state) => {
-        state.status = 'loading';
+        state.status = 'pending';
       })
       .addCase(updateUserAsync.fulfilled, (state, action) => {
-        state.status = 'idle';
+        state.status = 'fulfilled';
+        state.message=action.payload.message;
         state.userInfo=action.payload.updatedUser
       })
+      .addCase(updateUserAsync.rejected, (state,action) => {
+         state.message=action?.payload||"failed to updated user"
+        state.status = 'rejected';
+      })
       .addCase(fetchLoggedInUserAsync.pending, (state) => {
-        state.status = 'loading';
-        state.UserLoggedInstatus='pending';
+        // state.status = 'pending';
+        state.LoggedInStatus='pending';
       })
       .addCase(fetchLoggedInUserAsync.fulfilled, (state, action) => {
-        state.status = 'idle';
-        // this info can be different or more from logged-in User info
+        // state.status = 'fulfilled';
+        // state.message=action.payload.message;
+        state.LoggedInStatus='fulfilled';
         state.userInfo = action.payload.user;
-        state.UserLoggedInstatus='fulfilled';
-      });
+      })
+      .addCase(fetchLoggedInUserAsync.rejected, (state,action) => {
+        // state.status = 'rejected';
+        state.LoggedInStatus='rejected';
+        //  state.message=action?.payload||"failed to fetch User"
+        state.userInfo = null;
+      })
 
   },
 });
 
 export const selectUserOrders = (state)=>state.user.userOrders;
 export const selectUserStatus=(state)=>state.user.status;
+export const selectLoggedInStatus=(state)=>state.user.LoggedInStatus;
+export const selectUserMessage=(state)=>state.user.message;
 export const selectUserInfo = (state)=>state.user.userInfo;
-export const selectUserLoggedInstatus = (state)=>state.user.UserLoggedInstatus;
-export const selectLoginError = (state)=>state.user.loginError;
-export const selectSignUpError = (state)=>state.user.signUpError;
- export const selectauthStatus=(state)=>state.user.status;
-export const selectSignupStatus=(state)=>state.user.signupStatus;
-export const selectLoginStatus=(state)=>state.user.LoginStatus;
-
-export const { increment,resetSignUpStatus } = userSlice.actions;
+export const {resetStatusAndmessage,resetLoggedInStatus} = userSlice.actions;
 export default userSlice.reducer;
-// //loginError:null,
-// signUpError:null,
+

@@ -4,6 +4,7 @@ import { fetchItemsByUserIdAsync } from './features/cart/counterSlice.js';
 import Protected from './features/auth/component/Protected.jsx'
 import Loginpage from './pages/Loginpage'
 import SignupPage from './pages/SignupPage.jsx'
+import { selectCartStatus,resetCartStatusandError } from './features/cart/counterSlice.js';
 import { Route, Routes, Link, Navigate } from 'react-router-dom'
 import AdminOrdersPage from './pages/AdminOrderPage.jsx';
 import Home from './pages/Home.jsx'
@@ -22,10 +23,11 @@ import ProtectedAdmin from './features/admin/components/ProtectedAdmin.jsx'
 import AdminHome from './pages/AdminHome';
 import AdminProductDetailPage from './pages/AdminProductDetailPage';
 import AdminProductFormPage from './pages/AdminProductFormPage.jsx';
+import { selectCartFetchStatus } from './features/cart/counterSlice.js';
 function App() {
   const dispatch = useDispatch();
   const user = useSelector(selectUserInfo)
-   
+  // const status=useSelector(selectCartFetchStatus)
   useEffect(() => {
     const token = localStorage.getItem('token');
     const id= localStorage.getItem('id');
@@ -35,6 +37,7 @@ function App() {
       dispatch(fetchLoggedInUserAsync())
     }
   }, []);
+  //login
   useEffect(() => {
     const token=localStorage.getItem('token');
     console.log("in use effect due in user is ",user);

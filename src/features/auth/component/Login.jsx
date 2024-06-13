@@ -1,30 +1,43 @@
 
 import { useSelector, useDispatch } from 'react-redux';
-import { selectLoginError } from '../../user/userSlice';
+import {  selectUserMessage } from '../../user/userSlice';
 import { selectUserInfo } from '../../user/userSlice';
 import { Circles } from 'react-loader-spinner'
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink, Navigate, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form'
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { checkUserAsync } from '../../user/userSlice';
-import { selectLoginStatus } from '../../user/userSlice';
+import { selectUserStatus,resetStatusAndmessage} from '../../user/userSlice';
 const Login = () => {
   const navigate=useNavigate()
   const token=localStorage.getItem('token')
-  const status = useSelector(selectLoginStatus);
+  const status = useSelector(selectUserStatus);
   const dispatch = useDispatch();
-  const error = useSelector(selectLoginError)
+  const error = useSelector(selectUserMessage)
   const user = useSelector(selectUserInfo)
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm()
+  useEffect(()=>{
+   console.log("arrived in login")
+  },[])
+  if(status==='fulfilled'){
+    dispatch(resetStatusAndmessage());
+    navigate('/')
+  }
+  const handleClick=(e)=>{
+    e.preventDefault();
+    dispatch(resetStatusAndmessage())
+    navigate('/signup');
+  }
   return (
     <>
+    {user&&(<Navigate to='/'></Navigate>)}
       {
-        status === 'loading' ? (<div className=" h-[100vh] flex items-center justify-center"><Circles
+        status === 'pending' ? (<div className=" h-[100vh] flex items-center justify-center"><Circles
           height="80"
           width="80"
           color="#4fa94d"
@@ -34,7 +47,7 @@ const Login = () => {
           visible={true}
         /></div>) : (<>
         
-        {user&&token && navigate('/')}
+        
           <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
             <div className="sm:mx-auto sm:w-full sm:max-w-sm">
               <img
@@ -119,7 +132,7 @@ const Login = () => {
                   >
                     Sign in
                   </button>
-                  {error && (
+                  {status==='rejected' && (
                     <p className="text-red-500 ">{error}</p>
                   )}
                 </div>
@@ -127,7 +140,7 @@ const Login = () => {
     
               <p className="mt-10 text-center text-sm text-gray-500">
                 Not a member?{' '}
-                <NavLink to="/signup" className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">
+                <NavLink onClick={(e)=>handleClick(e)} to="/signup" className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">
                   Create a account
                 </NavLink>
               </p>

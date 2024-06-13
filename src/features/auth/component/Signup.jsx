@@ -3,35 +3,36 @@ import { useSelector, useDispatch } from 'react-redux';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { Circles } from 'react-loader-spinner'
 import { useForm } from 'react-hook-form';
-import { createUserAsync } from '../../user/userSlice';
+import { createUserAsync, resetStatusAndmessage } from '../../user/userSlice';
 import { Navigate } from 'react-router-dom';
-import { selectSignupStatus, selectauthStatus } from '../../user/userSlice';
 import { selectUserInfo } from '../../user/userSlice';
-import {selectSignUpError } from '../../user/userSlice';
-import { resetSignUpStatus } from '../../user/userSlice';
+import { selectUserStatus,selectUserMessage } from '../../user/userSlice';
 const Signup = () => {
   const navigate=useNavigate()
   const dispatch = useDispatch();
-  const signupStatus = useSelector(selectSignupStatus);
-  const status=useSelector(selectauthStatus)
+  const status=useSelector(selectUserStatus)
   useEffect(() => {
-    if (signupStatus === 'fulfilled') {
-      dispatch(resetSignUpStatus());
+    if (status === 'fulfilled') {
+      dispatch(resetStatusAndmessage());
       navigate('/login');
     }
-  }, [signupStatus, navigate,dispatch]);
+  }, [status, navigate,dispatch]);
 
  
 
   const token=localStorage.getItem('token')
-  const error=useSelector(selectSignUpError)
+  const error=useSelector(selectUserMessage)
   const user = useSelector(selectUserInfo);
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm()
-  // console.log("errors is ",errors)
+  const handleClick=(e)=>{
+    e.preventDefault();
+    dispatch(resetStatusAndmessage())
+    navigate('/login');
+  }
     return (
       <>
   
@@ -128,7 +129,7 @@ const Signup = () => {
              Sign Up
            </button>
            {
-            error&&signupStatus==='rejected'&&<p className='text-red-500 '>{error}</p>
+            status==='rejected'&&<p className='text-red-500 '>{error}</p>
            }
            
          </div>
@@ -136,7 +137,7 @@ const Signup = () => {
     
        <p className="mt-10 text-center text-sm text-gray-500">
          Already a member?{' '}
-         <NavLink to="/login" className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">
+         <NavLink onClick={(e)=>handleClick(e)}  to="/login" className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">
            Log in
          </NavLink>
        </p>

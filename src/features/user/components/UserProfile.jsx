@@ -1,15 +1,34 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectUserInfo, updateUserAsync } from '../userSlice';
+import { resetStatusAndmessage, selectUserInfo, selectUserMessage, selectUserStatus, updateUserAsync } from '../userSlice';
 import { useForm } from 'react-hook-form';
+import {useAlert} from 'react-alert'
+import {
+  PencilIcon,
+  TrashIcon
+} from '@heroicons/react/24/outline';
 
 export default function UserProfile() {
+  const status=useSelector(selectUserStatus);
+  const error=useSelector(selectUserMessage)
   const dispatch = useDispatch();
   const user = useSelector(selectUserInfo);
   const [selectedEditIndex, setSelectedEditIndex] = useState(-1);
   const [showAddAddressForm, setShowAddAddressForm] = useState(false);
+  const alert=useAlert()
+
+
 
   //TODO: We will add payment section when we work on backend.
+  useEffect(()=>{
+        if(status==='fulfilled'){
+            alert.success(" suceed ")
+            dispatch(resetStatusAndmessage())
+        }else if(status==='rejected'){
+          alert.error(error);
+          dispatch(resetStatusAndmessage())
+        }
+  },[error,status,alert,dispatch])
 
   const {
     register,
@@ -57,6 +76,11 @@ export default function UserProfile() {
 
   return (
     <div>
+
+
+    {
+      user?(<>
+        <div>
       <div className="mx-auto mt-12 bg-white max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="border-t border-gray-200 px-4 py-6 sm:px-6">
           <h1 className="text-4xl my-5 font-bold tracking-tight text-gray-900">
@@ -518,21 +542,26 @@ export default function UserProfile() {
                     {address.city}
                   </p>
                 </div>
-                <div className="hidden sm:flex sm:flex-col sm:items-end">
-                  <button
+                <div className=" flex flex-col items-end space-y-4">
+                  {/* <button
                     onClick={(e) => handleEditForm(index)}
                     type="button"
                     className="font-medium text-indigo-600 hover:text-indigo-500"
-                  >
-                    Edit
-                  </button>
-                  <button
+                  > */}
+                    <PencilIcon
+                            className="w-6 h-6 hover:text-green-500 text-indigo-600 cursor-pointer "
+                            onClick={(e) => handleEditForm(index)}
+                          ></PencilIcon>
+                  {/* </button> */}
+                  {/* <button
                     onClick={(e) => handleRemove(e, index)}
                     type="button"
                     className="font-medium text-indigo-600 hover:text-indigo-500"
-                  >
-                    Remove
-                  </button>
+                  > */}
+                   <TrashIcon  className="w-6 h-6 hover:text-green-500 text-indigo-600 cursor-pointer "
+                            onClick={(e) => handleRemove(e, index)}
+                            />
+                  {/* </button> */}
                 </div>
               </div>
             </div>
@@ -540,5 +569,10 @@ export default function UserProfile() {
         </div>
       </div>
     </div>
+        </>):(<></>)
+    }
+    
+    </div>
+    
   );
 }
