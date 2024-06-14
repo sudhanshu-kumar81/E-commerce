@@ -103,6 +103,7 @@ const initialState = {
   products: [],
   brands: [],
   categories: [],
+  fetchProductStatus:'',
   totalItems: 0,
   status: '',
   message:null,
@@ -120,7 +121,12 @@ export const productSlice = createSlice({
     clearStatusAndMessage:(state)=>{
       state.status = '';
       state.message=null;
+    },
+    clearAdminStatusAndMessage:(state)=>{
+      state.Adminstatus = '';
+      state.Adminmessage=null;
     }
+    
   },
   extraReducers: (builder) => {
 
@@ -161,33 +167,35 @@ export const productSlice = createSlice({
         state.message=action?.payload||"failed to fetch category"
       })
       .addCase(fetchProductByIdAsync.pending, (state) => {
-        state.status = 'pending';
+        state.fetchProductStatus = 'pending';
       })
       .addCase(fetchProductByIdAsync.fulfilled, (state, action) => {
-        state.status = 'fulfilled';
+        state.fetchProductStatus = 'fulfilled';
         state.selectedProduct = action.payload.product;
       })
       .addCase(fetchProductByIdAsync.rejected, (state,action) => {
-        state.status = 'rejected';
+        state.fetchProductStatus = 'rejected';
         state.selectedProduct = null;
         state.message=action?.payload||"failed to fetch product By Id"
       })
       .addCase(createProductAsync.pending, (state) => {
-        state.status = 'pending';
+        state.Adminstatus = 'pending';
       })
       .addCase(createProductAsync.fulfilled, (state, action) => {
-        state.status = 'fulfilled';
+        state.Adminstatus = 'fulfilled';
+        state.Adminmessage =action.payload.message 
         state.products.push(action.payload.doc);
       })
       .addCase(createProductAsync.rejected, (state,action) => {
-        state.status = 'rejected';
-        state.message=action?.payload||"failed to create product"
+        state.Adminstatus = 'rejected';
+        state.Adminmessage=action?.payload||"failed to create product"
       })
       .addCase(updateProductAsync.pending, (state) => {
-        state.status = 'pending';
+        state.Adminstatus = 'pending';
       })
       .addCase(updateProductAsync.fulfilled, (state, action) => {
-        state.status = 'fulfilled';
+        state.Adminstatus = 'fulfilled';
+        state.Adminmessage=action.payload.message
         const index = state.products.findIndex(
           (product) => product.id === action.payload.product.id
         );
@@ -195,8 +203,8 @@ export const productSlice = createSlice({
         state.selectedProduct=action.payload.product
       })
       .addCase(updateProductAsync.rejected, (state,action) => {
-        state.status = 'rejected';
-         state.message=action?.payload||"failed to update product"
+        state.Adminstatus = 'rejected';
+         state.Adminmessage=action?.payload||"failed to update product"
       });
 
   },
@@ -207,6 +215,9 @@ export const selectProductById = (state) => state.product.selectedProduct;
 export const selectCategories = (state) => state.product.categories
 export const selectTotalItems = (state) => state.product.totalItems
 export const selectProductListStatus= (state) => state.product.status
-export const selectProductListMessage= (state) => state.product.message
+export const selectProductListAdminStatus= (state) => state.product.Adminstatus
+export const selectProductListfetchProductStatus= (state) => state.product.fetchProductStatus
+export const selectProductListAdminmessage= (state) => state.product.Adminmessage
+export const selectProductListMessage= (state) => state.product.message//fetchProductStatus
 export default productSlice.reducer
-export const {clearSelectedProduct,clearStatusAndMessage}=productSlice.actions
+export const {clearSelectedProduct,clearStatusAndMessage,clearAdminStatusAndMessage}=productSlice.actions

@@ -24,6 +24,7 @@ import AdminHome from './pages/AdminHome';
 import AdminProductDetailPage from './pages/AdminProductDetailPage';
 import AdminProductFormPage from './pages/AdminProductFormPage.jsx';
 import { selectCartFetchStatus } from './features/cart/counterSlice.js';
+import FailedOrderPage from './pages/FailedOrderPage.jsx';
 function App() {
   const dispatch = useDispatch();
   const user = useSelector(selectUserInfo)
@@ -63,6 +64,7 @@ function App() {
           <Checkout></Checkout>
         </Protected>}></Route>
         <Route path='/order-success/:id' element={<Protected><OrderSuccessPage></OrderSuccessPage></Protected>}></Route>
+        <Route path='/order-failed' element={<Protected><FailedOrderPage></FailedOrderPage></Protected>}></Route>
         <Route path='/orders' element={<Protected><UserOrdersPage></UserOrdersPage></Protected>}></Route>
         <Route path='/profile' element={<Protected><UserProfilePage></UserProfilePage></Protected>}></Route>
         <Route path='/logout' element={<Logout></Logout>}></Route>

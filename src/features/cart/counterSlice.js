@@ -127,6 +127,7 @@ export const cartSlice = createSlice({
     .addCase(addToCartAsync.fulfilled, (state, action) => {
       state.status = 'fulfilled';
       state.items.push(action.payload.cartDetails);
+      state.error=action.payload.message
     })
     .addCase(addToCartAsync.rejected, (state, action) => {
       state.status = 'rejected';
@@ -153,7 +154,7 @@ export const cartSlice = createSlice({
       state.items[index] = action.payload.updatedItem;
       state.error=action.payload.message
     })
-    .addCase(updateCartAsync.rejected, (state) => {
+    .addCase(updateCartAsync.rejected, (state,action) => {
       state.status = 'rejected';
       state.error=action?.payload||"failed to update"
     })
@@ -166,19 +167,20 @@ export const cartSlice = createSlice({
       state.items.splice(index,1);
       state.error=action.payload.message
     })
-    .addCase(deleteItemFromCartAsync.rejected, (state) => {
+    .addCase(deleteItemFromCartAsync.rejected, (state,action) => {
       state.status = 'rejected';
      state.error=action?.payload||"failed to delete "
     })
     .addCase(resetCartAsync.pending, (state) => {
-      state.status = 'pending';
+      state.resetStatus = 'pending';
     })
     .addCase(resetCartAsync.fulfilled, (state, action) => {
-      state.status = 'idle';
+      state.resetStatus = 'fulfilled';
+      state.error=action.payload.message;
       state.items = [];
     })
     .addCase(resetCartAsync.rejected, (state, action) => {
-      state.status = 'idle';
+      state.resetStatus = 'rejected';
       state.error=action?.payload||"reset "
     })
 },

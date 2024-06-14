@@ -1,15 +1,58 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { NavLink, Navigate } from 'react-router-dom'
-import { selectUserInfo } from '../features/user/userSlice';
+import { resetStatusAndmessage, selectUserInfo, selectUserStatus } from '../features/user/userSlice';
 import { useDispatch, useSelector } from 'react-redux'
 import { discountedPrice } from '../app/constants';
 import { } from 'react-redux'
-import { selectItems } from '../features/cart/counterSlice'
+import { resetCartStatusandError, selectCartError, selectItems } from '../features/cart/counterSlice'
 import { deleteItemFromCartAsync, updateCartAsync } from '../features/cart/counterSlice'
-import {createOrderAsync,selectCurrentOrder} from '../features/order/orderSlice'
+import {createOrderAsync,selectCurrentOrder, selectMessageForOrder, selectStatusForOrder} from '../features/order/orderSlice'
 import { useForm } from 'react-hook-form';
+import { resetOrderStatusAndMessage } from '../features/order/orderSlice';
+import {useAlert} from 'react-alert'
 import { updateUserAsync } from '../features/user/userSlice';
+import { selectCartStatus } from '../features/cart/counterSlice';
 const Checkout = () => {
+    const [selectedItem,setSelectedItem]=useState(0)
+    const alert=useAlert()
+    const dispatch = useDispatch()
+    const cartStatus=useSelector(selectCartStatus)
+    const cartError=useSelector(selectCartError)
+    const userStatus=useSelector(selectUserStatus)
+    const orderStatus=useSelector(selectStatusForOrder)
+    const orderError=useSelector(selectMessageForOrder)
+    useEffect(()=>{
+       if(cartStatus==='fulfilled'){
+        alert.success(cartError)
+           dispatch(resetCartStatusandError())
+       }
+      else if(cartStatus==='rejected'){
+        alert.error(cartError)
+             dispatch(resetCartStatusandError())
+      }
+    },[dispatch,cartStatus,cartError,alert])
+    useEffect(()=>{
+        if(orderStatus==='fulfilled'){
+         alert.success(orderError)
+        dispatch(resetOrderStatusAndMessage())
+        }
+       else if(orderStatus==='rejected'){
+         alert.error(orderError)
+         dispatch(resetOrderStatusAndMessage())
+       }
+     },[dispatch,orderError,orderStatus])
+
+    useEffect(()=>{
+        if(userStatus==='fulfilled'){
+         alert.success("address added")
+            dispatch(resetStatusAndmessage())
+           reset()
+        }
+       else if(userStatus==='rejected'){
+         alert.error("failed to add address")
+              dispatch(resetStatusAndmessage())
+       }
+     },[dispatch,userStatus,alert])
     const currentOrder = useSelector(selectCurrentOrder);
     const user = useSelector(selectUserInfo);
     const {
@@ -18,7 +61,7 @@ const Checkout = () => {
         reset,
         formState: { errors },
     } = useForm();
-    const dispatch = useDispatch()
+    
 
     const handleRemove = (e, id) => {
         // console.log("it is handleremove product id", id);
@@ -38,14 +81,14 @@ const Checkout = () => {
         setPaymentMethod(e.target.value);
     };
     const handleOrder = (e) => {
-        // console.log("in handleorder", items, paymentMethod, selectedAddress, totalAmount, totalItems, user)
+        console.log("in handleorder", items, paymentMethod, selectedAddress, totalAmount, totalItems, user)
 
         if (selectedAddress && paymentMethod) {
             const order = { items, totalAmount, totalItems, user:user.id, paymentMethod, selectedAddress ,status:"pending"}
             console.log("order is ", order);
             dispatch(createOrderAsync(order));
         } else {
-            alert('Enter Address and Payment method')
+            alert.show('Enter Address and Payment method')
         }
 
         //TODO : Redirect to order-success page
@@ -58,6 +101,17 @@ const Checkout = () => {
     const totalItems = items.reduce((total, item) => item.quantity + total, 0)
     const [selectedAddress, setSelectedAddress] = useState(null);
     const [paymentMethod, setPaymentMethod] = useState(null);
+    const [orderPossible,setOrderPossible]=useState(false);
+    useEffect(()=>{
+     const isOrderPossible = items.every(item =>item.product.stock >= item.quantity);
+     setSelectedItem(items.length)
+     console.log("is Order Possible",isOrderPossible);
+     setOrderPossible(isOrderPossible);
+     if(items.length===0){
+      setOrderPossible(false);
+     }
+     console.log("orderPossible is",orderPossible)
+    },[dispatch,items]);
     return (
         <>
         {
@@ -65,7 +119,8 @@ const Checkout = () => {
             {/* {
                 !items.length && <Navigate to="/" replace={true}></Navigate>
             } */}
-            {currentOrder && <Navigate to={`/order-success/${currentOrder.id}`} replace={true}></Navigate>}
+            {orderStatus==='fulfilled' && <Navigate to={`/order-success/${currentOrder.id}`} replace={true}></Navigate>}
+            {orderStatus==='rejected' && <Navigate to={`/order-failed`} replace={true}></Navigate>}
             < div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
                 <div className='grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-5'>
                     <div className='lg:col-span-3'>
@@ -80,7 +135,7 @@ const Checkout = () => {
                                 dispatch(
                                     updateUserAsync(newUser)
                                 );
-                                reset();
+                                
                             })}
                         >
                             <div className="space-y-12">
@@ -406,6 +461,7 @@ const Checkout = () => {
                                                                 <option value="3">3</option>
                                                                 <option value="4">4</option>
                                                             </select>
+                                                            <div className='text-blue-600 mt-1 font-semibold'><p>stock:{item.product.stock}</p></div>
                                                         </div>
 
                                                         <div className="flex">
@@ -438,13 +494,30 @@ const Checkout = () => {
 
                                 <p className="mt-0.5 text-sm text-gray-500">Shipping and taxes calculated at checkout.</p>
                                 <div className="mt-6">
-                                    <div
+                                    {
+                                        orderPossible?(<div
 
-                                        onClick={(e) => handleOrder(e)}
-                                        className="flex cursor-pointer items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
-                                    >
-                                        Order Now
-                                    </div>
+                                            onClick={(e) => handleOrder(e)}
+                                            className="flex cursor-pointer items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
+                                        >
+                                            Order Now
+                                        </div>):(
+                                            <div
+                                            disabled
+                                            className="flex  items-center justify-center rounded-md border border-transparent bg-[#f0f0f0] px-6 py-3 text-base font-medium text-[#666] shadow-sm  cursor-not-allowed"
+                                        >
+                                {selectedItem?(<>out of stock</>):(<>Missing Cart items?</>)}
+                                        </div>
+                                        )
+                                    }
+                                    
+                                    
+
+
+
+
+                             
+
                                 </div>
                                 <div className="mt-6 flex justify-center text-center text-sm text-gray-500">
                                     <p>

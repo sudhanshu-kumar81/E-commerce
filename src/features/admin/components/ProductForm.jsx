@@ -8,12 +8,13 @@ import {
   selectProductById,
   updateProductAsync,
 } from '../../product-list/productlistSlice';
+import { fetchBrandsAsync,fetchCategoriesAsync } from '../../product-list/productlistSlice';
 import { useForm } from 'react-hook-form';
 import Modal from '../../common/Modal'
-import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import {  useNavigate, useParams } from 'react-router-dom';
 import { useEffect,useState } from 'react';
 import { useAlert } from 'react-alert';
-
+import { selectProductListAdminStatus,selectProductListAdminmessage,clearAdminStatusAndMessage} from '../../product-list/productlistSlice';
 function ProductForm() {
   const alert=useAlert()
   const [openModal, setOpenModal] = useState(null);
@@ -36,6 +37,8 @@ function ProductForm() {
     } else {
       dispatch(clearSelectedProduct());
     }
+    dispatch(fetchBrandsAsync());
+    dispatch(fetchCategoriesAsync());
   }, [params.id, dispatch]);
 
   useEffect(() => {
@@ -59,13 +62,26 @@ const navigate=useNavigate();
     const product = {...selectedProduct};
     product.deleted = true;
     dispatch(updateProductAsync(product));
-    alert.success("product deleted");
-    navigate('/admin')
+    // navigate('/admin')
   }
+  const status=useSelector(selectProductListAdminStatus);
+  const error=useSelector(selectProductListAdminmessage)
+  useEffect(()=>{
+   if(status==='rejected'){
+      alert.error(error)
+      dispatch(clearAdminStatusAndMessage())
+   }else if(status==='fulfilled'){
+    alert.success(error)
+    dispatch(clearAdminStatusAndMessage())
+   }
+  },[status,dispatch])
+ 
 
   return (
     <>
-    <form
+    {
+      brands&&categories?(<>
+      <form
       noValidate
       onSubmit={handleSubmit((data) => {
         console.log(data);
@@ -89,9 +105,6 @@ const navigate=useNavigate();
           product.id = params.id;
           product.rating = selectedProduct.rating || 0;
           dispatch(updateProductAsync(product));
-          alert.success("product updated successfully");
-          // reset();
-          // navigate('/admin')
         } else {
           dispatch(createProductAsync(product));
           alert.success("product created successfully");
@@ -462,6 +475,10 @@ const navigate=useNavigate();
         cancelAction={() => setOpenModal(null)}
         showModal={openModal}
       ></Modal>
+      
+      </>):(<>hi</>)
+    }
+    
     </>
     
   );

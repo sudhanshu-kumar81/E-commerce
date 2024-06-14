@@ -74,13 +74,20 @@ export function fetchItemsByUserId() {
 
 export function resetCart(userId) {
   // get all items of user's cart - and then delete each
-  return new Promise(async (resolve) => {
-    const response = await fetchItemsByUserId(userId);
-    const items = response.data.cartItems;
-    console.log("items is in reset ",items);
-    for (let item of items) {
-      await deleteItemFromCart(item.id);
+  return new Promise(async (resolve,reject) => {
+    try{
+      const response = await fetchItemsByUserId(userId);
+      const items = response.data.cartItems;
+      console.log("items is in reset ",items);
+      for (let item of items) {
+        await deleteItemFromCart(item.id);
+      }
+      resolve({data:{status:'success',success:true,message:'reset cart successfully'}})
+
+    }catch(err){
+       reject(err)
     }
-    resolve({data:{status:'success',success:true,message:'reset cart successfully'}})
+    
+    
   });
 }

@@ -28,11 +28,12 @@ const items = [
   { id: 2, title: 'Front End Developer', department: 'Engineering', type: 'Full-time', location: 'Remote' },
   { id: 3, title: 'User Interface Designer', department: 'Design', type: 'Full-time', location: 'Remote' },
 ]
-
+import {selectUserInfo} from '../../user/userSlice.js'
 export default function ProductList() {
   const status=useSelector(selectProductListStatus)
   const dispatch = useDispatch()
   const totalItems = useSelector(selectTotalItems)
+  const user=useSelector(selectUserInfo)
   const products = useSelector(selectAllProducts)
   const brands = useSelector(selectBrands)
   const categories = useSelector(selectCategories)
@@ -89,7 +90,7 @@ export default function ProductList() {
   useEffect(() => {
     dispatch(fetchBrandsAsync());
     dispatch(fetchCategoriesAsync());
-  }, [])
+  }, [user?.id,dispatch])
   const sortHandler = (option) => {
     // console.log(option)
     const newSort = { _sort: option.sort,_order:option.order }

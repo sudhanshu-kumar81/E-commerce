@@ -48,7 +48,6 @@ const Cart = () => {
     dispatch(resetCartStatusandError())
    }
   },[dispatch,status])
-  const [isLoading,setIsLoading]=useState(true)
   
 
   return (

@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
 import { StarIcon } from '@heroicons/react/20/solid';
 import { RadioGroup } from '@headlessui/react';
+import { Circles } from 'react-loader-spinner'
 import { useDispatch, useSelector } from 'react-redux';
 import { discountedPrice } from '../../../app/constants';
-import { fetchProductByIdAsync, selectProductById } from '../../product-list/productlistSlice';
+import { fetchProductByIdAsync, selectProductById, selectProductListStatus, selectProductListfetchProductStatus } from '../../product-list/productlistSlice';
 import { useParams } from 'react-router-dom';
-import { addToCartAsync, selectItems } from '../../cart/counterSlice';
+import { addToCartAsync, resetCartStatusandError, selectCartError, selectCartStatus, selectItems } from '../../cart/counterSlice';
 import {selectUserInfo} from '../../user/userSlice'
 import { useAlert } from 'react-alert';
 
@@ -41,6 +42,8 @@ function classNames(...classes) {
 // TODO : Loading UI
 
 export default function AdminProductDetail() {
+  const cartStatus=useSelector(selectCartStatus)
+  const cartError=useSelector(selectCartError)
   const items=useSelector(selectItems)
   const [selectedColor, setSelectedColor] = useState(colors[0]);
   const [selectedSize, setSelectedSize] = useState(sizes[2]);
@@ -60,7 +63,6 @@ export default function AdminProductDetail() {
       product:product.id,quantity:1,user:user.id
     }
     dispatch(addToCartAsync(newItem))
-    alert.success('Item added successfully');
     // navigate('/cart')
    }else{
     alert.error('Item Already Added');
@@ -71,10 +73,40 @@ export default function AdminProductDetail() {
   useEffect(() => {
     dispatch(fetchProductByIdAsync(params.id));
   }, [dispatch, params.id]);
+  const productStatus=useSelector(selectProductListfetchProductStatus)
+  useEffect(() => {
+    if (cartStatus === 'fulfilled') {
+      dispatch(resetCartStatusandError())
+      alert.success(cartError);
+    } else if (cartStatus === 'rejected') {
+      dispatch(resetCartStatusandError())
+      alert.error(`Failed to add item: ${cartError}`);
+    
+    }
+  }, [cartStatus, cartError, alert]);
 
   return (
     <div className="bg-white">
-      {product && (
+       {
+        productStatus==='rejected'&&(<><div className=' flex items-center bg-red-200 justify-center text-red-600 text-5xl'>Error</div><div className='h-[25vh] flex items-center bg-red-200 justify-center text-red-600 text-3xl'>Failed to load details</div></>)
+      }
+    {
+  productStatus === 'pending' && (
+    <div className=" h-[100vh] flex items-center justify-center">
+    <Circles
+      height="80"
+      width="80"
+      color="#4fa94d"
+      ariaLabel="circles-loading"
+      wrapperStyle={{}}
+      wrapperClass=""
+      visible={true}
+    />
+    </div>
+  )
+}
+    
+      {product &&items&& (
         <div className="pt-6">
           <nav aria-label="Breadcrumb">
             <ol

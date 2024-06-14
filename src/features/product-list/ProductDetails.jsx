@@ -7,8 +7,9 @@ import { selectUserInfo } from '../user/userSlice';
 import { RadioGroup } from '@headlessui/react';
 import { useDispatch, useSelector } from 'react-redux';
 import { discountedPrice } from '../../app/constants';
-import { fetchProductByIdAsync, selectProductById } from '../product-list/productlistSlice';
+import { fetchProductByIdAsync, selectProductById, selectProductListfetchProductStatus } from '../product-list/productlistSlice';
 import { selectProductListStatus } from '../product-list/productlistSlice';
+import { Circles } from 'react-loader-spinner'
 import { selectCartStatus,resetCartStatusandError } from '../cart/counterSlice';
 import { useNavigate, useParams } from 'react-router-dom';
 import { selectCartError } from '../cart/counterSlice';
@@ -49,7 +50,7 @@ export default function ProductDetail() {
   useEffect(()=>{
    console.log("entered in product details")
   },[])
-  const productStatus=useSelector(selectProductListStatus)
+  const productStatus=useSelector(selectProductListfetchProductStatus)
   const cartStatus=useSelector(selectCartStatus)
   const cartError=useSelector(selectCartError)
   const alert=useAlert()
@@ -79,12 +80,6 @@ export default function ProductDetail() {
    }
     
   }
-  useEffect(()=>{
-      if(productStatus==='fulfilled'){
-        // dispatch()
-        console.log("i have to do");
-      }
-  },[dispatch,productStatus])
 
   useEffect(() => {
     if (cartStatus === 'fulfilled') {
@@ -102,6 +97,23 @@ export default function ProductDetail() {
       {
         productStatus==='rejected'&&(<><div className=' flex items-center bg-red-200 justify-center text-red-600 text-5xl'>Error</div><div className='h-[25vh] flex items-center bg-red-200 justify-center text-red-600 text-3xl'>Failed to load details</div></>)
       }
+       {
+  productStatus === 'pending' && (
+    <div className=" h-[100vh] flex items-center justify-center">
+    <Circles
+      height="80"
+      width="80"
+      color="#4fa94d"
+      ariaLabel="circles-loading"
+      wrapperStyle={{}}
+      wrapperClass=""
+      visible={true}
+    />
+    </div>
+  )
+}
+
+
       {product&&items && (
         <div className="pt-6">
           <nav aria-label="Breadcrumb">

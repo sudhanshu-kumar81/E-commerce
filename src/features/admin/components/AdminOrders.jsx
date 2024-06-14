@@ -3,6 +3,7 @@ import {Grid} from 'react-loader-spinner'
 import {discountedPrice } from '../../../app/constants';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectStatusForOrder } from '../../order/orderSlice';
+import {UserModal} from '../../common/UserModal.jsx';
 import { ITEM_PER_PAGE } from '../../../app/constants';
 import {
   fetchAllOrdersAsync,
@@ -10,6 +11,9 @@ import {
   selectTotalOrders,
   updateOrderAsync,
 } from '../../order/orderSlice';
+import { Circles } from 'react-loader-spinner'
+
+import { resetOrderStatusAndMessage } from '../../order/orderSlice';
 import {
   PencilIcon,
   EyeIcon,
@@ -18,9 +22,10 @@ import {
 } from '@heroicons/react/24/outline';
 import Pagination from '../../common/Pagination';
 import { useAlert } from 'react-alert';
-
+import { selectFetchOrderStatus } from '../../order/orderSlice';
 function AdminOrders() {
   const status=useSelector(selectStatusForOrder)
+  const fetchStatus=useSelector(selectFetchOrderStatus)
   const alert=useAlert()
   const [page, setPage] = useState(1);
   const dispatch = useDispatch();
@@ -32,20 +37,16 @@ function AdminOrders() {
   const handleEdit = (order) => {
     setEditableOrderId(order.id);
   };
-  const handleShow = () => {
-    console.log('order');
-   
+  const [isModalOpen, setIsModalOpen] = useState(false); // State for modal visibility
+  const [modalContent, setModalContent] = useState(null); 
+  
+  const closeModal = () => {
+    setIsModalOpen(false); // Close modal
   };
-
-
-  // items: { type: [mongoose.Schema.Types.Mixed], required: true },
-  // totalAmount: { type: Number },
-  // totalItems: { type: Number },
-  // user: { type: mongoose.Schema.Types.ObjectId, ref: 'user', required: true },
-  // //TODO:  we can add enum types
-  // paymentMethod: { type: String, required: true },
-  // status: { type: String, default: 'pending' },
-  // selectedAddress: { type: [mongoose.Schema.Types.Mixed], required: true },
+  const handleShow = (order) => {
+    setModalContent(order);
+    setIsModalOpen(true); // Open modal
+  };
 
 
   const handleUpdate = (e, order) => {
@@ -53,7 +54,6 @@ function AdminOrders() {
     const updatedOrder = { ...order, status: e.target.value,user:order.user.id};
     console.log("updated order is ",order)
     dispatch(updateOrderAsync(updatedOrder));
-    alert.success("updated successfully");
     setEditableOrderId(-1);
   };
 
@@ -86,10 +86,41 @@ function AdminOrders() {
     const pagination = { _page: page,_per_page: ITEM_PER_PAGE };
     dispatch(fetchAllOrdersAsync({ sort, pagination }));
   }, [dispatch, page, sort]);
+  useEffect(()=>{
+   if(status==='fulfilled'){
+     alert.success("status updated");
+     dispatch(resetOrderStatusAndMessage())
+   }
+   if(status==='rejected'){
+    alert.error("failed updation")
+    dispatch(resetOrderStatusAndMessage())
+   }
+  },[status,dispatch])
+ 
 
   return (
   
     <>
+    {
+      fetchStatus==='rejected'&&(<div className='text-red-600'>
+      Failed to load Orders...
+      </div>)
+    }
+     {
+  fetchStatus === 'pending' && (
+    <div className=" h-[100vh] flex items-center justify-center">
+    <Circles
+      height="80"
+      width="80"
+      color="#4fa94d"
+      ariaLabel="circles-loading"
+      wrapperStyle={{}}
+      wrapperClass=""
+      visible={true}
+    />
+    </div>
+  )
+}
     
     <div className="overflow-x-auto">
     
@@ -242,6 +273,13 @@ function AdminOrders() {
         totalItems={totalOrders}
       ></Pagination>
     </div>
+   {
+    orders&&modalContent&& <UserModal 
+    order={modalContent} 
+    isOpen={isModalOpen} 
+    onClose={closeModal} 
+  /> 
+   }
     </>
   );
 }

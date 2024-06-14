@@ -2,7 +2,7 @@ import { Fragment, useEffect, useState } from 'react'
 import { Dialog, Disclosure, Menu, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { ChevronDownIcon, FunnelIcon, MinusIcon, PlusIcon, Squares2X2Icon } from '@heroicons/react/20/solid'
- import {Grid,Audio } from 'react-loader-spinner'
+ import {Grid, } from 'react-loader-spinner'
 import { StarIcon } from '@heroicons/react/20/solid'
 import Pagination from '../common/Pagination.jsx'
 import { useSelector, useDispatch } from 'react-redux'
@@ -360,7 +360,7 @@ const ProductGrid = ({ products,status }) => {
   // https://mhnpd.github.io/react-loader-spinner/docs/intro
   return (<div className="bg-white">
     {
-      status==='loading'?(<Grid
+      status==='pending'?(<Grid
         visible={true}
         height="80"
         width="80"

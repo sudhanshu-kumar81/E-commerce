@@ -60,6 +60,7 @@ const initialState = {
   status: 'idle',
   message:null,
   currentOrder:null,
+  fetchOrderStatus:'',
   totalOrders: 0
 };
 
@@ -70,39 +71,59 @@ export const orderSlice = createSlice({
     resetOrder: (state) => {
       state.currentOrder = null;
     },
+    resetOrderStatusAndMessage: (state) => {
+      state.status = '';
+      state.message=null
+    },
   },
   extraReducers: (builder) => {
     builder
       .addCase(createOrderAsync.pending, (state) => {
-        state.status = 'loading';
+        state.status = 'pending';
+      })
+      .addCase(createOrderAsync.rejected, (state,action) => {
+        state.status = 'rejected';
+        state.message=action.payload||"failed to create order"
       })
       .addCase(createOrderAsync.fulfilled, (state, action) => {
-        state.status = 'idle';
+        state.status = 'fulfilled';
         state.orders.push(action.payload.order);
         state.currentOrder = action.payload.order;
+        state.message=action.payload.message;
       })
       .addCase(fetchAllOrdersAsync.pending, (state) => {
-        state.status = 'loading';
+        state.fetchOrderStatus = 'pending';
       })
       .addCase(fetchAllOrdersAsync.fulfilled, (state, action) => {
-        state.status = 'idle';
+        state.fetchOrderStatus = 'fulfilled';
         state.orders = action.payload.orders
         state.totalOrders=action.payload.totalDocs
       })
+      .addCase(fetchAllOrdersAsync.rejected, (state) => {
+        state.fetchOrderStatus = 'rejected';
+        state.orders = []
+        state.totalOrders=0
+      })
       .addCase(updateOrderAsync.pending, (state) => {
-        state.status = 'loading';
+        state.status = 'pending';
+        
       })
       .addCase(updateOrderAsync.fulfilled, (state, action) => {
-        state.status = 'idle';
+        state.status = 'fulfilled';
         const index =  state.orders.findIndex(order=>order.id===action.payload.updatedOrders.id)
         state.orders[index] = action.payload.updatedOrders;
+      })
+      .addCase(updateOrderAsync.rejected, (state) => {
+        state.status = 'rejected';
       })
   },
 });
 
-export const { increment, resetOrder } = orderSlice.actions;
+export const { increment, resetOrder,resetOrderStatusAndMessage } = orderSlice.actions;///resetOrderStatusAndMessage
 export const selectCurrentOrder = (state) => state.order.currentOrder;
 export const selectAllOrdersForAdmin = (state) => state.order.orders;
 export const selectTotalOrders = (state) => state.order.totalOrders;
 export const selectStatusForOrder=(state)=>state.order.status;
+export const selectMessageForOrder=(state)=>state.order.message;
+export const selectFetchOrderStatus=(state)=>state.order.fetchOrderStatus;
 export default orderSlice.reducer;

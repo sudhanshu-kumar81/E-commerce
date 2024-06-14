@@ -36,7 +36,7 @@ const Signup = () => {
     return (
       <>
   
-      {  status === 'loading' ? (<div className=" h-[100vh] flex items-center justify-center"><Circles
+      {  status === 'pending' ? (<div className=" h-[100vh] flex items-center justify-center"><Circles
           height="80"
           width="80"
           color="#4fa94d"
