@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { Link, Navigate, useParams } from "react-router-dom";
-import { resetCartAsync } from "../features/cart/counterSlice";
+import { fetchItemsByUserIdAsync, resetCartAsync } from "../features/cart/counterSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { selectUserInfo } from "../features/user/userSlice";
 import { resetOrder } from "../features/order/orderSlice";
@@ -16,6 +16,9 @@ function OrderSuccessPage() {
     // reset currentOrder
     dispatch(resetOrder())
    },[dispatch,user])
+   useEffect(()=>{
+    dispatch(fetchItemsByUserIdAsync())
+   },[])
 
   return (
     <>
