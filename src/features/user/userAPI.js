@@ -99,3 +99,47 @@ export function signOut(userId) {
     resolve({ data: 'success' });
   });
 }
+
+export function resetPasswordRequest(email) {
+  return new Promise(async (resolve, reject) => {
+    try {
+      console.log("arrived in reset password request email is",email);
+      const response = await fetch('http://localhost:3000/users/reset-password-request', {
+        method: 'POST',
+        body: JSON.stringify({email}),
+        headers: { 'content-type': 'application/json' },
+      });
+      const data=await response.json()
+      console.log("data is ",data)
+      if(data.success){
+        resolve({data})
+      }else{
+        reject({data})
+      }
+    } catch (error) {
+      reject( error);
+    }
+
+  });
+}
+
+
+export function resetPassword(data) {
+  return new Promise(async (resolve, reject) => {
+    try {
+      console.log("arrived in reset password API and data is ",data);
+      const response = await fetch('http://localhost:3000/users/reset-password', {
+        method: 'POST',
+        body: JSON.stringify(data),
+        headers: { 'content-type': 'application/json' },
+      });
+      const responseData=await response.json()
+      console.log("resetData is ",responseData)
+      console.log("data in reset password api is ",data);
+        resolve({ responseData });
+    } catch (error) {
+      reject(error);
+    }
+
+  });
+}

@@ -1,14 +1,9 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { fetchLoggedInUserOrders, updateUser, fetchLoggedInUser  } from './userAPI';
 import { checkUser,createUser,signOut} from './userAPI'
-const initialState = {
-  status: '',
-  message:null,
-  userInfo: null,//detailed
-  userOrders:[],
-  LoggedInStatus:'',
-  token:null,
-};
+import { resetPasswordRequest } from './userAPI';
+import { resetPassword } from './userAPI';
+
 export const signOutAsync = createAsyncThunk(
   'user/signOut',
   async (loginInfo,{ rejectWithValue }) => {
@@ -128,6 +123,55 @@ export const fetchLoggedInUserOrderAsync = createAsyncThunk(
   }
 );
 
+export const resetPasswordRequestAsync = createAsyncThunk(
+  'user/resetPasswordRequest',
+  async (email,{rejectWithValue}) => {
+    try {
+      const response = await resetPasswordRequest(email);
+      if(response.data.success){
+        return response.data;
+      }else{
+        return rejectWithValue(error.data.message || { message: error.message });
+      } 
+    } catch (error) {
+      console.log(error);
+      return rejectWithValue(error);
+
+    }
+  }
+);
+
+export const resetPasswordAsync = createAsyncThunk(
+  'user/resetPassword',
+  async (data,{rejectWithValue}) => {
+    console.log("arrived in reset password Async data is ",data)
+    try {
+      const response = await resetPassword(data);
+      console.log("response in reset password async is ",response);
+      if(response.responseData.success){
+        return response.responseData;
+      }
+      else{
+        return rejectWithValue(response.responseData)
+      }
+    } catch (error) {
+      console.log(error);
+      return rejectWithValue(error);
+
+    }
+  }
+);
+const initialState = {
+  status: '',
+  message:null,
+  userInfo: null,//detailed
+  userOrders:[],
+  LoggedInStatus:'',
+  token:null,
+  resetStatus:'',
+  resetMessage:null
+};
+
 export const userSlice = createSlice({
   name: 'user',
   initialState,
@@ -226,6 +270,29 @@ export const userSlice = createSlice({
         //  state.message=action?.payload||"failed to fetch User"
         state.userInfo = null;
       })
+      .addCase(resetPasswordRequestAsync.pending, (state) => {
+        state.status = 'pending';
+      })
+      .addCase(resetPasswordRequestAsync.fulfilled, (state, action) => {
+        state.status = 'fulfilled';
+        state.message=action.payload.message;
+      })
+      .addCase(resetPasswordRequestAsync.rejected, (state, action) => {
+        state.status = 'rejected';
+        state.message=action?.payload.data.message||"failed to sent email";
+      })
+      .addCase(resetPasswordAsync.fulfilled, (state, action) => {
+        state.resetStatus = 'fulfilled';
+        state.resetMessage=action.payload.message;
+      })
+      .addCase(resetPasswordAsync.rejected, (state, action) => {
+        state.resetStatus = 'rejected';
+        state.resetMessage=action?.payload?.message||"reset password failed";
+      })
+      .addCase(resetPasswordAsync.pending,(state, action) => {
+        state.resetStatus = 'rejected';
+      })
+     
 
   },
 });
@@ -234,6 +301,8 @@ export const selectUserOrders = (state)=>state.user.userOrders;
 export const selectUserStatus=(state)=>state.user.status;
 export const selectLoggedInStatus=(state)=>state.user.LoggedInStatus;
 export const selectUserMessage=(state)=>state.user.message;
+export const selectUserResetStatus=(state)=>state.user.resetStatus;
+export const selectUserResetMessage=(state)=>state.user.resetMessage;
 export const selectUserInfo = (state)=>state.user.userInfo;
 export const {resetStatusAndmessage,resetLoggedInStatus} = userSlice.actions;
 export default userSlice.reducer;

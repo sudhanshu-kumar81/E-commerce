@@ -1,6 +1,9 @@
 
 import { Link} from 'react-router-dom';
 import { useForm } from 'react-hook-form';
+import { useDispatch, useSelector } from 'react-redux';
+import { resetPasswordRequestAsync, selectUserMessage, selectUserStatus } from '../../user/userSlice';
+import { useEffect, useState } from 'react';
 
 export default function ForgotPassword() {
     const {
@@ -8,8 +11,11 @@ export default function ForgotPassword() {
         handleSubmit,
         formState: { errors },
     } = useForm();
+    const userStatus=useSelector(selectUserStatus)
+    const userMessage=useSelector(selectUserMessage)
 
-    // console.log(errors);
+    console.log("error is ",errors);
+    const dispatch=useDispatch()
 
     return (
     <>
@@ -29,8 +35,9 @@ export default function ForgotPassword() {
           <form
             noValidate
             onSubmit={handleSubmit((data) => {
-                // console.log(data);
+                console.log(data);
                 console.log("it is forgot password .jsx form handler")
+                dispatch(resetPasswordRequestAsync(data.email))
                 // TODO : implementation on backend with email
             })}
             className="space-y-6"
@@ -59,6 +66,10 @@ export default function ForgotPassword() {
                 {errors.email && (
                   <p className="text-red-500">{errors.email.message}</p>
                 )}
+                 {userStatus==='fulfilled' ? (
+                  <p className="text-green-500">{userMessage}</p>
+                ):userStatus==='rejected'?(<p className="text-red-500">{userMessage}</p>):null}
+                
               </div>
             </div>
 

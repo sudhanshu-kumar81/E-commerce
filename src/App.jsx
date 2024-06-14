@@ -23,6 +23,7 @@ import ProtectedAdmin from './features/admin/components/ProtectedAdmin.jsx'
 import AdminHome from './pages/AdminHome';
 import AdminProductDetailPage from './pages/AdminProductDetailPage';
 import AdminProductFormPage from './pages/AdminProductFormPage.jsx';
+import ResetPasswordPage from './pages/ResetPasswordPage.jsx';
 import { selectCartFetchStatus } from './features/cart/counterSlice.js';
 import FailedOrderPage from './pages/FailedOrderPage.jsx';
 function App() {
@@ -63,6 +64,7 @@ function App() {
         <Route path='/checkout' element={<Protected>
           <Checkout></Checkout>
         </Protected>}></Route>
+  <Route path='/reset-password' element={<ResetPasswordPage></ResetPasswordPage>}></Route>
         <Route path='/order-success/:id' element={<Protected><OrderSuccessPage></OrderSuccessPage></Protected>}></Route>
         <Route path='/order-failed' element={<Protected><FailedOrderPage></FailedOrderPage></Protected>}></Route>
         <Route path='/orders' element={<Protected><UserOrdersPage></UserOrdersPage></Protected>}></Route>
