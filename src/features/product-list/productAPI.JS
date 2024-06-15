@@ -1,7 +1,7 @@
 // export function fetchAllProducts() {
 //     return new Promise(async (resolve) =>{
 //       //TODO: we will not hard-code server URL here
-//       const response = await fetch('https://e-commerce-backend-alpha-one.vercel.app/products') 
+//       const response = await fetch('https://e-commerce-backend-3wsm.onrender.com/products') 
     
 //       const data = await response.json()
 //       // console.log("data in productapi id ",data);
@@ -34,8 +34,8 @@ export function fetchAllProductsByFilter(fil,sort,pagination) {
   }
     return new Promise(async (resolve) =>{
       console.log("before fetchAllProductByFilter")
-      console.log('https://e-commerce-backend-alpha-one.vercel.app/products?',queryString);
-      const response = await fetch('https://e-commerce-backend-alpha-one.vercel.app/products?'+queryString,{
+      console.log('https://e-commerce-backend-3wsm.onrender.com/products?',queryString);
+      const response = await fetch('https://e-commerce-backend-3wsm.onrender.com/products?'+queryString,{
         headers:{
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`,
@@ -53,7 +53,7 @@ export function fetchAllProductsByFilter(fil,sort,pagination) {
   export function fetchBrands(){
     return new Promise(async (resolve)=>{
       // console.log("before requets");
-      const response=await fetch('https://e-commerce-backend-alpha-one.vercel.app/brands')
+      const response=await fetch('https://e-commerce-backend-3wsm.onrender.com/brands')
       // console.log("after requets");
       const data=await response.json()
       // console.log("brand in productApi",data)
@@ -62,7 +62,7 @@ export function fetchAllProductsByFilter(fil,sort,pagination) {
   }
   export function fetchCategories(){
     return new Promise(async (resolve)=>{
-      const response=await fetch('https://e-commerce-backend-alpha-one.vercel.app/categories')
+      const response=await fetch('https://e-commerce-backend-3wsm.onrender.com/categories')
       const data=await response.json()
       console.log("data in fetch category ",data);
       resolve({data})
@@ -72,7 +72,7 @@ export function fetchAllProductsByFilter(fil,sort,pagination) {
     const token=localStorage.getItem('token');
     console.log("id is ",id);
     return new Promise(async (resolve)=>{
-      const response=await fetch('https://e-commerce-backend-alpha-one.vercel.app/products/'+id,{
+      const response=await fetch('https://e-commerce-backend-3wsm.onrender.com/products/'+id,{
         headers:{
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`,
@@ -87,7 +87,7 @@ export function fetchAllProductsByFilter(fil,sort,pagination) {
   export function createProduct(product) {
     const token=localStorage.getItem('token');
     return new Promise(async (resolve) => {
-      const response = await fetch('https://e-commerce-backend-alpha-one.vercel.app/products/', {
+      const response = await fetch('https://e-commerce-backend-3wsm.onrender.com/products/', {
         method: 'POST',
         body: JSON.stringify(product),
         headers:{
@@ -105,7 +105,7 @@ export function fetchAllProductsByFilter(fil,sort,pagination) {
     const token=localStorage.getItem('token');
     return new Promise(async (resolve) => {
       const response = await fetch(
-        'https://e-commerce-backend-alpha-one.vercel.app/products/' + update.id,
+        'https://e-commerce-backend-3wsm.onrender.com/products/' + update.id,
         {
           method: 'PATCH',
           body: JSON.stringify(update),

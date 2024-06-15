@@ -6,7 +6,7 @@ export function updateCart(updatedItem) {
   console.log("id is ",id);
   delete updatedItem['id']
     return new Promise(async (resolve) => {
-      const response = await fetch('https://e-commerce-backend-alpha-one.vercel.app/cart/'+id, {
+      const response = await fetch('https://e-commerce-backend-3wsm.onrender.com/cart/'+id, {
         method: 'PATCH',
         body: JSON.stringify(updatedItem),
         headers:{
@@ -23,7 +23,7 @@ export function updateCart(updatedItem) {
 export function deleteItemFromCart(itemId) {
   const token=localStorage.getItem('token');
     return new Promise(async (resolve) => {
-      const response = await fetch('https://e-commerce-backend-alpha-one.vercel.app/cart/'+itemId, {
+      const response = await fetch('https://e-commerce-backend-3wsm.onrender.com/cart/'+itemId, {
         method: 'DELETE',
         headers:{
           'Content-Type': 'application/json',
@@ -40,7 +40,7 @@ export function deleteItemFromCart(itemId) {
 export function addToCart(item) {
   const token=localStorage.getItem('token');
     return new Promise(async (resolve) => {
-      const response = await fetch('https://e-commerce-backend-alpha-one.vercel.app/cart', {
+      const response = await fetch('https://e-commerce-backend-3wsm.onrender.com/cart', {
         method: 'POST',
         body: JSON.stringify(item),
         headers:{
@@ -59,7 +59,7 @@ export function fetchItemsByUserId() {
     return new Promise(async (resolve) =>{
      
       //TODO: we will not hard-code server URL here
-      const response = await fetch('https://e-commerce-backend-alpha-one.vercel.app/cart/userCart/',{
+      const response = await fetch('https://e-commerce-backend-3wsm.onrender.com/cart/userCart/',{
         headers:{
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`,
