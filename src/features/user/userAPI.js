@@ -1,7 +1,7 @@
 export function fetchLoggedInUserOrders(userId) {
   const token=localStorage.getItem('token');
     return new Promise(async (resolve) =>{
-      const response = await fetch('http://localhost:3000/orders/'+userId,{
+      const response = await fetch('https://e-commerce-backend-3wsm.onrender.com/orders/'+userId,{
         headers:{
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`,
@@ -16,7 +16,7 @@ export function fetchLoggedInUserOrders(userId) {
   export function fetchLoggedInUser() {
     const token=localStorage.getItem('token');
     return new Promise(async (resolve) =>{
-      const response = await fetch('http://localhost:3000/users/fetchUserById/',{
+      const response = await fetch('https://e-commerce-backend-3wsm.onrender.com/users/fetchUserById/',{
         headers:{
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`,
@@ -35,7 +35,7 @@ export function fetchLoggedInUserOrders(userId) {
     console.log("data in update user is ",update)
     return new Promise(async (resolve) => {
     try{
-      const response = await fetch('http://localhost:3000/users/updateUser/'+update.id, {
+      const response = await fetch('https://e-commerce-backend-3wsm.onrender.com/users/updateUser/'+update.id, {
         method: 'PATCH',
         body: JSON.stringify(update),
         headers:{
@@ -57,7 +57,7 @@ export function fetchLoggedInUserOrders(userId) {
     // console.log("arrived in create user",userData)
     return new Promise(async (resolve) => {
       console.log("userdata in create User",userData);
-      const response = await fetch('http://localhost:3000/users/signup', {
+      const response = await fetch('https://e-commerce-backend-3wsm.onrender.com/users/signup', {
         method: 'POST',
         body: JSON.stringify(userData),
         headers: { 'content-type': 'application/json' },
@@ -73,7 +73,7 @@ export function fetchLoggedInUserOrders(userId) {
     return new Promise(async (resolve, reject) => {
       const email = loginInfo.email;
       const password = loginInfo.password;
-      const response = await fetch('http://localhost:3000/users/login',{
+      const response = await fetch('https://e-commerce-backend-3wsm.onrender.com/users/login',{
         method: 'POST',
         body: JSON.stringify(loginInfo),
         headers: { 'content-type': 'application/json' },
@@ -104,7 +104,7 @@ export function resetPasswordRequest(email) {
   return new Promise(async (resolve, reject) => {
     try {
       console.log("arrived in reset password request email is",email);
-      const response = await fetch('http://localhost:3000/users/reset-password-request', {
+      const response = await fetch('https://e-commerce-backend-3wsm.onrender.com/users/reset-password-request', {
         method: 'POST',
         body: JSON.stringify({email}),
         headers: { 'content-type': 'application/json' },
@@ -128,7 +128,7 @@ export function resetPassword(data) {
   return new Promise(async (resolve, reject) => {
     try {
       console.log("arrived in reset password API and data is ",data);
-      const response = await fetch('http://localhost:3000/users/reset-password', {
+      const response = await fetch('https://e-commerce-backend-3wsm.onrender.com/users/reset-password', {
         method: 'POST',
         body: JSON.stringify(data),
         headers: { 'content-type': 'application/json' },

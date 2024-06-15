@@ -3,7 +3,7 @@ export function createOrder(order) {
   console.log("arrived in create order function");  
   return new Promise(async (resolve) => {
     const token=localStorage.getItem('token');
-      const response = await fetch('http://localhost:3000/orders', {
+      const response = await fetch('https://e-commerce-backend-3wsm.onrender.com/orders', {
         method: 'POST',
         body: JSON.stringify(order),
         headers:{
@@ -20,7 +20,7 @@ export function createOrder(order) {
   export function updateOrder(order) {
     const token=localStorage.getItem('token');
     return new Promise(async (resolve) => {
-      const response = await fetch('http://localhost:3000/orders/'+order.id, {
+      const response = await fetch('https://e-commerce-backend-3wsm.onrender.com/orders/'+order.id, {
         method: 'PATCH',
         body: JSON.stringify(order),
         headers:{
@@ -49,14 +49,14 @@ export function createOrder(order) {
     return new Promise(async (resolve) => {
       //TODO: we will not hard-code server URL here
       const response = await fetch(
-        'http://localhost:3000/orders?'+queryString,{
+        'https://e-commerce-backend-3wsm.onrender.com/orders?'+queryString,{
           headers:{
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`,
           }
         }
       );
-      console.log('http://localhost:3000/orders?',queryString,)
+      console.log('https://e-commerce-backend-3wsm.onrender.com/orders?',queryString,)
       const data = await response.json();
       // const totalOrders = await response.headers.get('X-Total-Count');
       resolve({ data });
