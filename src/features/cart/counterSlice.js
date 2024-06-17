@@ -5,16 +5,13 @@ export const addToCartAsync = createAsyncThunk(
   'cart/addToCart',
     async (item,{ rejectWithValue }) => {
       try {
-        console.log("item in addTocart in frontend",item);
         const response = await addToCart(item);
-        console.log("response in async function is", response);
         if (response.data.success) {
           return response.data;
         } else {
           return rejectWithValue(response.data.message); // Pass only the data property
         }
       }catch (error) {
-        console.log('error in catch block is ',error);
         return rejectWithValue(error.response?.data || { message: error.message });
       }
 
@@ -28,14 +25,12 @@ export const fetchItemsByUserIdAsync = createAsyncThunk(
     async (_,{ rejectWithValue }) => {
       try {
         const response = await fetchItemsByUserId();
-        console.log("response in async function is", response);
         if (response.data.success) {
           return response.data;
         } else {
           return rejectWithValue(response.data.message); // Pass only the data property
         }
       } catch (error) {
-        console.log('error in catch block is ',error);
         return rejectWithValue(error.response?.data || { message: error.message });
       }
 
@@ -50,14 +45,12 @@ export const updateCartAsync = createAsyncThunk(
   async (updatedItem,{ rejectWithValue }) => {
     try {
       const response = await updateCart(updatedItem);
-      console.log("response in async function is", response);
       if (response.data.success) {
         return response.data;
       } else {
         return rejectWithValue(response.data.message); // Pass only the data property
       }
   }catch (error) {
-    console.log('error in catch block is ',error);
     return rejectWithValue(error.response?.data || { message: error.message });
   }
 }
@@ -69,14 +62,12 @@ export const deleteItemFromCartAsync = createAsyncThunk(
   async (itemId ,{ rejectWithValue }) => {
     try {
       const response = await deleteItemFromCart(itemId);
-      console.log("response in async function is", response);
       if (response.data.success) {
         return response.data;
       } else {
         return rejectWithValue(response.data.message); // Pass only the data property
       }
   }catch (error) {
-    console.log('error in catch block is ',error);
     return rejectWithValue(error.response?.data || { message: error.message });
   }
 
@@ -87,14 +78,12 @@ export const resetCartAsync = createAsyncThunk(
   async (userId,{ rejectWithValue }) => {
     try {
       const response = await resetCart(userId);
-      console.log("response in async function is", response);
       if (response.data.success) {
         return response.data;
       } else {
         return rejectWithValue(response.data.message); // Pass only the data property
       }
   } catch (error) {
-    console.log('error in catch block is ',error);
     return rejectWithValue(error.response?.data || { message: error?.message });
   } 
   }

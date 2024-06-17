@@ -9,10 +9,7 @@ export const  fetchProductsByFiltersAsync = createAsyncThunk(
 
   
 
-
-    // console.log("fil ans sort and pageination are are", fil, sort, pagination);
     const response = await fetchAllProductsByFilter(fil, sort, pagination);
-    // console.log("response from fetchAllProductsAsync is ", response);
     return response.data
   },
 )
@@ -27,7 +24,6 @@ export const fetchBrandsAsync = createAsyncThunk(
         return rejectWithValue(response.data.message); // Pass only the data property
       }
     }catch (error) {
-      console.log('error in catch block is ',error);
       return rejectWithValue(error.data.message || { message: error.message });
     }
   
@@ -43,7 +39,6 @@ export const fetchCategoriesAsync = createAsyncThunk(
         return rejectWithValue(response.data.message); // Pass only the data property
       }
     }catch (error) {
-      console.log('error in catch block is ',error);
       return rejectWithValue(error.data.message || { message: error.message });
     }
   
@@ -59,7 +54,6 @@ export const createProductAsync = createAsyncThunk(
         return rejectWithValue(response.data.message); // Pass only the data property
       }
     }catch (error) {
-      console.log('error in catch block is ',error);
       return rejectWithValue(error.data.message || { message: error.message });
     }
   
@@ -77,7 +71,6 @@ export const updateProductAsync = createAsyncThunk(
         return rejectWithValue(response.data.message); // Pass only the data property
       }
     }catch (error) {
-      console.log('error in catch block is ',error);
       return rejectWithValue(error.data.message || { message: error.message });
     }
   }
@@ -93,7 +86,6 @@ export const fetchProductByIdAsync  = createAsyncThunk(
         return rejectWithValue(response.data.message); // Pass only the data property
       }
     }catch (error) {
-      console.log('error in catch block is ',error);
       return rejectWithValue(error.data.message || { message: error.message });
     }
   }

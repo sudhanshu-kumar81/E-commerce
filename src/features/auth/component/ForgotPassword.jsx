@@ -13,8 +13,6 @@ export default function ForgotPassword() {
     } = useForm();
     const userStatus=useSelector(selectUserStatus)
     const userMessage=useSelector(selectUserMessage)
-
-    console.log("error is ",errors);
     const dispatch=useDispatch()
 
     return (
@@ -35,8 +33,6 @@ export default function ForgotPassword() {
           <form
             noValidate
             onSubmit={handleSubmit((data) => {
-                console.log(data);
-                console.log("it is forgot password .jsx form handler")
                 dispatch(resetPasswordRequestAsync(data.email))
                 // TODO : implementation on backend with email
             })}

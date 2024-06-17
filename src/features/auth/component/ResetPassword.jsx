@@ -10,10 +10,8 @@ export default function ResetPassword() {
   const status=useSelector(selectUserResetStatus)
   const message=useSelector(selectUserResetMessage)
   const query = new URLSearchParams(window.location.search);
-  console.log("query is ",query);
   const token = query.get('token')
   const email = query.get('email')
-  console.log("token and email is ",token,email);
  
   const {
     register,
@@ -21,7 +19,6 @@ export default function ResetPassword() {
     formState: { errors },
   } = useForm();
 
-  console.log("errors in form is ",errors);
 
   return (
     <>
@@ -43,9 +40,7 @@ export default function ResetPassword() {
           <form
             noValidate
             onSubmit={handleSubmit((data) => {
-              console.log("data in handler is ",data);
               const newData={...data,token:token,email:email}
-              console.log('new data is ',newData);
               dispatch(resetPasswordAsync(newData))
             })}
             className="space-y-6"

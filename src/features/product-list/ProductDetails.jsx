@@ -47,9 +47,6 @@ function classNames(...classes) {
 // TODO : Loading UI  
 
 export default function ProductDetail() {
-  useEffect(()=>{
-   console.log("entered in product details")
-  },[])
   const productStatus=useSelector(selectProductListfetchProductStatus)
   const cartStatus=useSelector(selectCartStatus)
   const cartError=useSelector(selectCartError)
@@ -63,11 +60,9 @@ export default function ProductDetail() {
   const params = useParams();
   const items=useSelector(selectItems)
   useEffect(() => {
-    console.log("params.id is ",params);
     dispatch(fetchProductByIdAsync(params.id));
   }, [dispatch, params.id]);
   const handleCart = (e)=>{
-    console.log("in handle cart")
     e.preventDefault();
     const index=items.findIndex((item)=>item.product.id===product.id)
    if(index===-1){

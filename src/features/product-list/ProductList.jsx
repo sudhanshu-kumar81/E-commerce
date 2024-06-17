@@ -57,7 +57,6 @@ export default function ProductList() {
   const [page, setPage] = useState(1);
 
   const filterHandler = (e, section, option) => {
-    // console.log("e is ",e.target.checked);
     const newFil = { ...fil }
     if (e.target.checked) {
       if (newFil[section.id]) {
@@ -69,16 +68,10 @@ export default function ProductList() {
       const index = newFil[section.id].findIndex(el => el === option.value);
       newFil[section.id].splice(index, 1);//delete one element;
     }
-    console.log("after update newFil is ", newFil);
     setFil(newFil)
-    // dispatch( fetchProductsByFiltersAsync(newFil))
-    // console.log(section.id,option.value)
   }
 
   useEffect(() => {
-    // console.log("arrived in useEffect");
-    // console.log(" fil and sort is ",fil,sort);
-    // console.log("page and item_per_page is ",page,ITEM_PER_PAGE)
     const pagination = { _page: page, _per_page: ITEM_PER_PAGE }
     dispatch( fetchProductsByFiltersAsync({ fil, sort, pagination }))
   }, [dispatch, fil, sort, page])
@@ -90,13 +83,10 @@ export default function ProductList() {
     dispatch(fetchCategoriesAsync());
   }, [])
   const sortHandler = (option) => {
-    // console.log(option)
     const newSort = { _sort: option.sort,_order:option.order }
     setSort(newSort)
   }
   const HandlePage = (page) => {
-    // console.log("in handle page")
-    // console.log("page is ",page);
     if (page >= 1 && page < (totalItems / ITEM_PER_PAGE + 1)) {
       setPage(page);
     }
@@ -356,8 +346,6 @@ const DeskTopFilter = ({ filterHandler, filters }) => {
 
 
 const ProductGrid = ({ products,status }) => {
-  // console.log("products in product grid is ",products);
-  // https://mhnpd.github.io/react-loader-spinner/docs/intro
   return (<div className="bg-white">
     {
       status==='pending'?(<Grid

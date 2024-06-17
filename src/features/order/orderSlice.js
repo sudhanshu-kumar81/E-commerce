@@ -13,7 +13,6 @@ export const updateOrderAsync = createAsyncThunk(
         return rejectWithValue(response.data.message); // Pass only the data property
       }
     }catch (error) {
-      console.log('error in catch block is ',error);
       return rejectWithValue(error.data.message || { message: error.message });
     }
   }
@@ -24,7 +23,6 @@ export const fetchAllOrdersAsync = createAsyncThunk(
   'order/fetchAllOrders',
   async ({sort, pagination},{ rejectWithValue }) => {
     try {
-      console.log("fetchAllOrdersAsync sort and pagination",sort,pagination)
     const response = await fetchAllOrders(sort,pagination);
       if (response.data.success) {
         return response.data;
@@ -32,7 +30,6 @@ export const fetchAllOrdersAsync = createAsyncThunk(
         return rejectWithValue(response.data.message); // Pass only the data property
       }
     }catch (error) {
-      console.log('error in catch block is ',error);
       return rejectWithValue(error.data.message || { message: error.message });
     }
   }
@@ -42,7 +39,6 @@ export const createOrderAsync = createAsyncThunk(
   'order/createOrder',
   async (order,{ rejectWithValue }) => {
     try {
-      console.log("in the begining of createOrderAsync",order);
       const response = await createOrder(order);
       if (response.data.success) {
         return response.data;
@@ -50,7 +46,6 @@ export const createOrderAsync = createAsyncThunk(
         return rejectWithValue(response.data.message); // Pass only the data property
       }
     }catch (error) {
-      console.log('error in catch block is ',error);
       return rejectWithValue(error.data.message || { message: error.message });
     }
   }

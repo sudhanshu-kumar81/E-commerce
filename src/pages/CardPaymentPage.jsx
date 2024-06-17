@@ -7,7 +7,6 @@ import { useSelector } from 'react-redux';
 const CardPaymentPage = () => {
 
 const currentOrder=useSelector(selectCurrentOrder)
-console.log("current order is ",currentOrder);
  const makepayment=async()=>{
         const stripe=await loadStripe("pk_test_51PPfQMP8WnHYzfx7oFyIgbcNwH56MS4b8DJDIlPEmEIchwSFXZADfMTV0od1NeuGieOCgLDZWY1gklusMZ8EIu0o005CGUzA1w")
         const response=await fetch('https://e-commerce-backend-3wsm.onrender.com/api/create-checkout-session',{

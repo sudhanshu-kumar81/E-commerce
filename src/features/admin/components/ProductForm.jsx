@@ -84,7 +84,6 @@ const navigate=useNavigate();
       <form
       noValidate
       onSubmit={handleSubmit((data) => {
-        console.log(data);
         const product = { ...data };
         product.images = [
           product.image1,
@@ -99,7 +98,6 @@ const navigate=useNavigate();
         product.price = +product.price;
         product.stock = +product.stock;
         product.discountPercentage = +product.discountPercentage;
-        console.log(product);
 
         if (params.id) {
           product.id = params.id;

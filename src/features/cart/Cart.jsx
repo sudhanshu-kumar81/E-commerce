@@ -16,12 +16,10 @@ const Cart = () => {
   const [openModal, setOpenModal] = useState(null);
   
   const handleRemove = (e, id) => {
-    console.log("it is handleremove product id", id);
     dispatch(deleteItemFromCartAsync(id))
   }
   const handleQuantity = (e, item) => {
     const updatedItem={id:item.id,product:item.product.id,user:item.user.id ,quantity: +e.target.value }
-    // console.log("it is handlequantity e.target.value", e.target.value);
     dispatch(updateCartAsync(updatedItem));
   };
   const items = useSelector(selectItems);
@@ -31,7 +29,6 @@ const Cart = () => {
   useEffect(()=>{
     setSelectedItem(items.length)
    const isOrderPossible = items.every(item =>item.product.stock >= item.quantity);
-   console.log("is Order Possible",isOrderPossible);
    setOrderPossible(isOrderPossible);
    if(items.length===0){
     setOrderPossible(false);

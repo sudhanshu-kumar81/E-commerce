@@ -22,7 +22,6 @@ const Login = () => {
     formState: { errors },
   } = useForm()
   useEffect(()=>{
-   console.log("arrived in login")
   },[])
   if(status==='fulfilled'){
     dispatch(resetStatusAndmessage());

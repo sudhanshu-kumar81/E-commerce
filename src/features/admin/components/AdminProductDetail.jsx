@@ -55,7 +55,6 @@ export default function AdminProductDetail() {
 
   
   const handleCart = (e)=>{
-    console.log("in handle cart")
     e.preventDefault();
     const index=items.findIndex((item)=>item.product.id===product.id)
    if(index===-1){

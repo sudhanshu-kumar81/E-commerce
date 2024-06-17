@@ -33,7 +33,6 @@ function App() {
   useEffect(() => {
     const token = localStorage.getItem('token');
     const id= localStorage.getItem('id');
-    console.log("in use effect after refresh in app.js")
     if (id&&token) {
       dispatch(fetchItemsByUserIdAsync())
       dispatch(fetchLoggedInUserAsync())
@@ -42,7 +41,6 @@ function App() {
   //login
   useEffect(() => {
     const token=localStorage.getItem('token');
-    console.log("in use effect due in user is ",user);
     if (token) {
       dispatch(fetchItemsByUserIdAsync())
       dispatch(fetchLoggedInUserAsync())

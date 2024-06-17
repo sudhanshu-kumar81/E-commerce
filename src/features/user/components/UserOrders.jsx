@@ -17,7 +17,6 @@ export default function UserOrders() {
   const error=useSelector(selectUserMessage)
   const dispatch = useDispatch();
     useEffect(() => {
-      console.log("dispatch(fetchLoggedInUserOrderAsync(user.id))-user.id",user.id);
       dispatch(fetchLoggedInUserOrderAsync(user.id));
     }, []);
     useEffect(()=>{

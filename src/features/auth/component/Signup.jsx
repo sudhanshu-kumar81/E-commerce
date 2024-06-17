@@ -60,7 +60,6 @@ const Signup = () => {
      <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
        <form className="space-y-6" noValidate
        onSubmit={handleSubmit((data)=>{
-        console.log("data for signup is ",data);
        dispatch(createUserAsync({ email: data.email, password: data.password,role:'user',address:[]}))
        })}>
          <div>

@@ -64,28 +64,22 @@ const Checkout = () => {
     
 
     const handleRemove = (e, id) => {
-        // console.log("it is handleremove product id", id);
         dispatch(deleteItemFromCartAsync(id))
     }
     const handleQuantity = (e, item) => {
-        // console.log("it is handlequantity e.target.value", e.target.value);
         const updatedItem={id:item.id,product:item.product.id,user:item.user.id ,quantity: +e.target.value }
         dispatch(updateCartAsync(updatedItem));
     };
     const handleAddress = (e) => {
-        // console.log(e.target.value);
         setSelectedAddress(user.addresses[e.target.value]);
     };
     const handlePayment = (e) => {
-        // console.log(e.target.value);
         setPaymentMethod(e.target.value);
     };
     const handleOrder = (e) => {
-        console.log("in handleorder", items, paymentMethod, selectedAddress, totalAmount, totalItems, user)
 
         if (selectedAddress && paymentMethod) {
             const order = { items, totalAmount, totalItems, user:user.id, paymentMethod, selectedAddress ,status:"pending"}
-            console.log("order is ", order);
             dispatch(createOrderAsync(order));
         } else {
             alert.show('Enter Address and Payment method')
@@ -105,12 +99,10 @@ const Checkout = () => {
     useEffect(()=>{
      const isOrderPossible = items.every(item =>item.product.stock >= item.quantity);
      setSelectedItem(items.length)
-     console.log("is Order Possible",isOrderPossible);
      setOrderPossible(isOrderPossible);
      if(items.length===0){
       setOrderPossible(false);
      }
-     console.log("orderPossible is",orderPossible)
     },[dispatch,items]);
     return (
         <>
@@ -128,10 +120,8 @@ const Checkout = () => {
                             className="bg-white px-5 py-12 mt-12"
                             noValidate
                             onSubmit={handleSubmit((data) => {
-                                // console.log("complete form data is ", data);
                                 const newUser={...user,
                                     addresses: [...user.addresses, data]}
-                                    console.log("new User in checkout for update User",newUser);
                                 dispatch(
                                     updateUserAsync(newUser)
                                 );

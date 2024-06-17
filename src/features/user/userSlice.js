@@ -9,15 +9,12 @@ export const signOutAsync = createAsyncThunk(
   async (loginInfo,{ rejectWithValue }) => {
     try {
       const response = await signOut(loginInfo);
-      console.log("response in async function is", response);
       if (response.data.success) {
         return response.data;
       } else {
-        console.log("in else condition");
         return rejectWithValue(response.data.message); // Pass only the data property
       }
     } catch (error) {
-      console.log('error in catch block is Async ',error);
       return rejectWithValue(error.data?.message || { message: error?.message });
     }
   }
@@ -27,14 +24,12 @@ export const createUserAsync = createAsyncThunk(
   async (userData,{ rejectWithValue }) => {
     try {
       const response = await createUser(userData);
-      console.log("response in async function is", response);
       if (response.data.success) {
         return response.data;
       } else {
         return rejectWithValue(response.data.message); // Pass only the data property
       }
     } catch (error) {
-      console.log('error in catch block is ',error);
       return rejectWithValue(error.response?.data || { message: error.message });
     }
   
@@ -47,17 +42,14 @@ export const checkUserAsync = createAsyncThunk(
   async (loginInfo,{ rejectWithValue }) => {
     try {
       const response = await checkUser(loginInfo);
-      console.log("response in async function is", response);
       if (response.data.success) {
         localStorage.setItem('token', response.data.token);
         localStorage.setItem('id', response.data.user.id);
         return response.data;
       } else {
-        console.log("in else condition");
         return rejectWithValue(response.data.message); // Pass only the data property
       }
     } catch (error) {
-      console.log('error in catch block is ',error);
       return rejectWithValue(error.data.message || { message: error.message }||{ message: error.TypeError});
     }
 
@@ -70,15 +62,12 @@ export const fetchLoggedInUserAsync = createAsyncThunk(
 
       try {
         const response = await fetchLoggedInUser();
-        console.log("response in async function fetchLoggedInUser is", response);
         if (response.data.success) {
           return response.data;
         } else {
-          console.log("in else condition");
           return rejectWithValue(response.data.message); // Pass only the data property
         }
       } catch (error) {
-        console.log('error in catch block is ',error);
         return rejectWithValue(error.data.message || { message: error.message });
       }
   }
@@ -89,15 +78,12 @@ export const updateUserAsync = createAsyncThunk(
   async (update,{ rejectWithValue }) => {
     try {
       const response = await updateUser(update);
-      console.log("response in async function is", response);
       if (response.data.success) {
         return response.data;
       } else {
-        console.log("in else condition");
         return rejectWithValue(response.data.message); // Pass only the data property
       }
     } catch (error) {
-      console.log('error in catch block is ',error);
       return rejectWithValue(error.data.message || { message: error.message });
     }
  
@@ -109,15 +95,12 @@ export const fetchLoggedInUserOrderAsync = createAsyncThunk(
   async (id,{ rejectWithValue }) => {
     try {
       const response = await fetchLoggedInUserOrders(id);
-      console.log("response in async function is", response);
       if (response.data.success) {
         return response.data;
       } else {
-        console.log("in else condition");
         return rejectWithValue(response.data.message); // Pass only the data property
       }
     }catch (error) {
-      console.log('error in catch block is ',error);
       return rejectWithValue(error.data.message || { message: error.message });
     }
   }
@@ -134,7 +117,6 @@ export const resetPasswordRequestAsync = createAsyncThunk(
         return rejectWithValue(error.data.message || { message: error.message });
       } 
     } catch (error) {
-      console.log(error);
       return rejectWithValue(error);
 
     }
@@ -144,10 +126,8 @@ export const resetPasswordRequestAsync = createAsyncThunk(
 export const resetPasswordAsync = createAsyncThunk(
   'user/resetPassword',
   async (data,{rejectWithValue}) => {
-    console.log("arrived in reset password Async data is ",data)
     try {
       const response = await resetPassword(data);
-      console.log("response in reset password async is ",response);
       if(response.responseData.success){
         return response.responseData;
       }
@@ -155,7 +135,6 @@ export const resetPasswordAsync = createAsyncThunk(
         return rejectWithValue(response.responseData)
       }
     } catch (error) {
-      console.log(error);
       return rejectWithValue(error);
 
     }

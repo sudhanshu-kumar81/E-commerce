@@ -4,7 +4,6 @@ import { ExclamationTriangleIcon } from '@heroicons/react/24/outline';
 
 export const UserModal = ({ order, isOpen, onClose }) => {
   const cancelButtonRef = useRef(null);
-  console.log("order is ",order)
   return (
     <Transition.Root show={isOpen} as={Fragment}>
       <Dialog as="div" className="fixed inset-0 z-10 overflow-y-auto" onClose={onClose} initialFocus={cancelButtonRef}>
